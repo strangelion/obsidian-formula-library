@@ -1,0 +1,9 @@
+{
+  "id": "obsidian-formula-library",
+  "name": "Formula Library",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "LaTeX formula editor with MathLive and 2100+ formula library, extracted from LaTeXSnipper Office Plugin.",
+  "author": "strangelion",
+  "isDesktopOnly": false
+}

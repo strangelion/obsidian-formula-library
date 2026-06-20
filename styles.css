@@ -1,0 +1,354 @@
+/* ========================================
+   Formula Library Plugin - Styles
+   ======================================== */
+
+/* ---- Sidebar ---- */
+.formula-library-sidebar {
+  padding: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fl-search-container { margin-bottom: 10px; }
+
+.fl-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+}
+
+.fl-search-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
+}
+
+/* ---- Tabs ---- */
+.fl-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.fl-tab {
+  padding: 4px 10px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fl-tab.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+.fl-tab:hover:not(.active) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* ---- Sidebar List ---- */
+.fl-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.fl-list-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border: none;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: none;
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: var(--font-ui-small);
+  font-family: var(--font-monospace);
+  line-height: 1.5;
+  transition: background 0.1s;
+  word-break: break-all;
+}
+
+.fl-list-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* ---- Grid (for modal library) ---- */
+.fl-grid-scroll { flex: 1; overflow-y: auto; }
+
+.fl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 4px;
+}
+
+.fl-grid.structures { grid-template-columns: 1fr; }
+
+/* ---- Symbol Button ---- */
+.fl-symbol-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  cursor: pointer;
+  text-align: center;
+  min-height: 50px;
+  gap: 2px;
+}
+
+.fl-symbol-btn:hover {
+  background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
+}
+
+.fl-sym-preview {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 2px 0;
+}
+
+.fl-sym-preview svg {
+  width: auto !important;
+  height: 28px !important;
+}
+
+.fl-sym-preview mjx-container {
+  font-size: 18px !important;
+}
+
+.fl-sym-preview mjx-container svg {
+  height: 28px !important;
+  width: auto !important;
+}
+
+.fl-sym-fallback {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+
+.fl-sym-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ---- Labels ---- */
+.fl-section-label, .fl-group-label {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-accent);
+  padding: 8px 0 4px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.fl-group-label { border-top: 1px solid var(--background-modifier-border); margin-top: 4px; }
+
+/* ---- Action Bar ---- */
+.fl-action-bar { padding: 10px 0 0; display: flex; gap: 8px; }
+
+.fl-btn {
+  flex: 1;
+  padding: 8px 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+}
+
+.fl-btn:hover { background: var(--background-modifier-hover); }
+
+.fl-btn-primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ========================================
+   Editor Modal - LARGE
+   ======================================== */
+
+.formula-editor-modal {
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-container:has(.formula-editor-modal) {
+  max-width: 1400px;
+  width: 96vw;
+  max-height: 95vh;
+}
+
+.formula-editor-modal {
+  min-height: 70vh;
+  max-height: 95vh;
+}
+
+/* ---- Top Bar ---- */
+.fe-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.fe-mode-toggle {
+  display: flex;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  overflow: hidden;
+}
+
+.fe-mode-toggle button {
+  padding: 6px 16px;
+  border: none;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.fe-mode-toggle button.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.fe-spacer { flex: 1; }
+
+.fe-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.fe-btn-primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ---- Main Layout ---- */
+.fe-main-layout {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---- Editor Pane ---- */
+.fe-editor-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 8px;
+}
+
+.fe-visual-pane { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+/* Preview takes 65% of the left pane */
+.fe-preview-area {
+  flex: 65;
+  min-height: 200px;
+  padding: 20px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: auto;
+  gap: 12px;
+}
+
+/* Textarea takes 35% of the left pane */
+.fe-source-pane { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.fe-textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-monospace);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.fe-textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
+}
+
+.fe-status-bar { padding: 8px 0 0; font-size: 12px; color: var(--text-muted); }
+
+/* ---- Library Panel ---- */
+.fe-library-panel {
+  width: 220px;
+  min-width: 200px;
+  border-left: 1px solid var(--background-modifier-border);
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fe-library-panel .fl-grid { grid-template-columns: repeat(3, 1fr); gap: 3px; }
+
+.fe-library-panel .fl-symbol-btn {
+  min-height: 40px;
+  padding: 4px 2px;
+}
+
+.fe-library-panel .fl-sym-label { font-size: 9px; }
+.fe-library-panel .fl-sym-fallback { font-size: 9px; }
+
+@media (max-width: 900px) {
+  .fe-main-layout { flex-direction: column; }
+  .fe-library-panel { width: 100%; min-width: 0; border-left: none; border-top: 1px solid var(--background-modifier-border); padding-left: 0; max-height: 240px; }
+}
