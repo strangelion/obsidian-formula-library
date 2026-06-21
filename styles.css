@@ -28,6 +28,17 @@
   box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
 }
 
+.fl-search-hint {
+  margin-top: 4px;
+}
+
+.fl-search-hint-text {
+  font-size: 10px;
+  color: var(--text-faint);
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
 /* ---- Tabs ---- */
 .fl-tabs {
   display: flex;
