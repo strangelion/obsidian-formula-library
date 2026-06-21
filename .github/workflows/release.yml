@@ -4,12 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version tag (e.g. v1.0.0)"
+        description: "Version tag (e.g. 1.2.0, no v prefix)"
         required: true
         type: string
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   release:
@@ -41,10 +43,19 @@ jobs:
           git commit -m "chore: bump version to $VERSION"
           git push origin HEAD
 
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            main.js
+            styles.css
+
       - name: Create tag
         run: |
-          git tag ${{ inputs.version }}
-          git push origin ${{ inputs.version }}
+          VERSION="${{ inputs.version }}"
+          VERSION="${VERSION#v}"
+          git tag "$VERSION"
+          git push origin "$VERSION"
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
