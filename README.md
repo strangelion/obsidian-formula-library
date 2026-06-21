@@ -1,6 +1,6 @@
 # Formula Library - Obsidian Plugin
 
-[中文文档](README-cn.md)
+[中文文档](README-cn.md) | English Doc
 
 A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ categorized formulas**, **smart search** (pinyin, LaTeX commands, fuzzy matching), and **extensible formula folders** for user customization.
 
