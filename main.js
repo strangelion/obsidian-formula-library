@@ -984,15 +984,6 @@ class EditorModal extends obsidian.Modal {
     if (window.MathfieldElement) {
       try { MathfieldElement.fontsDirectory = plugin.app.vault.adapter.getResourcePath(plugin.manifest.dir + "/vendor/fonts"); } catch (_) {}
       try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = "https://cdn.jsdelivr.net/npm/mathlive@0.104.0/dist/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = "https://cdn.jsdelivr.net/npm/mathlive@0.104.0/dist/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = "https://cdn.jsdelivr.net/npm/mathlive@0.104.0/dist/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
-      try { if (!MathfieldElement.fontsDirectory) MathfieldElement.fontsDirectory = plugin.manifest.dir + "/vendor/fonts"; } catch (_) {}
       if (loc(this.plugin) === "zh") {
         try { MathfieldElement.strings = { "zh-CN": MATHLIVE_ZH }; } catch (_) {}
         try { MathfieldElement.locale = "zh-CN"; } catch (_) {}
