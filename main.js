@@ -265,9 +265,13 @@ function smartMatch(query, item, plugin) {
   return false;
 }
 
-function loadBundledFallback() {
+async function loadBundledFallback(plugin) {
   try {
-    const data = require("./formulas/_bundled.js");
+    const adapter = plugin.app.vault.adapter;
+    const pluginDir = ".obsidian/plugins/" + plugin.manifest.id;
+    const content = await adapter.read(pluginDir + "/formulas/_bundled.js");
+    const jsonStr = content.replace("module.exports = ", "").replace(/;$/, "");
+    const data = JSON.parse(jsonStr);
     if (data && data.GROUPS && data.GROUPS.length) {
       FORMULA_DATA = data;
       log("Loaded bundled fallback data,", data.GROUPS.length, "groups");
@@ -340,7 +344,7 @@ async function loadFormulas(plugin) {
         return true;
       }
       log("No groups loaded, trying bundled fallback");
-      return loadBundledFallback();
+      return await loadBundledFallback(plugin);
     }
 
     FORMULA_DATA = { STRINGS: STRINGS, GROUPS: GROUPS };
@@ -348,7 +352,7 @@ async function loadFormulas(plugin) {
     return true;
   } catch (e) {
     logWarn("loadFormulas from files failed:", e.message, "- trying bundled fallback");
-    return loadBundledFallback();
+    return await loadBundledFallback(plugin);
   }
 }
 
