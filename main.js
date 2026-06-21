@@ -587,7 +587,14 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   onunload() {
     log("Unloading");
     try {
-      this.app.workspace.detachLeavesOfType("formula-library-sidebar");
+      document.querySelectorAll('link[href*="mathlive"]').forEach((el) => el.remove());
+      document.querySelectorAll('script[src*="mathlive"]').forEach((el) => el.remove());
+    } catch (_) {}
+    try {
+      const leaves = this.app.workspace.getLeavesOfType("formula-library-sidebar");
+      for (const leaf of leaves) {
+        try { leaf.detach(); } catch (_) {}
+      }
     } catch (e) {
       logWarn("detachLeaves failed:", e.message);
     }

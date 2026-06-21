@@ -2,7 +2,7 @@
 
 [中文文档](README-cn.md)
 
-LaTeX formula editor with MathLive WYSIWYG editing, 2100+ categorized formulas, smart search, and extensible formula folders. Extracted from **LaTeXSnipper Office Plugin**.
+A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ categorized formulas**, **smart search** (pinyin, LaTeX commands, fuzzy matching), and **extensible formula folders** for user customization.
 
 ## Features
 

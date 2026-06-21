@@ -3,7 +3,7 @@
   "name": "Formula Library",
   "version": "1.0.0",
   "minAppVersion": "1.0.0",
-  "description": "LaTeX formula editor with MathLive and 2100+ formula library, extracted from LaTeXSnipper Office Plugin.",
+  "description": "LaTeX formula editor with MathLive WYSIWYG editing, 2100+ categorized formulas, smart search, and extensible formula folders.",
   "author": "strangelion",
   "isDesktopOnly": false
 }

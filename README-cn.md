@@ -1,6 +1,8 @@
 # Formula Library - Obsidian Plugin
 
-LaTeX 公式编辑器，内置 2100+ 公式库，从 **LaTeXSnipper Office 插件**提取。
+中文文档 | [English](README.md)
+
+LaTeX 公式编辑器，支持 **MathLive WYSIWYG 可视化编辑**、**2100+ 分类公式**、**智能搜索**（拼音、LaTeX 命令、模糊匹配），以及**可扩展的公式文件夹**供用户自定义。
 
 ## 功能
 
