@@ -882,6 +882,15 @@ class EditorModal extends obsidian.Modal {
     this.statusEl = ep.createDiv({ cls: "fe-status-bar" });
     this.statusEl.setText(ui(this.plugin, "ready"));
 
+    this.latexInline = ep.createDiv({ cls: "fe-latex-inline-wrap" });
+    this.latexSource = this.latexInline.createEl("textarea", {
+      cls: "fe-latex-inline",
+      attr: { spellcheck: "false", placeholder: "LaTeX source...", rows: "2" },
+    });
+    if (this.plugin.settings.defaultEditorMode === "source") {
+      this.latexInline.style.display = "none";
+    }
+
     const lp = ml.createDiv({ cls: "fe-library-panel" });
     const lc = lp.createDiv({ cls: "fl-search-container" });
     this.libSI = lc.createEl("input", { cls: "fl-search-input", attr: { type: "text", placeholder: ui(this.plugin, "search") } });
@@ -904,6 +913,37 @@ class EditorModal extends obsidian.Modal {
       this.mf = new MathfieldElement();
       this.mf.mathVirtualKeyboardPolicy = this.plugin.settings.mathliveKeyboard ? "auto" : "manual";
       this.mf.smartFence = true;
+
+      try {
+        if (window.mathVirtualKeyboard) {
+          window.mathVirtualKeyboard.container = document.body;
+          window.mathVirtualKeyboard.style = {
+            position: "fixed",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            zIndex: "99999",
+          };
+          setTimeout(() => {
+            const kbd = document.querySelector(".ML__virtual-keyboard");
+            if (kbd) {
+              ["mousedown", "click"].forEach((evt) => {
+                kbd.addEventListener(evt, (e) => e.stopPropagation(), true);
+              });
+              const observer = new MutationObserver(() => {
+                const modalEl = this.contentEl.closest(".modal");
+                if (!modalEl) return;
+                const visible = kbd.offsetHeight > 0;
+                modalEl.parentElement.style.maxHeight = visible ? "55vh" : "95vh";
+                modalEl.parentElement.style.height = visible ? "55vh" : "";
+              });
+              observer.observe(kbd, { attributes: true, attributeFilter: ["style", "class"] });
+              observer.observe(kbd, { childList: true, subtree: true });
+            }
+          }, 500);
+        }
+      } catch (_) {}
+
       this.mf.style.width = "100%";
       this.mf.style.minHeight = "120px";
       this.mf.style.fontSize = (this.plugin.settings.previewFontSize || 20) + "px";
@@ -921,15 +961,30 @@ class EditorModal extends obsidian.Modal {
       }
       this.previewEl.appendChild(this.mf);
 
-      this.latexSource = this.previewEl.createEl("textarea", {
-        cls: "fe-latex-inline",
-        attr: { spellcheck: "false", placeholder: "LaTeX source...", rows: "2" },
-      });
-      this.latexSource.value = this.initLatex || "";
-
-      ["mousedown", "mouseup", "mousemove", "click", "dblclick"].forEach((evt) => {
-        this.mf.addEventListener(evt, (e) => e.stopPropagation(), true);
-      });
+      try {
+        const container = this.mf.shadowRoot?.querySelector(".ML__container");
+        if (container) {
+          container.removeAttribute("aria-hidden");
+          log("Removed aria-hidden from ML__container");
+          new MutationObserver(() => {
+            if (container.hasAttribute("aria-hidden")) {
+              container.removeAttribute("aria-hidden");
+              log("Removed re-added aria-hidden");
+            }
+          }).observe(container, { attributes: true, attributeFilter: ["aria-hidden"] });
+        } else {
+          logWarn("ML__container not found in shadow root");
+        }
+        const kbdToggle = this.mf.shadowRoot?.querySelector(".ML__virtual-keyboard-toggle");
+        if (kbdToggle) {
+          log("Virtual keyboard toggle found");
+          kbdToggle.addEventListener("click", () => {
+            log("Virtual keyboard toggle clicked");
+          });
+        } else {
+          logWarn("Virtual keyboard toggle not found");
+        }
+      } catch (e) { logWarn("aria-hidden cleanup error:", e.message); }
 
       this.mf.addEventListener("input", () => {
         const val = this.mf.value || "";
@@ -948,7 +1003,10 @@ class EditorModal extends obsidian.Modal {
         this.latexSource.value = this.mf.value || "";
       });
 
-      if (this.initLatex) this.mf.value = this.initLatex;
+      if (this.initLatex) {
+        this.mf.value = this.initLatex;
+        this.latexSource.value = this.initLatex;
+      }
     } else {
       this.previewEl.createEl("div", { cls: "fe-preview-placeholder", text: "MathLive unavailable" });
     }
@@ -963,10 +1021,12 @@ class EditorModal extends obsidian.Modal {
     this.btnV.addEventListener("click", () => {
       this.btnV.addClass("active"); this.btnS.removeClass("active");
       this.visualPane.style.display = ""; this.sourcePane.style.display = "none";
+      if (this.latexInline) this.latexInline.style.display = "";
     });
     this.btnS.addEventListener("click", () => {
       this.btnS.addClass("active"); this.btnV.removeClass("active");
       this.visualPane.style.display = "none"; this.sourcePane.style.display = "";
+      if (this.latexInline) this.latexInline.style.display = "none";
       this.sourceTA.value = this.mf ? this.mf.getValue("latex") : this.ta.value;
     });
     [this.sourceTA].forEach(el => el.addEventListener("keydown", (e) => this.onKey(e)));

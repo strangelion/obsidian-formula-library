@@ -288,6 +288,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: max-height 0.2s ease;
 }
 
 .modal-container:has(.formula-editor-modal) {
@@ -355,9 +356,9 @@
 .fe-main-layout {
   display: flex;
   gap: 16px;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* ---- Editor Pane ---- */
@@ -400,6 +401,10 @@
   pointer-events: auto;
 }
 
+.fe-latex-inline-wrap {
+  flex-shrink: 0;
+}
+
 .fe-latex-inline {
   width: 100%;
   min-height: 36px;
@@ -413,7 +418,6 @@
   font-size: 12px;
   line-height: 1.4;
   resize: vertical;
-  flex-shrink: 0;
 }
 
 .fe-latex-inline:focus {
@@ -445,7 +449,7 @@
   box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
 }
 
-.fe-status-bar { padding: 8px 0 0; font-size: 12px; color: var(--text-muted); }
+.fe-status-bar { padding: 8px 0 0; font-size: 12px; color: var(--text-muted); text-align: left; }
 
 /* ---- Library Panel ---- */
 .fe-library-panel {
@@ -471,4 +475,27 @@
 @media (max-width: 900px) {
   .fe-main-layout { flex-direction: column; }
   .fe-library-panel { width: 100%; min-width: 0; border-left: none; border-top: 1px solid var(--background-modifier-border); padding-left: 0; max-height: 240px; }
+}
+
+/* MathLive virtual keyboard */
+.ML__virtual-keyboard {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: auto !important;
+  width: 100% !important;
+  max-height: 40vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.ML__virtual-keyboard-toggle {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.ML__menu-toggle {
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
