@@ -364,10 +364,6 @@ function loadMathLive() {
   if (mathliveReady) return Promise.resolve();
   return new Promise((resolve) => {
     if (window.MathfieldElement) { mathliveReady = true; resolve(); return; }
-    const css = document.createElement("link");
-    css.rel = "stylesheet";
-    css.href = "https://cdn.jsdelivr.net/npm/mathlive@0.104.0/dist/mathlive-static.css";
-    document.head.appendChild(css);
     const s = document.createElement("script");
     s.src = "https://cdn.jsdelivr.net/npm/mathlive@0.104.0/dist/mathlive.min.js";
     s.onload = () => { mathliveReady = true; log("MathLive loaded"); resolve(); };
@@ -623,7 +619,6 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   onunload() {
     log("Unloading");
     try {
-      document.querySelectorAll('link[href*="mathlive"]').forEach((el) => el.remove());
       document.querySelectorAll('script[src*="mathlive"]').forEach((el) => el.remove());
     } catch (_) {}
     try {
@@ -926,6 +921,12 @@ class EditorModal extends obsidian.Modal {
       }
       this.previewEl.appendChild(this.mf);
 
+      this.latexSource = this.previewEl.createEl("textarea", {
+        cls: "fe-latex-inline",
+        attr: { spellcheck: "false", placeholder: "LaTeX source...", rows: "2" },
+      });
+      this.latexSource.value = this.initLatex || "";
+
       ["mousedown", "mouseup", "mousemove", "click", "dblclick"].forEach((evt) => {
         this.mf.addEventListener(evt, (e) => e.stopPropagation(), true);
       });
@@ -933,6 +934,18 @@ class EditorModal extends obsidian.Modal {
       this.mf.addEventListener("input", () => {
         const val = this.mf.value || "";
         this.sourceTA.value = val;
+        if (this.latexSource !== document.activeElement) {
+          this.latexSource.value = val;
+        }
+      });
+
+      this.latexSource.addEventListener("input", () => {
+        const val = this.latexSource.value;
+        this.mf.value = val;
+        this.sourceTA.value = val;
+      });
+      this.latexSource.addEventListener("focus", () => {
+        this.latexSource.value = this.mf.value || "";
       });
 
       if (this.initLatex) this.mf.value = this.initLatex;
@@ -1016,6 +1029,7 @@ class EditorModal extends obsidian.Modal {
       const mlLatex = latex.replace(/#\?/g, "\\square").replace(/#0/g, "\\square").replace(/#@/g, "\\square");
       this.mf.insert(mlLatex);
       this.sourceTA.value = this.mf.value || "";
+      if (this.latexSource) this.latexSource.value = this.mf.value || "";
       this.mf.focus();
     } else {
       const s = this.ta.selectionStart, end = this.ta.selectionEnd, t = this.ta.value;
