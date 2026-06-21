@@ -1,7 +1,7 @@
 {
-  "id": "obsidian-formula-library",
+  "id": "formula-library",
   "name": "Formula Library",
-  "version": "1.1.2",
+  "version": "1.0.0",
   "minAppVersion": "1.0.0",
   "description": "LaTeX formula editor with MathLive WYSIWYG editing, 2100+ categorized formulas, smart search, and extensible formula folders.",
   "author": "strangelion",
