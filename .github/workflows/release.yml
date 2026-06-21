@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Embed MathLive into main.js
+        run: node build-embed.js
+
       - name: Update manifest.json version
         run: |
           VERSION="${{ inputs.version }}"
@@ -30,7 +37,7 @@ jobs:
           "
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add manifest.json
+          git add manifest.json main.js
           git commit -m "chore: bump version to $VERSION"
           git push origin HEAD
 
@@ -49,4 +56,3 @@ jobs:
             main.js
             manifest.json
             styles.css
-            formulas/_bundled.js

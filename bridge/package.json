@@ -1,0 +1,13 @@
+{
+  "name": "formula-library-bridge",
+  "version": "1.0.0",
+  "description": "Bridge server for Formula Library Obsidian plugin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js --dev"
+  },
+  "dependencies": {
+    "katex": "^0.16.11"
+  }
+}
