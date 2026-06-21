@@ -2,6 +2,58 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.2.2] - 2026-06-21
+
+### Fixed
+- Plugin ID changed from `obsidian-formula-library` to `formula-library` (community submission requirement: ID cannot contain "obsidian")
+- MathLive CSS inlined into `styles.css` to bypass Obsidian CSP blocking CDN stylesheets
+- MathLive JS embedded as base64 in `main.js` — zero CDN dependency for compliance
+- Virtual keyboard not working — `aria-hidden` on MathLive container blocking focus, removed with MutationObserver
+- Virtual keyboard causing modal close — keyboard container set to `document.body`, click events stopped from propagating to modal
+- Context menu cannot close by clicking empty space — removed `stopPropagation` from mathfield, moved to preview container
+- LaTeX source editor not visible — moved from inside preview area to independent bottom section
+- LaTeX source hidden in Source mode — toggled with Visual/Source mode switch
+- Status bar centered — fixed to left-align
+- `loadMathLive` function missing `plugin` parameter — all callers updated
+- Duplicate `MATHLIVE_B64` declarations from repeated build — build script deduplication fixed
+- CDN font references remaining after build — manual cleanup of duplicate font directory lines
+- `saveSettings()` method missing — all settings changes were silently discarded
+- `enabledGroups` not initialized on first load — disabling groups had no effect until manual refresh
+- "Enable all" toggle not reflecting individual group states after toggling
+- Settings panel not re-rendering after toggling groups (required manual Refresh click)
+- Keyboard shortcuts hardcoded — now configurable in settings, default to unbound
+- `loadBundledFallback` using `require()` which fails in Obsidian sandbox — switched to Vault adapter
+- Plugin disable crashing settings window — added try-catch and proper resource cleanup in `onunload()`
+- CSS `:has` selector warning — replaced with JS class-based approach
+- CSS `!important` warnings — removed from own CSS, kept only in third-party MathLive CSS
+
+### Added
+- **MathLive Embedded**: MathLive 0.104.0 embedded as base64 in `main.js` — fully compliant with Obsidian plugin policies (no CDN, no eval via external scripts)
+- **Bridge Architecture**: Local HTTP server for enhanced rendering (SVG/MathML export):
+  - `bridge/server.js` — Node.js server with KaTeX rendering
+  - `bridge/client.js` — Client module (integrated into main.js)
+  - `bridge/package.json` — Dependencies
+  - `bridge/README.md` — API documentation
+  - Settings: Bridge enable toggle + URL configuration
+  - Plugin methods: `bridgeConvert()`, `bridgeExport()`
+  - Modal: SVG/MathML export buttons (visible when Bridge connected)
+- **Configurable Keyboard Shortcuts**: Custom shortcuts for fraction, sqrt, superscript, subscript, sub-super (default: unbound)
+- **Bridge Settings**: Enable/disable Bridge, URL configuration
+- **Search Hints**: Gray hint text below search inputs showing supported search modes
+- **LaTeX Source Editor**: Small editing area below the MathLive editor for raw LaTeX input
+- **Formula Group Toggles**: Enable/disable individual formula categories in settings with auto-detect and refresh button
+- **GitHub Actions Workflow**: One-click release with version sync, MathLive embedding, and artifact attestation
+- **`exportViaBridge` method**: Export formula to SVG/MathML via Bridge, copy to clipboard
+
+### Changed
+- MathLive loaded from `vendor/mathlive.min.js` via Vault adapter (local, no CDN)
+- Fonts loaded from local `vendor/fonts/` directory
+- MathLive CSS inlined into `styles.css` (bypass CSP)
+- Settings page: all labels follow selected language dynamically
+- Modal height dynamically adjusts when virtual keyboard is shown/hidden
+- `loadMathLive` now requires `plugin` parameter for Vault adapter access
+- `onunload` properly cleans up MathLive script tags and detaches sidebar leaves
+
 ## [1.1.1] - 2026-06-21
 
 ### Fixed
