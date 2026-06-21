@@ -2,6 +2,11 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.2.3] - 2026-06-21
+
+### Removed
+- **Bridge server and client removed**: The Bridge architecture (Node.js HTTP server for SVG/MathML export) was incomplete — OCR integration with desktop LaTeXSnipper was not functional (Office Bridge doesn't expose OCR results to external consumers), and the export feature was premature. Rather than ship half-working functionality to users, it was removed entirely. Will be re-implemented when the OCR pipeline is ready.
+
 ## [1.2.2] - 2026-06-21
 
 ### Fixed

@@ -609,19 +609,6 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
 
     loadMathLive(this);
 
-    this._bridgeAvailable = false;
-    if (this.settings.bridgeEnabled && this.settings.bridgeUrl) {
-      const bUrl = this.settings.bridgeUrl.replace(/\/$/, "");
-      try {
-        const resp = await fetch(bUrl + "/health", { signal: AbortSignal.timeout(3000) });
-        const data = await resp.json();
-        if (data.ok) {
-          this._bridgeAvailable = true;
-          log("Bridge connected:", bUrl, "KaTeX:", data.katex);
-        }
-      } catch (e) { logWarn("Bridge not available:", e.message); }
-    }
-
     this._activeEditor = null;
 
     this.registerEvent(
@@ -767,44 +754,6 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     }
     ed.focus();
   }
-
-  async bridgeConvert(latex, targets) {
-    if (!this._bridgeAvailable) return null;
-    try {
-      const bUrl = this.settings.bridgeUrl.replace(/\/$/, "");
-      const resp = await fetch(bUrl + "/convert", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ latex, targets }),
-        signal: AbortSignal.timeout(10000),
-      });
-      const data = await resp.json();
-      return data.ok ? data.result : null;
-    } catch (e) {
-      logWarn("bridgeConvert failed:", e.message);
-      this._bridgeAvailable = false;
-      return null;
-    }
-  }
-
-  async bridgeExport(latex, format) {
-    if (!this._bridgeAvailable) return null;
-    try {
-      const bUrl = this.settings.bridgeUrl.replace(/\/$/, "");
-      const resp = await fetch(bUrl + "/export", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ latex, format }),
-        signal: AbortSignal.timeout(10000),
-      });
-      const data = await resp.json();
-      return data.ok ? data.output : null;
-    } catch (e) {
-      logWarn("bridgeExport failed:", e.message);
-      this._bridgeAvailable = false;
-      return null;
-    }
-  }
 }
 
 // ======================== Sidebar (simplified) ========================
@@ -933,10 +882,6 @@ class EditorModal extends obsidian.Modal {
     this.btnV = tg.createEl("button", { text: ui(this.plugin, "visual"), cls: "active" });
     this.btnS = tg.createEl("button", { text: ui(this.plugin, "source") });
     top.createDiv({ cls: "fe-spacer" });
-    if (this.plugin._bridgeAvailable) {
-      top.createEl("button", { cls: "fe-btn", text: "SVG", title: "Export SVG via Bridge" }).addEventListener("click", () => this.exportViaBridge("svg"));
-      top.createEl("button", { cls: "fe-btn", text: "MathML", title: "Export MathML via Bridge" }).addEventListener("click", () => this.exportViaBridge("mathml"));
-    }
     top.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "cancel") }).addEventListener("click", () => this.close());
     this.btnAccept = top.createEl("button", { cls: "fe-btn fe-btn-primary", text: ui(this.plugin, "acceptInsert") });
     this.btnAccept.addEventListener("click", () => this.accept());
@@ -1247,19 +1192,6 @@ class EditorModal extends obsidian.Modal {
     log("accept: inserting into editor");
     this.plugin.insertFormula(latex, true);
     this.close();
-  }
-
-  async exportViaBridge(format) {
-    const latex = this.mf ? (this.mf.value || "").trim() : this.ta.value.trim();
-    if (!latex) { this.statusEl.setText("No formula to export"); return; }
-    this.statusEl.setText("Exporting via Bridge...");
-    const result = await this.plugin.bridgeConvert(latex, [format]);
-    if (result && result[format]) {
-      await navigator.clipboard.writeText(result[format]);
-      this.statusEl.setText("Copied " + format.toUpperCase() + " to clipboard");
-    } else {
-      this.statusEl.setText("Export failed");
-    }
   }
 
   onClose() { log("Modal onClose"); this.contentEl.empty(); }
