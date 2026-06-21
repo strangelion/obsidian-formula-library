@@ -23,9 +23,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Embed MathLive into main.js
-        run: node build-embed.js
-
       - name: Update manifest.json version
         run: |
           VERSION="${{ inputs.version }}"
