@@ -17,6 +17,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Update manifest.json version
+        run: |
+          VERSION="${{ inputs.version }}"
+          VERSION="${VERSION#v}"
+          node -e "
+            const fs = require('fs');
+            const m = JSON.parse(fs.readFileSync('manifest.json','utf8'));
+            m.version = '$VERSION';
+            fs.writeFileSync('manifest.json', JSON.stringify(m, null, 2) + '\n');
+            console.log('Updated manifest.json version to', '$VERSION');
+          "
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git commit -m "chore: bump version to $VERSION"
+          git push origin HEAD
+
       - name: Create tag
         run: |
           git tag ${{ inputs.version }}

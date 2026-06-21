@@ -9,11 +9,12 @@ A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ c
 - **MathLive Visual Editor**: WYSIWYG formula editing with real-time preview and virtual keyboard
 - **2100+ Formulas**: 18 categories (Greek, Structures, Delimiters, Analysis, Algebra, Geometry, Topology, Number Theory, Relations, Operators, Big Ops, Arrows, Sets, Functions, Probability, Physics, Chemistry, Misc)
 - **Smart Search**: Pinyin initials, LaTeX command aliases (e.g., `frac` → Fraction), and fuzzy matching
+- **Configurable Shortcuts**: Custom keyboard shortcuts for fraction, sqrt, superscript, subscript (default: unbound)
 - **Matrix Templates**: cases, matrix, bmatrix, pmatrix, jacobian, hessian, identity, diagonal, augmented
 - **Visual / Source Mode**: Toggle between WYSIWYG and raw LaTeX editing
 - **Edit Existing Formulas**: Place cursor inside `$...$` or `$$...$$` and run command to edit
 - **Sidebar Quick Insert**: Click formulas in the sidebar to insert directly
-- **Settings Page**: Language, insert format, editor mode, font size, font style, formula group toggles
+- **Settings Page**: Language, insert format, editor mode, shortcuts, font size, font style, formula group toggles
 - **Extensible Formula Folders**: Add custom formula groups by dropping JSON files into `formulas/`
 - **Bilingual**: Full Chinese/English localization, follows Obsidian language setting
 

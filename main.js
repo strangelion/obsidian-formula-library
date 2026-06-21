@@ -19,6 +19,13 @@ const DEFAULT_SETTINGS = {
   mathFontStyle: "italic",
   mathFontFamily: "",
   enabledGroups: {},
+  shortcuts: {
+    fraction: "",
+    sqrt: "",
+    superscript: "",
+    subscript: "",
+    subSuper: "",
+  },
 };
 const LOG_PREFIX = "[FormulaLib]";
 const UI_STRINGS = {
@@ -36,6 +43,8 @@ const UI_STRINGS = {
     groupsTitle: "Formula Groups", groupsDesc: "Toggle which groups are visible. Add JSON files to formulas/ then click Refresh.",
     refreshBtn: "Refresh", refreshDesc: "Detect new formula files and reload.",
     enableAll: "Enable all", enableAllDesc: "When enabled, all groups are shown regardless of individual toggles below.",
+    shortcuts: "Keyboard Shortcuts", shortcutsDesc: "Custom shortcuts for formula insertion (e.g. ctrl+f, ctrl+shift+f).",
+    shortcutFraction: "Fraction (\\frac)", shortcutSqrt: "Square Root (\\sqrt)", shortcutSuper: "Superscript (^{})", shortcutSub: "Subscript (_{})", shortcutSubSuper: "Sub & Super (_{}^{})",
   },
   zh: {
     title: "公式编辑器", visual: "可视化", source: "源码", search: "搜索所有公式 ...", preview: "在下方输入 LaTeX", noEditor: "没有活动的编辑器", openEditor: "打开编辑器", editMode: "编辑模式", cancel: "取消", acceptInsert: "插入", acceptUpdate: "更新", ready: "就绪",
@@ -51,6 +60,8 @@ const UI_STRINGS = {
     groupsTitle: "公式分类", groupsDesc: "切换哪些分类可见。放入 JSON 文件后点击刷新。",
     refreshBtn: "刷新", refreshDesc: "检测新公式文件并重新加载。",
     enableAll: "全部启用", enableAllDesc: "启用后忽略下方的单独开关。",
+    shortcuts: "键盘快捷键", shortcutsDesc: "自定义公式插入快捷键（如 ctrl+f, ctrl+shift+f）。",
+    shortcutFraction: "分数 (\\frac)", shortcutSqrt: "根号 (\\sqrt)", shortcutSuper: "上标 (^{})", shortcutSub: "下标 (_{})", shortcutSubSuper: "上下标 (_{}^{})",
   },
 };
 
@@ -446,6 +457,31 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setPlaceholder("KaTeX")
         .setValue(p.settings.mathFontFamily)
         .onChange(async (v) => { p.settings.mathFontFamily = v; await p.saveSettings(); }));
+
+    containerEl.createEl("h3", { text: ui(p, "shortcuts") });
+    containerEl.createEl("p", { text: ui(p, "shortcutsDesc"), cls: "setting-item-description" });
+
+    const sc = p.settings.shortcuts || {};
+    const shortcutDefs = [
+      { key: "fraction", label: ui(p, "shortcutFraction"), placeholder: "e.g. ctrl+f" },
+      { key: "sqrt", label: ui(p, "shortcutSqrt"), placeholder: "e.g. ctrl+r" },
+      { key: "superscript", label: ui(p, "shortcutSuper"), placeholder: "e.g. ctrl+h" },
+      { key: "subscript", label: ui(p, "shortcutSub"), placeholder: "e.g. ctrl+l" },
+      { key: "subSuper", label: ui(p, "shortcutSubSuper"), placeholder: "e.g. ctrl+j" },
+    ];
+
+    for (const def of shortcutDefs) {
+      new obsidian.Setting(containerEl)
+        .setName(def.label)
+        .setDesc(sc[def.key] || (loc(p) === "zh" ? "未绑定" : "Unbound"))
+        .addText((t) => t
+          .setPlaceholder(def.placeholder)
+          .setValue(sc[def.key] || "")
+          .onChange(async (v) => {
+            p.settings.shortcuts[def.key] = v.trim();
+            await p.saveSettings();
+          }));
+    }
 
     await this.renderGroupToggles(containerEl);
   }
@@ -1030,8 +1066,22 @@ class EditorModal extends obsidian.Modal {
   }
 
   onKey(e) {
+    const sc = this.plugin.settings.shortcuts || {};
+    const map = {};
+    if (sc.fraction) map[sc.fraction] = "\\frac{}{}";
+    if (sc.sqrt) map[sc.sqrt] = "\\sqrt{}";
+    if (sc.superscript) map[sc.superscript] = "^{}";
+    if (sc.subscript) map[sc.subscript] = "_{}";
+    if (sc.subSuper) map[sc.subSuper] = "_{}^{}";
+    const combo = (e.ctrlKey ? "ctrl+" : "") + (e.shiftKey ? "shift+" : "") + (e.altKey ? "alt+" : "") + (e.metaKey ? "meta+" : "") + e.key.toLowerCase();
+    if (map[combo]) {
+      e.preventDefault();
+      this.insertIntoEditor(map[combo]);
+      return;
+    }
     if (e.key === "Enter" && e.shiftKey && !e.isComposing && !e.altKey && !e.ctrlKey && !e.metaKey) {
-      e.preventDefault(); this.accept();
+      e.preventDefault();
+      this.accept();
     }
   }
 
