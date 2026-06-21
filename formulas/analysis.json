@@ -1,0 +1,1112 @@
+{
+  "id": "analysis",
+  "structures": true,
+  "items": [
+    {
+      "section": "数学分析 / 实分析 - 概念 / 性质",
+      "sectionEn": "Mathematical / Real Analysis - Concepts / Properties"
+    },
+    [
+      "数列极限",
+      "\\lim_{n\\to\\infty}a_n=L",
+      "Sequence limit"
+    ],
+    [
+      "函数极限",
+      "\\lim_{x\\to a}f(x)=L",
+      "Function limit"
+    ],
+    [
+      "连续",
+      "f\\in C(X)",
+      "Continuity"
+    ],
+    [
+      "一致连续",
+      "\\forall\\varepsilon>0\\;\\exists\\delta>0:\\;d(x,y)<\\delta\\Rightarrow |f(x)-f(y)|<\\varepsilon",
+      "Uniform continuity"
+    ],
+    [
+      "可微函数",
+      "f\\in C^1(U)",
+      "Differentiable function"
+    ],
+    [
+      "紧集",
+      "K\\subset X\\text{ compact}",
+      "Compact set"
+    ],
+    [
+      "完备空间",
+      "(X,d)\\text{ complete}",
+      "Complete metric space"
+    ],
+    [
+      "一致收敛",
+      "f_n\\rightrightarrows f",
+      "Uniform convergence"
+    ],
+    [
+      "绝对连续",
+      "f\\in AC([a,b])",
+      "Absolute continuity"
+    ],
+    [
+      "凸函数",
+      "f(tx+(1-t)y)\\le tf(x)+(1-t)f(y)",
+      "Convex function"
+    ],
+    [
+      "导数",
+      "f'(x)=\\lim_{h\\to0}\\frac{f(x+h)-f(x)}{h}",
+      "Derivative"
+    ],
+    [
+      "高阶导数",
+      "f^{(n)}(x)",
+      "Higher derivative"
+    ],
+    [
+      "偏导数",
+      "\\frac{\\partial f}{\\partial x_i}",
+      "Partial derivative"
+    ],
+    [
+      "全微分",
+      "df=\\sum_i\\frac{\\partial f}{\\partial x_i}dx_i",
+      "Total differential"
+    ],
+    [
+      "方向导数",
+      "D_{\\mathbf v}f=\\nabla f\\cdot\\mathbf v",
+      "Directional derivative"
+    ],
+    [
+      "梯度",
+      "\\nabla f=\\left(\\frac{\\partial f}{\\partial x_1},\\ldots,\\frac{\\partial f}{\\partial x_n}\\right)",
+      "Gradient"
+    ],
+    [
+      "散度",
+      "\\nabla\\cdot\\mathbf F=\\sum_i\\frac{\\partial F_i}{\\partial x_i}",
+      "Divergence"
+    ],
+    [
+      "旋度",
+      "\\nabla\\times\\mathbf F",
+      "Curl"
+    ],
+    [
+      "Jacobian",
+      "J_f=\\left(\\frac{\\partial f_i}{\\partial x_j}\\right)",
+      "Jacobian matrix"
+    ],
+    [
+      "Hessian",
+      "H_f=\\left(\\frac{\\partial^2 f}{\\partial x_i\\partial x_j}\\right)",
+      "Hessian matrix"
+    ],
+    [
+      "定积分",
+      "\\int_a^b f(x)\\,dx",
+      "Definite integral"
+    ],
+    [
+      "不定积分",
+      "\\int f(x)\\,dx",
+      "Indefinite integral"
+    ],
+    [
+      "重积分",
+      "\\int\\cdots\\int_D f\\,dV",
+      "Multiple integral"
+    ],
+    [
+      "曲线积分",
+      "\\int_C f\\,ds",
+      "Line integral"
+    ],
+    [
+      "曲面积分",
+      "\\int_S f\\,dS",
+      "Surface integral"
+    ],
+    {
+      "section": "数学分析 / 实分析 - 定理 / 公式",
+      "sectionEn": "Mathematical / Real Analysis - Theorems / Formulas"
+    },
+    [
+      "Heine-Borel",
+      "K\\subset\\mathbb{R}^n\\text{ compact}\\Longleftrightarrow K\\text{ closed and bounded}",
+      "Heine-Borel theorem"
+    ],
+    [
+      "Bolzano-Weierstrass",
+      "(x_n)\\subset K\\text{ compact}\\implies\\exists x_{n_k}\\to x\\in K",
+      "Bolzano-Weierstrass theorem"
+    ],
+    [
+      "介值定理",
+      "f([a,b])\\supset [f(a),f(b)]",
+      "Intermediate value theorem"
+    ],
+    [
+      "Rolle 定理",
+      "f(a)=f(b)\\implies\\exists c:\\,f'(c)=0",
+      "Rolle theorem"
+    ],
+    [
+      "Lagrange 中值",
+      "f(b)-f(a)=f'(\\xi)(b-a)",
+      "Mean value theorem"
+    ],
+    [
+      "微分中值定理",
+      "\\exists\\xi\\in(a,b):\\;f(b)-f(a)=f'(\\xi)(b-a)",
+      "Differential mean value theorem"
+    ],
+    [
+      "Cauchy 中值",
+      "\\frac{f(b)-f(a)}{g(b)-g(a)}=\\frac{f'(\\xi)}{g'(\\xi)}",
+      "Cauchy mean value theorem"
+    ],
+    [
+      "Taylor 定理",
+      "f(x)=\\sum_{k=0}^{n}\\frac{f^{(k)}(a)}{k!}(x-a)^k+R_n(x)",
+      "Taylor theorem"
+    ],
+    [
+      "Fermat 极值",
+      "f\\text{ has local extremum at }c\\implies f'(c)=0",
+      "Fermat theorem"
+    ],
+    [
+      "Darboux 导数",
+      "f'\\text{ has the intermediate value property}",
+      "Darboux theorem for derivatives"
+    ],
+    [
+      "闭区间有界",
+      "f\\in C([a,b])\\implies f\\text{ bounded}",
+      "Boundedness theorem"
+    ],
+    [
+      "最值定理",
+      "f\\in C([a,b])\\implies\\exists x_m,x_M:\\,f(x_m)\\le f(x)\\le f(x_M)",
+      "Extreme value theorem"
+    ],
+    [
+      "Cantor 一致连续",
+      "f\\in C(K),\\;K\\text{ compact}\\implies f\\text{ uniformly continuous}",
+      "Heine-Cantor theorem"
+    ],
+    [
+      "Newton-Leibniz",
+      "\\int_a^b f'(x)\\,dx=f(b)-f(a)",
+      "Newton-Leibniz formula"
+    ],
+    [
+      "第一积分中值",
+      "\\int_a^b f(x)g(x)\\,dx=f(\\xi)\\int_a^b g(x)\\,dx",
+      "First mean value theorem for integrals"
+    ],
+    [
+      "第二积分中值",
+      "\\int_a^b f(x)g(x)\\,dx=f(a)\\int_a^\\xi g(x)\\,dx+f(b)\\int_\\xi^b g(x)\\,dx",
+      "Second mean value theorem for integrals"
+    ],
+    [
+      "分部积分",
+      "\\int_a^b u\\,dv=uv\\big|_a^b-\\int_a^b v\\,du",
+      "Integration by parts"
+    ],
+    [
+      "换元积分",
+      "\\int_{\\varphi(a)}^{\\varphi(b)}f(x)\\,dx=\\int_a^b f(\\varphi(t))\\varphi'(t)\\,dt",
+      "Change of variables"
+    ],
+    [
+      "Green 定理",
+      "\\oint_{\\partial D}P\\,dx+Q\\,dy=\\iint_D\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)dA",
+      "Green theorem"
+    ],
+    [
+      "Gauss 散度",
+      "\\iiint_V\\nabla\\cdot\\mathbf F\\,dV=\\iint_{\\partial V}\\mathbf F\\cdot\\mathbf n\\,dS",
+      "Divergence theorem"
+    ],
+    [
+      "Stokes 公式",
+      "\\oint_{\\partial S}\\mathbf F\\cdot d\\mathbf r=\\iint_S(\\nabla\\times\\mathbf F)\\cdot\\mathbf n\\,dS",
+      "Stokes theorem"
+    ],
+    [
+      "Dini 定理",
+      "f_n\\uparrow f\\in C(K),\\;K\\text{ compact}\\implies f_n\\rightrightarrows f",
+      "Dini theorem"
+    ],
+    [
+      "Arzela-Ascoli",
+      "\\mathcal{F}\\text{ equicontinuous and bounded}\\implies\\overline{\\mathcal{F}}\\text{ compact}",
+      "Arzela-Ascoli theorem"
+    ],
+    [
+      "Weierstrass 逼近",
+      "\\overline{\\mathbb{R}[x]}^{\\|\\cdot\\|_\\infty}=C([a,b])",
+      "Weierstrass approximation"
+    ],
+    [
+      "Stone-Weierstrass",
+      "A\\subset C(K)\\text{ separates points}\\implies\\overline{A}=C(K)",
+      "Stone-Weierstrass theorem"
+    ],
+    [
+      "Banach 不动点",
+      "d(Tx,Ty)\\le qd(x,y),\\;q<1\\implies\\exists!x^*=Tx^*",
+      "Banach fixed point theorem"
+    ],
+    {
+      "section": "测度论 / 积分 - 概念 / 性质",
+      "sectionEn": "Measure / Integration - Concepts / Properties"
+    },
+    [
+      "σ-代数",
+      "\\mathcal{A}\\text{ is a }\\sigma\\text{-algebra}",
+      "Sigma algebra"
+    ],
+    [
+      "测度空间",
+      "(X,\\mathcal{A},\\mu)",
+      "Measure space"
+    ],
+    [
+      "可测函数",
+      "f:(X,\\mathcal{A})\\to(Y,\\mathcal{B})\\text{ measurable}",
+      "Measurable function"
+    ],
+    [
+      "Lebesgue 积分",
+      "\\int_X f\\,d\\mu",
+      "Lebesgue integral"
+    ],
+    [
+      "Lp 空间",
+      "L^p(X)=\\{f:\\int |f|^p d\\mu<\\infty\\}",
+      "Lp space"
+    ],
+    [
+      "几乎处处",
+      "f=g\\quad\\mu\\text{-a.e.}",
+      "Almost everywhere"
+    ],
+    {
+      "section": "测度论 / 积分 - 定理 / 公式",
+      "sectionEn": "Measure / Integration - Theorems / Formulas"
+    },
+    [
+      "单调收敛",
+      "0\\le f_n\\uparrow f\\implies\\int f_n\\,d\\mu\\to\\int f\\,d\\mu",
+      "Monotone convergence theorem"
+    ],
+    [
+      "控制收敛",
+      "|f_n|\\le g,\\;f_n\\to f\\implies\\int f_n\\to\\int f",
+      "Dominated convergence theorem"
+    ],
+    [
+      "Fatou 引理",
+      "\\int\\liminf f_n\\,d\\mu\\le\\liminf\\int f_n\\,d\\mu",
+      "Fatou lemma"
+    ],
+    [
+      "Fubini 定理",
+      "\\int_X\\int_Y f(x,y)\\,d\\nu\\,d\\mu=\\int_{X\\times Y}f\\,d(\\mu\\times\\nu)",
+      "Fubini theorem"
+    ],
+    [
+      "Tonelli 定理",
+      "f\\ge0\\implies\\int_X\\int_Y f=\\int_{X\\times Y}f",
+      "Tonelli theorem"
+    ],
+    [
+      "Radon-Nikodym",
+      "\\nu\\ll\\mu\\implies d\\nu=f\\,d\\mu",
+      "Radon-Nikodym theorem"
+    ],
+    [
+      "Lebesgue 微分",
+      "\\lim_{r\\to0}\\frac1{|B_r|}\\int_{B_r(x)}f(y)dy=f(x)\\text{ a.e.}",
+      "Lebesgue differentiation theorem"
+    ],
+    [
+      "Egorov 定理",
+      "f_n\\to f\\text{ a.e.}\\implies f_n\\rightrightarrows f\\text{ off small set}",
+      "Egorov theorem"
+    ],
+    [
+      "Lusin 定理",
+      "f\\text{ measurable}\\implies f\\text{ continuous off small set}",
+      "Lusin theorem"
+    ],
+    {
+      "section": "复分析 / 多复变 - 概念 / 性质",
+      "sectionEn": "Complex / Several Complex Variables - Concepts / Properties"
+    },
+    [
+      "全纯函数",
+      "f\\in\\mathcal{O}(\\Omega)",
+      "Holomorphic function"
+    ],
+    [
+      "亚纯函数",
+      "f\\in\\mathcal{M}(\\Omega)",
+      "Meromorphic function"
+    ],
+    [
+      "留数",
+      "\\operatorname{Res}(f,a)=\\frac{1}{2\\pi i}\\oint_\\gamma f(z)\\,dz",
+      "Residue"
+    ],
+    [
+      "Laurent 级数",
+      "f(z)=\\sum_{n=-\\infty}^{\\infty}a_n(z-a)^n",
+      "Laurent series"
+    ],
+    [
+      "调和函数",
+      "\\Delta u=0",
+      "Harmonic function"
+    ],
+    [
+      "共形映射",
+      "f:\\Omega\\to\\Omega'\\text{ conformal}",
+      "Conformal map"
+    ],
+    [
+      "多复变量全纯",
+      "f\\in\\mathcal{O}(\\Omega\\subset\\mathbb{C}^n)",
+      "Several complex variables"
+    ],
+    [
+      "Dolbeault 算子",
+      "\\bar\\partial f=0",
+      "Dolbeault operator"
+    ],
+    {
+      "section": "复分析 / 多复变 - 定理 / 公式",
+      "sectionEn": "Complex / Several Complex Variables - Theorems / Formulas"
+    },
+    [
+      "Cauchy 积分定理",
+      "\\oint_\\gamma f(z)\\,dz=0",
+      "Cauchy integral theorem"
+    ],
+    [
+      "Cauchy 积分公式",
+      "f(a)=\\frac1{2\\pi i}\\oint_\\gamma\\frac{f(z)}{z-a}\\,dz",
+      "Cauchy integral formula"
+    ],
+    [
+      "留数定理",
+      "\\oint_\\gamma f(z)dz=2\\pi i\\sum_k\\operatorname{Res}(f,a_k)",
+      "Residue theorem"
+    ],
+    [
+      "辐角原理",
+      "\\frac1{2\\pi i}\\oint_\\gamma\\frac{f'}{f}dz=N-P",
+      "Argument principle"
+    ],
+    [
+      "恒等定理",
+      "f|_A=g|_A,\\;A'\\cap\\Omega\\ne\\varnothing\\implies f=g",
+      "Identity theorem"
+    ],
+    [
+      "最大模原理",
+      "|f|\\text{ has interior maximum}\\implies f\\text{ constant}",
+      "Maximum modulus principle"
+    ],
+    [
+      "Schwarz 引理",
+      "|f(z)|\\le |z|,\\quad |f'(0)|\\le1",
+      "Schwarz lemma"
+    ],
+    [
+      "Liouville 定理",
+      "f\\text{ entire bounded}\\implies f\\text{ constant}",
+      "Liouville theorem"
+    ],
+    [
+      "Morera 定理",
+      "\\oint_\\gamma f(z)dz=0\\implies f\\text{ holomorphic}",
+      "Morera theorem"
+    ],
+    [
+      "开映射定理",
+      "f\\in\\mathcal{O},\\;f\\text{ nonconstant}\\implies f\\text{ open}",
+      "Open mapping theorem"
+    ],
+    [
+      "Rouche 定理",
+      "|g|<|f|\\text{ on }\\partial D\\implies f,g+f\\text{ same zeros}",
+      "Rouche theorem"
+    ],
+    [
+      "Riemann 映射",
+      "\\Omega\\subsetneq\\mathbb{C}\\text{ simply connected}\\implies\\Omega\\cong\\mathbb{D}",
+      "Riemann mapping theorem"
+    ],
+    [
+      "Montel 定理",
+      "\\mathcal{F}\\text{ locally bounded}\\implies\\mathcal{F}\\text{ normal}",
+      "Montel theorem"
+    ],
+    [
+      "Mittag-Leffler",
+      "\\exists f\\in\\mathcal{M}(\\Omega)\\text{ with prescribed principal parts}",
+      "Mittag-Leffler theorem"
+    ],
+    [
+      "Weierstrass 分解",
+      "f(z)=z^m e^{g(z)}\\prod_n E_{p_n}(z/a_n)",
+      "Weierstrass factorization"
+    ],
+    [
+      "Hartogs 延拓",
+      "n\\ge2\\implies\\text{compact holes are removable}",
+      "Hartogs extension theorem"
+    ],
+    [
+      "Runge 定理",
+      "K\\Subset\\Omega,\\;\\mathbb{C}\\setminus K\\text{ no bounded component}\\implies f\\approx r",
+      "Runge theorem"
+    ],
+    [
+      "Mergelyan 定理",
+      "f\\in A(K)\\implies f\\text{ uniformly approximable by polynomials}",
+      "Mergelyan theorem"
+    ],
+    [
+      "Picard 小定理",
+      "f\\text{ entire nonconstant}\\implies\\mathbb{C}\\setminus f(\\mathbb{C})\\text{ has at most one point}",
+      "Little Picard theorem"
+    ],
+    [
+      "Phragmen-Lindelof",
+      "|f|\\text{ bounded on boundary and growth controlled}\\implies |f|\\text{ bounded}",
+      "Phragmen-Lindelof principle"
+    ],
+    [
+      "Levi 问题",
+      "\\Omega\\text{ pseudoconvex}\\Longleftrightarrow\\Omega\\text{ domain of holomorphy}",
+      "Levi problem"
+    ],
+    [
+      "Oka-Cartan",
+      "H^q(X,\\mathcal{F})=0\\quad(q>0)",
+      "Oka-Cartan theorem"
+    ],
+    {
+      "section": "泛函分析 / 算子理论 - 概念 / 性质",
+      "sectionEn": "Functional Analysis / Operator Theory - Concepts / Properties"
+    },
+    [
+      "赋范空间",
+      "(X,\\|\\cdot\\|)",
+      "Normed space"
+    ],
+    [
+      "Banach 空间",
+      "(X,\\|\\cdot\\|)\\text{ complete}",
+      "Banach space"
+    ],
+    [
+      "Hilbert 空间",
+      "(\\mathcal{H},\\langle\\cdot,\\cdot\\rangle)\\text{ complete}",
+      "Hilbert space"
+    ],
+    [
+      "有界算子",
+      "T\\in\\mathcal{B}(X,Y)",
+      "Bounded operator"
+    ],
+    [
+      "紧算子",
+      "T\\in\\mathcal{K}(X,Y)",
+      "Compact operator"
+    ],
+    [
+      "对偶空间",
+      "X^*",
+      "Dual space"
+    ],
+    [
+      "弱收敛",
+      "x_n\\rightharpoonup x",
+      "Weak convergence"
+    ],
+    [
+      "谱",
+      "\\sigma(T)=\\{\\lambda:T-\\lambda I\\text{ not invertible}\\}",
+      "Spectrum"
+    ],
+    [
+      "Fredholm 算子",
+      "\\operatorname{ind}T=\\dim\\ker T-\\dim\\operatorname{coker}T",
+      "Fredholm operator"
+    ],
+    {
+      "section": "泛函分析 / 算子理论 - 定理 / 公式",
+      "sectionEn": "Functional Analysis / Operator Theory - Theorems / Formulas"
+    },
+    [
+      "Hahn-Banach",
+      "p(x)\\ge f(x)\\implies\\exists F\\supset f,\\;F(x)\\le p(x)",
+      "Hahn-Banach theorem"
+    ],
+    [
+      "一致有界原理",
+      "\\sup_n\\|T_nx\\|<\\infty\\;\\forall x\\implies\\sup_n\\|T_n\\|<\\infty",
+      "Uniform boundedness principle"
+    ],
+    [
+      "开映射定理",
+      "T:X\\to Y\\text{ surjective bounded linear}\\implies T\\text{ open}",
+      "Open mapping theorem"
+    ],
+    [
+      "闭图像定理",
+      "\\operatorname{graph}(T)\\text{ closed}\\implies T\\text{ bounded}",
+      "Closed graph theorem"
+    ],
+    [
+      "Banach-Alaoglu",
+      "B_{X^*}\\text{ is weak-* compact}",
+      "Banach-Alaoglu theorem"
+    ],
+    [
+      "Riesz 表示",
+      "\\mathcal{H}^*\\cong\\mathcal{H}",
+      "Riesz representation theorem"
+    ],
+    [
+      "谱半径公式",
+      "r(T)=\\lim_{n\\to\\infty}\\|T^n\\|^{1/n}",
+      "Spectral radius formula"
+    ],
+    [
+      "谱定理",
+      "T=T^*\\implies T=\\int_{\\sigma(T)}\\lambda\\,dE(\\lambda)",
+      "Spectral theorem"
+    ],
+    [
+      "Fredholm 二择一",
+      "T\\text{ compact}\\implies I-T\\text{ invertible or }\\ker(I-T)\\ne0",
+      "Fredholm alternative"
+    ],
+    [
+      "Krein-Milman",
+      "K=\\overline{\\operatorname{conv}}\\operatorname{Ext}(K)",
+      "Krein-Milman theorem"
+    ],
+    [
+      "Eberlein-Smulyan",
+      "K\\subset X\\text{ weakly compact}\\Longleftrightarrow K\\text{ weakly sequentially compact}",
+      "Eberlein-Smulyan theorem"
+    ],
+    [
+      "Lumer-Phillips",
+      "A\\text{ maximal dissipative}\\Longleftrightarrow A\\text{ generates contraction semigroup}",
+      "Lumer-Phillips theorem"
+    ],
+    [
+      "Hille-Yosida",
+      "A\\text{ generates }C_0\\text{-semigroup}\\Longleftrightarrow\\|R(\\lambda,A)^n\\|\\le\\frac{M}{(\\lambda-\\omega)^n}",
+      "Hille-Yosida theorem"
+    ],
+    [
+      "Schauder 不动点",
+      "T:K\\to K\\text{ continuous compact}\\implies\\exists x=Tx",
+      "Schauder fixed point theorem"
+    ],
+    {
+      "section": "调和分析 / Fourier 分析 - 概念 / 性质",
+      "sectionEn": "Harmonic / Fourier Analysis - Concepts / Properties"
+    },
+    [
+      "Fourier 变换",
+      "\\widehat f(\\xi)=\\int_{\\mathbb{R}^n}f(x)e^{-2\\pi ix\\cdot\\xi}dx",
+      "Fourier transform"
+    ],
+    [
+      "逆 Fourier",
+      "f(x)=\\int_{\\mathbb{R}^n}\\widehat f(\\xi)e^{2\\pi ix\\cdot\\xi}d\\xi",
+      "Inverse Fourier transform"
+    ],
+    [
+      "卷积",
+      "(f*g)(x)=\\int f(y)g(x-y)dy",
+      "Convolution"
+    ],
+    [
+      "Schwartz 空间",
+      "\\mathcal{S}(\\mathbb{R}^n)",
+      "Schwartz space"
+    ],
+    [
+      "缓增分布",
+      "\\mathcal{S}'(\\mathbb{R}^n)",
+      "Tempered distributions"
+    ],
+    [
+      "Hardy-Littlewood 最大",
+      "Mf(x)=\\sup_{r>0}\\frac1{|B_r|}\\int_{B_r(x)}|f(y)|dy",
+      "Hardy-Littlewood maximal function"
+    ],
+    [
+      "Hilbert 变换",
+      "\\mathcal{H}f(x)=\\frac1\\pi\\operatorname{p.v.}\\int\\frac{f(y)}{x-y}dy",
+      "Hilbert transform"
+    ],
+    [
+      "Riesz 变换",
+      "R_j f=\\mathcal{F}^{-1}\\!\\left(-i\\frac{\\xi_j}{|\\xi|}\\widehat f\\right)",
+      "Riesz transform"
+    ],
+    [
+      "Littlewood-Paley",
+      "f=\\sum_j\\Delta_j f",
+      "Littlewood-Paley decomposition"
+    ],
+    [
+      "BMO",
+      "\\|f\\|_{\\mathrm{BMO}}=\\sup_Q\\frac1{|Q|}\\int_Q|f-f_Q|",
+      "BMO"
+    ],
+    [
+      "Hardy 空间",
+      "H^p=\\{f:\\sup_{0<r<1}\\|f(re^{i\\theta})\\|_{L^p}<\\infty\\}",
+      "Hardy space"
+    ],
+    [
+      "Carleson 测度",
+      "\\mu(S_I)\\le C|I|",
+      "Carleson measure"
+    ],
+    [
+      "Fourier 限制",
+      "\\mathcal R_Sf=\\widehat f\\big|_S",
+      "Fourier restriction"
+    ],
+    [
+      "Besov 空间",
+      "\\|f\\|_{B^s_{p,q}}=\\left(\\sum_j 2^{jsq}\\|\\Delta_jf\\|_p^q\\right)^{1/q}",
+      "Besov space"
+    ],
+    [
+      "Triebel-Lizorkin",
+      "\\|f\\|_{F^s_{p,q}}=\\left\\|\\left(\\sum_j 2^{jsq}|\\Delta_jf|^q\\right)^{1/q}\\right\\|_p",
+      "Triebel-Lizorkin space"
+    ],
+    {
+      "section": "调和分析 / Fourier 分析 - 定理 / 公式",
+      "sectionEn": "Harmonic / Fourier Analysis - Theorems / Formulas"
+    },
+    [
+      "Parseval 恒等式",
+      "\\sum_n |c_n|^2=\\frac1{2\\pi}\\int_{-\\pi}^{\\pi}|f(x)|^2dx",
+      "Parseval identity"
+    ],
+    [
+      "Plancherel 定理",
+      "\\|\\widehat f\\|_{L^2}=\\|f\\|_{L^2}",
+      "Plancherel theorem"
+    ],
+    [
+      "卷积定理",
+      "\\widehat{f*g}=\\widehat f\\,\\widehat g",
+      "Convolution theorem"
+    ],
+    [
+      "Hausdorff-Young",
+      "\\|\\widehat f\\|_{p'}\\le\\|f\\|_p\\quad(1\\le p\\le2)",
+      "Hausdorff-Young inequality"
+    ],
+    [
+      "Riesz-Thorin 插值",
+      "\\|T\\|_{L^{p_\\theta}\\to L^{q_\\theta}}\\le M_0^{1-\\theta}M_1^\\theta",
+      "Riesz-Thorin interpolation"
+    ],
+    [
+      "Marcinkiewicz 插值",
+      "T:L^{p_i}\\to L^{p_i,\\infty}\\implies T:L^p\\to L^p",
+      "Marcinkiewicz interpolation"
+    ],
+    [
+      "Hardy-Littlewood 最大定理",
+      "\\|Mf\\|_{L^p}\\le C_p\\|f\\|_{L^p}\\quad(p>1)",
+      "Hardy-Littlewood maximal theorem"
+    ],
+    [
+      "Calderon-Zygmund",
+      "T:L^p\\to L^p\\quad(1<p<\\infty)",
+      "Calderon-Zygmund theorem"
+    ],
+    [
+      "Mikhlin 乘子",
+      "|\\partial^\\alpha m(\\xi)|\\le C_\\alpha|\\xi|^{-|\\alpha|}\\implies T_m:L^p\\to L^p",
+      "Mikhlin multiplier theorem"
+    ],
+    [
+      "Carleson 定理",
+      "S_N f(x)\\to f(x)\\text{ a.e. for }f\\in L^2(\\mathbb{T})",
+      "Carleson theorem"
+    ],
+    [
+      "T(1) 定理",
+      "T\\text{ Calderon-Zygmund bounded}\\Longleftrightarrow T1,T^*1\\in\\mathrm{BMO}",
+      "T(1) theorem"
+    ],
+    [
+      "T(b) 定理",
+      "T\\text{ bounded under accretive testing functions }b",
+      "T(b) theorem"
+    ],
+    [
+      "Coifman-Meyer",
+      "\\|T_m(f,g)\\|_p\\le C\\|f\\|_{p_1}\\|g\\|_{p_2}",
+      "Coifman-Meyer theorem"
+    ],
+    [
+      "Restriction 猜想",
+      "\\|\\widehat f\\|_{L^q(S)}\\le C\\|f\\|_{L^p(\\mathbb{R}^n)}",
+      "Restriction conjecture"
+    ],
+    {
+      "section": "PDE / 变分法 / 微局部 - 概念 / 性质",
+      "sectionEn": "PDE / Calculus of Variations / Microlocal - Concepts / Properties"
+    },
+    [
+      "弱导数",
+      "\\int u\\,D^\\alpha\\varphi=(-1)^{|\\alpha|}\\int D^\\alpha u\\,\\varphi",
+      "Weak derivative"
+    ],
+    [
+      "Sobolev 空间",
+      "W^{k,p}(\\Omega)=\\{u:D^\\alpha u\\in L^p,\\;|\\alpha|\\le k\\}",
+      "Sobolev space"
+    ],
+    [
+      "弱解",
+      "a(u,v)=\\langle f,v\\rangle\\quad\\forall v\\in V",
+      "Weak solution"
+    ],
+    [
+      "基本解",
+      "L\\Phi=\\delta",
+      "Fundamental solution"
+    ],
+    [
+      "Green 函数",
+      "LG(x,y)=\\delta_y",
+      "Green function"
+    ],
+    [
+      "椭圆算子",
+      "\\sum_{i,j}a^{ij}(x)\\xi_i\\xi_j\\ge\\lambda|\\xi|^2",
+      "Elliptic operator"
+    ],
+    [
+      "抛物方程",
+      "\\partial_t u-Lu=f",
+      "Parabolic equation"
+    ],
+    [
+      "双曲方程",
+      "\\partial_t^2u-Lu=f",
+      "Hyperbolic equation"
+    ],
+    [
+      "波前集",
+      "\\operatorname{WF}(u)",
+      "Wavefront set"
+    ],
+    [
+      "Navier-Stokes 弱解",
+      "u\\in L^2_tH^1_x,\\quad \\partial_tu+(u\\cdot\\nabla)u+\\nabla p=\\nu\\Delta u",
+      "Navier-Stokes weak solution"
+    ],
+    [
+      "Strichartz 范数",
+      "\\|u\\|_{L^q_tL^r_x}",
+      "Strichartz norm"
+    ],
+    [
+      "黏性解",
+      "F(x,u,Du,D^2u)=0\\text{ in viscosity sense}",
+      "Viscosity solution"
+    ],
+    {
+      "section": "PDE / 变分法 / 微局部 - 定理 / 公式",
+      "sectionEn": "PDE / Calculus of Variations / Microlocal - Theorems / Formulas"
+    },
+    [
+      "Lax-Milgram",
+      "a(u,v)=\\langle f,v\\rangle\\quad\\forall v\\in V",
+      "Lax-Milgram theorem"
+    ],
+    [
+      "Sobolev 嵌入",
+      "W^{k,p}(\\Omega)\\hookrightarrow L^q(\\Omega)",
+      "Sobolev embedding theorem"
+    ],
+    [
+      "Poincare 不等式",
+      "\\|u-u_\\Omega\\|_{L^p}\\le C\\|\\nabla u\\|_{L^p}",
+      "Poincare inequality"
+    ],
+    [
+      "Morrey 不等式",
+      "W^{1,p}(\\Omega)\\hookrightarrow C^{0,1-n/p}(\\Omega)\\quad(p>n)",
+      "Morrey inequality"
+    ],
+    [
+      "Rellich-Kondrachov",
+      "W^{1,p}(\\Omega)\\Subset L^q(\\Omega)",
+      "Rellich-Kondrachov theorem"
+    ],
+    [
+      "最大值原理",
+      "Lu\\ge0\\implies\\max_\\Omega u\\le\\max_{\\partial\\Omega}u",
+      "Maximum principle"
+    ],
+    [
+      "Hopf 引理",
+      "\\partial_\\nu u(x_0)<0",
+      "Hopf boundary point lemma"
+    ],
+    [
+      "Schauder 估计",
+      "\\|u\\|_{C^{2,\\alpha}}\\le C(\\|Lu\\|_{C^\\alpha}+\\|u\\|_{C^0})",
+      "Schauder estimate"
+    ],
+    [
+      "Calderon-Zygmund 估计",
+      "\\|D^2u\\|_{L^p}\\le C\\|Lu\\|_{L^p}",
+      "Calderon-Zygmund estimate"
+    ],
+    [
+      "De Giorgi-Nash-Moser",
+      "u\\text{ weak solution}\\implies u\\in C^\\alpha_{\\mathrm{loc}}",
+      "De Giorgi-Nash-Moser theorem"
+    ],
+    [
+      "Cauchy-Kowalevski",
+      "\\text{analytic data}\\implies\\exists!\\text{ analytic solution}",
+      "Cauchy-Kowalevski theorem"
+    ],
+    [
+      "Euler-Lagrange",
+      "\\frac{\\partial L}{\\partial u}-\\partial_i\\frac{\\partial L}{\\partial u_i}=0",
+      "Euler-Lagrange equation"
+    ],
+    [
+      "Noether 定理",
+      "\\text{symmetry}\\implies\\partial_\\mu j^\\mu=0",
+      "Noether theorem"
+    ],
+    [
+      "伪微分算子",
+      "Pu(x)=\\int e^{ix\\cdot\\xi}p(x,\\xi)\\widehat u(\\xi)d\\xi",
+      "Pseudodifferential operator"
+    ],
+    [
+      "弱 Harnack",
+      "\\left(\\fint_{B_R}u^p\\right)^{1/p}\\le C\\inf_{B_R}u",
+      "Weak Harnack inequality"
+    ],
+    [
+      "Strichartz 估计",
+      "\\|e^{it\\Delta}f\\|_{L^q_tL^r_x}\\le C\\|f\\|_{L^2}",
+      "Strichartz estimate"
+    ],
+    [
+      "能量估计",
+      "\\|u\\|_{H^1}\\le C\\|f\\|_{H^{-1}}",
+      "Energy estimate"
+    ],
+    [
+      "先验估计",
+      "\\|u\\|_X\\le C\\|f\\|_Y",
+      "A priori estimate"
+    ],
+    [
+      "Garding 不等式",
+      "\\operatorname{Re}\\langle Lu,u\\rangle\\ge c\\|u\\|_{H^1}^2-\\lambda\\|u\\|_{L^2}^2",
+      "Garding inequality"
+    ],
+    [
+      "梯度估计",
+      "\\sup_{B_{R/2}}|\\nabla u|\\le \\frac{C}{R}\\sup_{B_R}|u|",
+      "Gradient estimate"
+    ],
+    [
+      "Carleman 估计",
+      "\\int|e^{\\tau\\varphi}u|^2\\le C\\int|e^{\\tau\\varphi}Pu|^2\\quad(\\tau\\gg1)",
+      "Carleman estimate"
+    ],
+    [
+      "椭圆正则性",
+      "Lu=f\\in H^s\\implies u\\in H^{s+2}_{\\mathrm{loc}}",
+      "Elliptic regularity"
+    ],
+    [
+      "Leray-Hopf",
+      "u\\text{ solves Navier-Stokes and satisfies energy inequality}",
+      "Leray-Hopf weak solution"
+    ],
+    {
+      "section": "ODE / 动力系统 / 凸优化 - 概念 / 性质",
+      "sectionEn": "ODE / Dynamical Systems / Convex Optimization - Concepts / Properties"
+    },
+    [
+      "初值问题",
+      "\\dot x=f(t,x),\\quad x(t_0)=x_0",
+      "Initial value problem"
+    ],
+    [
+      "流映射",
+      "\\varphi_t:X\\to X",
+      "Flow map"
+    ],
+    [
+      "Lyapunov 函数",
+      "V(x)>0,\\quad \\dot V(x)\\le0",
+      "Lyapunov function"
+    ],
+    [
+      "Hamilton 系统",
+      "\\dot q=\\partial_pH,\\quad\\dot p=-\\partial_qH",
+      "Hamiltonian system"
+    ],
+    [
+      "凸共轭",
+      "f^*(y)=\\sup_x(\\langle x,y\\rangle-f(x))",
+      "Fenchel conjugate"
+    ],
+    {
+      "section": "ODE / 动力系统 / 凸优化 - 定理 / 公式",
+      "sectionEn": "ODE / Dynamical Systems / Convex Optimization - Theorems / Formulas"
+    },
+    [
+      "Picard-Lindelof",
+      "f\\text{ locally Lipschitz}\\implies\\exists!x(t)",
+      "Picard-Lindelof theorem"
+    ],
+    [
+      "Gronwall 不等式",
+      "u(t)\\le a+\\int_0^t b(s)u(s)ds\\implies u(t)\\le a e^{\\int_0^t b}",
+      "Gronwall inequality"
+    ],
+    [
+      "Sobolev 不等式",
+      "\\|u\\|_{L^q(\\mathbb R^n)}\\le C\\|\\nabla u\\|_{L^p(\\mathbb R^n)}",
+      "Sobolev inequality"
+    ],
+    [
+      "等周不等式",
+      "\\operatorname{Area}(\\partial\\Omega)\\ge n\\operatorname{Vol}(\\Omega)^{1-1/n}\\operatorname{Vol}(B_1)^{1/n}",
+      "Isoperimetric inequality"
+    ],
+    [
+      "Hölder 不等式",
+      "\\int_\\Omega|fg|dx\\le\\left(\\int_\\Omega|f|^p\\right)^{1/p}\\left(\\int_\\Omega|g|^q\\right)^{1/q}",
+      "Holder inequality"
+    ],
+    [
+      "Minkowski 不等式",
+      "\\left(\\int|f+g|^p\\right)^{1/p}\\le\\left(\\int|f|^p\\right)^{1/p}+\\left(\\int|g|^p\\right)^{1/p}",
+      "Minkowski inequality"
+    ],
+    [
+      "Young 不等式",
+      "ab\\le\\frac{a^p}{p}+\\frac{b^q}{q}",
+      "Young inequality"
+    ],
+    [
+      "Jensen 不等式",
+      "\\varphi\\!\\left(\\int f\\right)\\le\\int\\varphi(f)",
+      "Jensen inequality"
+    ],
+    [
+      "Wirtinger 不等式",
+      "\\int_0^{2\\pi}|f-\\bar f|^2\\le\\int_0^{2\\pi}|f'|^2",
+      "Wirtinger inequality"
+    ],
+    [
+      "Hardy 不等式",
+      "\\int_0^\\infty\\!\\left|\\frac1x\\int_0^x f\\right|^p\\!dx\\le\\left(\\frac{p}{p-1}\\right)^p\\!\\int_0^\\infty|f|^p",
+      "Hardy inequality"
+    ],
+    [
+      "Gagliardo-Nirenberg",
+      "\\|D^j u\\|_{L^r}\\le C\\|D^m u\\|_{L^p}^{\\frac{j}{m}}\\|u\\|_{L^q}^{1-\\frac{j}{m}}",
+      "Gagliardo-Nirenberg inequality"
+    ],
+    [
+      "Trudinger 不等式",
+      "\\int_\\Omega\\exp\\!\\left(\\alpha|u|^{\\frac{n}{n-1}}\\right)<\\infty",
+      "Trudinger inequality"
+    ],
+    [
+      "Cheeger 不等式",
+      "\\lambda_1\\ge\\frac{h^2}{4},\\; h=\\inf\\frac{|\\partial A|}{|A|}",
+      "Cheeger inequality"
+    ],
+    [
+      "Caccioppoli 不等式",
+      "\\int|\\nabla u|^2\\le C\\int|u|^2",
+      "Caccioppoli inequality"
+    ],
+    [
+      "Korn 不等式",
+      "\\|\\nabla u\\|_{L^2}\\le C\\|\\varepsilon(u)\\|_{L^2}",
+      "Korn inequality"
+    ],
+    [
+      "Brunn-Minkowski",
+      "|A+B|^{1/n}\\ge|A|^{1/n}+|B|^{1/n}",
+      "Brunn-Minkowski inequality"
+    ],
+    [
+      "Harnack 不等式",
+      "\\sup_{B_{r/2}}u\\le C\\inf_{B_{r/2}}u",
+      "Harnack inequality"
+    ],
+    [
+      "Poincare-Bendixson",
+      "\\omega(x)\\text{ compact planar limit set}\\implies\\text{ equilibrium or periodic orbit}",
+      "Poincare-Bendixson theorem"
+    ],
+    [
+      "Stable manifold",
+      "W^s(p)=\\{x:\\varphi_t(x)\\to p\\}",
+      "Stable manifold theorem"
+    ],
+    [
+      "KKT 条件",
+      "\\nabla f(x)+\\sum_i\\lambda_i\\nabla g_i(x)=0",
+      "KKT conditions"
+    ],
+    [
+      "Fenchel-Rockafellar",
+      "\\inf_x f(x)+g(Ax)=\\sup_y -f^*(-A^*y)-g^*(y)",
+      "Fenchel-Rockafellar duality"
+    ],
+    [
+      "Pontryagin 最大值",
+      "\\dot x=\\partial_pH,\\quad \\dot p=-\\partial_xH,\\quad H=\\max_u H(x,p,u)",
+      "Pontryagin maximum principle"
+    ]
+  ]
+}

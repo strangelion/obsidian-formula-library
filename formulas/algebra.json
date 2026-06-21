@@ -1,0 +1,924 @@
+{
+  "id": "algebra",
+  "structures": true,
+  "items": [
+    {
+      "section": "线性代数 / 矩阵论 - 概念 / 性质",
+      "sectionEn": "Linear Algebra / Matrix Theory - Concepts / Properties"
+    },
+    [
+      "向量空间",
+      "V\\text{ over }\\mathbb{F}",
+      "Vector space"
+    ],
+    [
+      "子空间",
+      "W\\le V",
+      "Subspace"
+    ],
+    [
+      "线性组合",
+      "\\sum_i a_i v_i",
+      "Linear combination"
+    ],
+    [
+      "张成",
+      "\\operatorname{span}\\{v_1,ldots,v_k\\}",
+      "Span"
+    ],
+    [
+      "线性无关",
+      "\\sum_i a_i v_i=0\\implies a_i=0",
+      "Linear independence"
+    ],
+    [
+      "基",
+      "\\mathcal B=(v_1,ldots,v_n)",
+      "Basis"
+    ],
+    [
+      "维数",
+      "\\dim V=n",
+      "Dimension"
+    ],
+    [
+      "线性映射",
+      "T:V\\to W",
+      "Linear map"
+    ],
+    [
+      "核",
+      "\\ker T",
+      "Kernel"
+    ],
+    [
+      "像",
+      "\\operatorname{im}T",
+      "Image"
+    ],
+    [
+      "商空间",
+      "V/W",
+      "Quotient vector space"
+    ],
+    [
+      "对偶基",
+      "e^i(e_j)=\\delta^i_j",
+      "Dual basis"
+    ],
+    [
+      "坐标向量",
+      "[v]_{\\mathcal B}",
+      "Coordinate vector"
+    ],
+    [
+      "矩阵乘法",
+      "(AB)_{ij}=\\sum_k A_{ik}B_{kj}",
+      "Matrix multiplication"
+    ],
+    [
+      "逆矩阵",
+      "AA^{-1}=I",
+      "Inverse matrix"
+    ],
+    [
+      "迹",
+      "\\operatorname{tr}A",
+      "Trace"
+    ],
+    [
+      "行列式",
+      "\\det A",
+      "Determinant"
+    ],
+    [
+      "秩",
+      "\\operatorname{rank}A",
+      "Rank"
+    ],
+    [
+      "特征值",
+      "Av=\\lambda v",
+      "Eigenvalue"
+    ],
+    [
+      "特征多项式",
+      "p_A(\\lambda)=\\det(\\lambda I-A)",
+      "Characteristic polynomial"
+    ],
+    [
+      "Jordan 块",
+      "J_k(\\lambda)",
+      "Jordan block"
+    ],
+    [
+      "内积",
+      "\\langle x,y\\rangle",
+      "Inner product"
+    ],
+    [
+      "正交补",
+      "W^\\perp",
+      "Orthogonal complement"
+    ],
+    [
+      "正交投影",
+      "\\operatorname{proj}_W(v)",
+      "Orthogonal projection"
+    ],
+    [
+      "张量积",
+      "V\\otimes W",
+      "Tensor product"
+    ],
+    {
+      "section": "线性代数 / 矩阵论 - 定理 / 公式",
+      "sectionEn": "Linear Algebra / Matrix Theory - Theorems / Formulas"
+    },
+    [
+      "秩-零化度",
+      "\\dim V=\\operatorname{rank}T+\\operatorname{nullity}T",
+      "Rank-nullity theorem"
+    ],
+    [
+      "Cayley-Hamilton",
+      "p_A(A)=0",
+      "Cayley-Hamilton theorem"
+    ],
+    [
+      "谱定理",
+      "A=A^*\\implies A=U\\Lambda U^*",
+      "Spectral theorem"
+    ],
+    [
+      "Jordan 标准形",
+      "A\\sim\\operatorname{diag}(J_1,\\ldots,J_k)",
+      "Jordan normal form"
+    ],
+    [
+      "SVD",
+      "A=U\\Sigma V^*",
+      "Singular value decomposition"
+    ],
+    [
+      "Schur 分解",
+      "A=QTQ^*",
+      "Schur decomposition"
+    ],
+    [
+      "Sylvester 惯性",
+      "Q\\sim I_p\\oplus(-I_q)\\oplus0_r",
+      "Sylvester law of inertia"
+    ],
+    [
+      "Cramer 法则",
+      "x_i=\\frac{\\det A_i}{\\det A}",
+      "Cramer rule"
+    ],
+    [
+      "Steinitz 交换",
+      "\\text{independent set can be extended to a basis}",
+      "Steinitz exchange lemma"
+    ],
+    [
+      "基扩张定理",
+      "S\\text{ linearly independent}\\implies S\\subset\\mathcal B",
+      "Basis extension theorem"
+    ],
+    [
+      "Gram-Schmidt",
+      "u_k=v_k-\\sum_{j<k}\\operatorname{proj}_{u_j}v_k",
+      "Gram-Schmidt process"
+    ],
+    [
+      "正交分解",
+      "V=W\\oplus W^\\perp",
+      "Orthogonal decomposition"
+    ],
+    [
+      "最小多项式",
+      "m_A(A)=0,\\quad m_A\\mid p_A",
+      "Minimal polynomial theorem"
+    ],
+    {
+      "section": "群论 / 伽罗瓦理论 - 概念 / 性质",
+      "sectionEn": "Group Theory / Galois Theory - Concepts / Properties"
+    },
+    [
+      "群",
+      "(G,\\cdot)",
+      "Group"
+    ],
+    [
+      "子群",
+      "H\\le G",
+      "Subgroup"
+    ],
+    [
+      "正规子群",
+      "N\\triangleleft G",
+      "Normal subgroup"
+    ],
+    [
+      "商群",
+      "G/N",
+      "Quotient group"
+    ],
+    [
+      "群同态",
+      "\\varphi:G\\to H",
+      "Group homomorphism"
+    ],
+    [
+      "群同构",
+      "G\\cong H",
+      "Group isomorphism"
+    ],
+    [
+      "自同构群",
+      "\\operatorname{Aut}(G)",
+      "Automorphism group"
+    ],
+    [
+      "循环群",
+      "C_n=\\langle g\\rangle",
+      "Cyclic group"
+    ],
+    [
+      "置换群",
+      "S_n",
+      "Symmetric group"
+    ],
+    [
+      "陪集",
+      "gH",
+      "Coset"
+    ],
+    [
+      "群作用",
+      "G\\curvearrowright X",
+      "Group action"
+    ],
+    [
+      "轨道",
+      "Gx",
+      "Orbit"
+    ],
+    [
+      "稳定子",
+      "G_x",
+      "Stabilizer"
+    ],
+    [
+      "可解群",
+      "G^{(n)}=1",
+      "Solvable group"
+    ],
+    [
+      "伽罗瓦群",
+      "\\operatorname{Gal}(L/K)",
+      "Galois group"
+    ],
+    [
+      "域扩张",
+      "L/K",
+      "Field extension"
+    ],
+    [
+      "环同态",
+      "f:R\\to S",
+      "Ring homomorphism"
+    ],
+    [
+      "理想运算",
+      "I+J,\\quad IJ,\\quad I\\cap J",
+      "Ideal operations"
+    ],
+    [
+      "域",
+      "\\mathbb F",
+      "Field"
+    ],
+    [
+      "多项式环",
+      "R[x_1,ldots,x_n]",
+      "Polynomial ring"
+    ],
+    [
+      "PID",
+      "R\\text{ principal ideal domain}",
+      "Principal ideal domain"
+    ],
+    [
+      "UFD",
+      "R\\text{ unique factorization domain}",
+      "Unique factorization domain"
+    ],
+    {
+      "section": "群论 / 伽罗瓦理论 - 定理 / 公式",
+      "sectionEn": "Group Theory / Galois Theory - Theorems / Formulas"
+    },
+    [
+      "Lagrange 定理",
+      "|G|=|H|[G:H]",
+      "Lagrange theorem"
+    ],
+    [
+      "第一同构定理",
+      "G/\\ker\\varphi\\cong\\operatorname{im}\\varphi",
+      "First isomorphism theorem"
+    ],
+    [
+      "第二同构定理",
+      "H/(H\\cap N)\\cong HN/N",
+      "Second isomorphism theorem"
+    ],
+    [
+      "第三同构定理",
+      "(G/N)/(H/N)\\cong G/H",
+      "Third isomorphism theorem"
+    ],
+    [
+      "轨道-稳定子",
+      "|Gx|=[G:G_x]",
+      "Orbit-stabilizer theorem"
+    ],
+    [
+      "Burnside 引理",
+      "|X/G|=\\frac1{|G|}\\sum_{g\\in G}|X^g|",
+      "Burnside lemma"
+    ],
+    [
+      "Cauchy 群定理",
+      "p\\mid |G|\\implies\\exists g:\\,|g|=p",
+      "Cauchy group theorem"
+    ],
+    [
+      "Sylow 定理",
+      "n_p\\equiv1\\pmod p,\\quad n_p\\mid |G|/p^k",
+      "Sylow theorems"
+    ],
+    [
+      "Jordan-Holder",
+      "\\text{composition factors are unique up to order}",
+      "Jordan-Holder theorem"
+    ],
+    [
+      "Galois 基本定理",
+      "\\{E:K\\subset E\\subset L\\}\\leftrightarrow\\{H\\le\\operatorname{Gal}(L/K)\\}",
+      "Fundamental theorem of Galois theory"
+    ],
+    [
+      "Abel-Ruffini",
+      "n\\ge5\\implies\\text{generic polynomial not solvable by radicals}",
+      "Abel-Ruffini theorem"
+    ],
+    {
+      "section": "环论 / 模论 / 交换代数 - 概念 / 性质",
+      "sectionEn": "Ring / Module / Commutative Algebra - Concepts / Properties"
+    },
+    [
+      "环",
+      "(R,+,\\cdot)",
+      "Ring"
+    ],
+    [
+      "理想",
+      "I\\triangleleft R",
+      "Ideal"
+    ],
+    [
+      "商环",
+      "R/I",
+      "Quotient ring"
+    ],
+    [
+      "模",
+      "M\\text{ is an }R\\text{-module}",
+      "Module"
+    ],
+    [
+      "局部化",
+      "S^{-1}R",
+      "Localization"
+    ],
+    [
+      "Noether 环",
+      "R\\text{ Noetherian}",
+      "Noetherian ring"
+    ],
+    [
+      "Artin 环",
+      "R\\text{ Artinian}",
+      "Artinian ring"
+    ],
+    [
+      "整闭",
+      "R\\text{ integrally closed}",
+      "Integrally closed"
+    ],
+    [
+      "平坦模",
+      "M\\text{ flat}",
+      "Flat module"
+    ],
+    [
+      "正则局部环",
+      "\\dim R=\\dim_{k}\\mathfrak{m}/\\mathfrak{m}^2",
+      "Regular local ring"
+    ],
+    [
+      "正则列",
+      "x_1,\\ldots,x_r\\text{ is }M\\text{-regular}",
+      "Regular sequence"
+    ],
+    [
+      "深度",
+      "\\operatorname{depth}_RM",
+      "Depth"
+    ],
+    [
+      "Cohen-Macaulay",
+      "\\operatorname{depth}R=\\dim R",
+      "Cohen-Macaulay ring"
+    ],
+    [
+      "局部上同调",
+      "H_I^i(M)",
+      "Local cohomology"
+    ],
+    {
+      "section": "环论 / 模论 / 交换代数 - 定理 / 公式",
+      "sectionEn": "Ring / Module / Commutative Algebra - Theorems / Formulas"
+    },
+    [
+      "中国剩余定理",
+      "R/(I_1\\cap\\cdots\\cap I_n)\\cong\\prod_i R/I_i",
+      "Chinese remainder theorem"
+    ],
+    [
+      "Hilbert 基定理",
+      "R\\text{ Noetherian}\\implies R[x]\\text{ Noetherian}",
+      "Hilbert basis theorem"
+    ],
+    [
+      "Nakayama 引理",
+      "M=\\mathfrak mM\\implies M=0",
+      "Nakayama lemma"
+    ],
+    [
+      "Krull 主理想定理",
+      "\\operatorname{ht}(\\mathfrak p)\\le n\\text{ over }(f_1,\\ldots,f_n)",
+      "Krull principal ideal theorem"
+    ],
+    [
+      "主分解",
+      "I=Q_1\\cap\\cdots\\cap Q_r",
+      "Primary decomposition"
+    ],
+    [
+      "Krull 交定理",
+      "\\bigcap_{n\\ge0}I^nM=0",
+      "Krull intersection theorem"
+    ],
+    [
+      "Auslander-Buchsbaum",
+      "\\operatorname{pd}_RM+\\operatorname{depth}M=\\operatorname{depth}R",
+      "Auslander-Buchsbaum formula"
+    ],
+    [
+      "Hilbert 零维定理",
+      "R\\text{ Artinian}\\Longleftrightarrow\\dim R=0\\text{ and }R\\text{ Noetherian}",
+      "Artinian dimension theorem"
+    ],
+    [
+      "Krull 维数定理",
+      "\\dim R=\\sup\\{n:\\mathfrak p_0\\subsetneq\\cdots\\subsetneq\\mathfrak p_n\\}",
+      "Krull dimension theorem"
+    ],
+    {
+      "section": "同调代数 / 范畴论 - 概念 / 性质",
+      "sectionEn": "Homological Algebra / Category Theory - Concepts / Properties"
+    },
+    [
+      "范畴",
+      "\\mathcal C=(\\operatorname{Ob}\\mathcal C,\\operatorname{Hom}_{\\mathcal C})",
+      "Category"
+    ],
+    [
+      "函子",
+      "F:\\mathcal{C}\\to\\mathcal{D}",
+      "Functor"
+    ],
+    [
+      "自然变换",
+      "\\eta:F\\Rightarrow G",
+      "Natural transformation"
+    ],
+    [
+      "伴随函子",
+      "F\\dashv G",
+      "Adjoint functor"
+    ],
+    [
+      "极限",
+      "\\varprojlim F",
+      "Limit"
+    ],
+    [
+      "余极限",
+      "\\varinjlim F",
+      "Colimit"
+    ],
+    [
+      "链复形",
+      "\\cdots\\to C_{n+1}\\xrightarrow{\\partial}C_n\\xrightarrow{\\partial}C_{n-1}\\to\\cdots",
+      "Chain complex"
+    ],
+    [
+      "导出范畴",
+      "D(\\mathcal{A})",
+      "Derived category"
+    ],
+    [
+      "Tor",
+      "\\operatorname{Tor}^R_n(M,N)",
+      "Tor functor"
+    ],
+    [
+      "Ext",
+      "\\operatorname{Ext}^n_R(M,N)",
+      "Ext functor"
+    ],
+    [
+      "三角范畴",
+      "(\\mathcal{T},[1],\\Delta)",
+      "Triangulated category"
+    ],
+    [
+      "模型范畴",
+      "(\\mathcal C,\\mathcal W,\\mathcal COf,\\mathcal Fib)",
+      "Model category"
+    ],
+    [
+      "∞-范畴",
+      "\\infty\\text{-category}",
+      "Infinity category"
+    ],
+    {
+      "section": "同调代数 / 范畴论 - 定理 / 公式",
+      "sectionEn": "Homological Algebra / Category Theory - Theorems / Formulas"
+    },
+    [
+      "蛇形引理",
+      "\\ker f\\to\\ker g\\to\\ker h\\xrightarrow{\\delta}\\operatorname{coker}f\\to\\operatorname{coker}g\\to\\operatorname{coker}h",
+      "Snake lemma"
+    ],
+    [
+      "五引理",
+      "\\text{exact diagram}\\implies f_3\\text{ isomorphism}",
+      "Five lemma"
+    ],
+    [
+      "九引理",
+      "\\text{two exact rows/columns}\\implies\\text{ third exact}",
+      "Nine lemma"
+    ],
+    [
+      "长正合列",
+      "\\cdots\\to H_n(A)\\to H_n(B)\\to H_n(C)\\xrightarrow{\\delta}H_{n-1}(A)\\to\\cdots",
+      "Long exact sequence"
+    ],
+    [
+      "Yoneda 引理",
+      "\\operatorname{Nat}(\\operatorname{Hom}(A,-),F)\\cong F(A)",
+      "Yoneda lemma"
+    ],
+    [
+      "Freyd 伴随函子",
+      "F\\text{ preserves limits and solution set}\\implies F\\text{ has left adjoint}",
+      "Adjoint functor theorem"
+    ],
+    [
+      "Grothendieck 谱序列",
+      "E_2^{p,q}=R^pG(R^qF(A))\\Rightarrow R^{p+q}(GF)(A)",
+      "Grothendieck spectral sequence"
+    ],
+    [
+      "Brown 表示",
+      "H:\\mathcal T^{op}\\to\\mathbf{Set}\\text{ cohomological}\\implies H\\cong\\operatorname{Hom}(-,X)",
+      "Brown representability"
+    ],
+    [
+      "Dold-Kan",
+      "s\\mathbf{Ab}\\simeq Ch_{\\ge0}(\\mathbf{Ab})",
+      "Dold-Kan correspondence"
+    ],
+    {
+      "section": "表示论 / 李理论 - 概念 / 性质",
+      "sectionEn": "Representation Theory / Lie Theory - Concepts / Properties"
+    },
+    [
+      "表示",
+      "\\rho:G\\to GL(V)",
+      "Representation"
+    ],
+    [
+      "特征标",
+      "\\chi_\\rho(g)=\\operatorname{tr}\\rho(g)",
+      "Character"
+    ],
+    [
+      "李群",
+      "G\\text{ Lie group}",
+      "Lie group"
+    ],
+    [
+      "李代数",
+      "\\mathfrak g=T_eG",
+      "Lie algebra"
+    ],
+    [
+      "李括号",
+      "[X,Y]",
+      "Lie bracket"
+    ],
+    [
+      "根系",
+      "\\Phi\\subset\\mathfrak h^*",
+      "Root system"
+    ],
+    [
+      "Weyl 群",
+      "W=\\langle s_\\alpha:\\alpha\\in\\Phi\\rangle",
+      "Weyl group"
+    ],
+    [
+      "最高权",
+      "V(\\lambda)",
+      "Highest weight"
+    ],
+    [
+      "包络代数",
+      "U(\\mathfrak g)",
+      "Universal enveloping algebra"
+    ],
+    [
+      "Verma 模",
+      "M(\\lambda)",
+      "Verma module"
+    ],
+    [
+      "BGG 范畴 O",
+      "\\mathcal O",
+      "BGG category O"
+    ],
+    {
+      "section": "表示论 / 李理论 - 定理 / 公式",
+      "sectionEn": "Representation Theory / Lie Theory - Theorems / Formulas"
+    },
+    [
+      "Schur 引理",
+      "\\operatorname{Hom}_G(V,W)\\cong\\mathbb{C}",
+      "Schur lemma"
+    ],
+    [
+      "Maschke 定理",
+      "\\operatorname{char}K\\nmid |G|\\implies KG\\text{ semisimple}",
+      "Maschke theorem"
+    ],
+    [
+      "Peter-Weyl",
+      "L^2(G)=\\widehat\\bigoplus_{\\pi\\in\\widehat G}V_\\pi\\otimes V_\\pi^*",
+      "Peter-Weyl theorem"
+    ],
+    [
+      "Weyl 特征公式",
+      "\\chi_\\lambda=\\frac{\\sum_{w\\in W}\\operatorname{sgn}(w)e^{w(\\lambda+\\rho)}}{\\sum_{w\\in W}\\operatorname{sgn}(w)e^{w\\rho}}",
+      "Weyl character formula"
+    ],
+    [
+      "Engel 定理",
+      "\\operatorname{ad}x\\text{ nilpotent}\\;\\forall x\\implies\\mathfrak g\\text{ nilpotent}",
+      "Engel theorem"
+    ],
+    [
+      "Lie 定理",
+      "\\mathfrak g\\text{ solvable}\\implies\\text{ simultaneous upper triangular}",
+      "Lie theorem"
+    ],
+    [
+      "Cartan 判别",
+      "\\mathfrak g\\text{ semisimple}\\Longleftrightarrow B\\text{ nondegenerate}",
+      "Cartan criterion"
+    ],
+    [
+      "PBW 定理",
+      "\\operatorname{gr}U(\\mathfrak g)\\cong\\operatorname{Sym}(\\mathfrak g)",
+      "PBW theorem"
+    ],
+    [
+      "Weyl 完全可约",
+      "\\mathfrak g\\text{ semisimple}\\implies V\\text{ completely reducible}",
+      "Weyl complete reducibility"
+    ],
+    [
+      "BGG 分解",
+      "0\\to M(w_0\\cdot\\lambda)\\to\\cdots\\to M(\\lambda)\\to L(\\lambda)\\to0",
+      "BGG resolution"
+    ],
+    [
+      "Kazhdan-Lusztig",
+      "[M(y\\cdot\\lambda):L(w\\cdot\\lambda)]=P_{w,y}(1)",
+      "Kazhdan-Lusztig theorem"
+    ],
+    {
+      "section": "代数几何 / 非交换代数 - 概念 / 性质",
+      "sectionEn": "Algebraic Geometry / Noncommutative Algebra - Concepts / Properties"
+    },
+    [
+      "仿射簇",
+      "V(I)\\subset\\mathbb A^n",
+      "Affine variety"
+    ],
+    [
+      "射影簇",
+      "V_+(I)\\subset\\mathbb P^n",
+      "Projective variety"
+    ],
+    [
+      "概形",
+      "(X,\\mathcal O_X)",
+      "Scheme"
+    ],
+    [
+      "层",
+      "\\mathcal F:\\operatorname{Open}(X)^{op}\\to\\mathbf{Set}",
+      "Sheaf"
+    ],
+    [
+      "Zariski 切空间",
+      "T_pX=\\operatorname{Hom}(\\mathfrak m_p/\\mathfrak m_p^2,k)",
+      "Zariski tangent space"
+    ],
+    [
+      "C*-代数",
+      "\\|a^*a\\|=\\|a\\|^2",
+      "C-star algebra"
+    ],
+    [
+      "平展上同调",
+      "H^i_{\\mathrm{et}}(X,\\mathcal F)",
+      "Etale cohomology"
+    ],
+    [
+      "von Neumann 代数",
+      "\\mathcal M=\\mathcal M''",
+      "Von Neumann algebra"
+    ],
+    {
+      "section": "代数几何 / 非交换代数 - 定理 / 公式",
+      "sectionEn": "Algebraic Geometry / Noncommutative Algebra - Theorems / Formulas"
+    },
+    [
+      "Hilbert 零点定理",
+      "I(V(I))=\\sqrt I",
+      "Hilbert Nullstellensatz"
+    ],
+    [
+      "Noether 归一化",
+      "A\\text{ finite over }k[x_1,\\ldots,x_d]",
+      "Noether normalization"
+    ],
+    [
+      "Serre 对偶",
+      "H^i(X,\\mathcal F)^*\\cong\\operatorname{Ext}^{n-i}(\\mathcal F,\\omega_X)",
+      "Serre duality"
+    ],
+    [
+      "Riemann-Roch",
+      "\\ell(D)-\\ell(K-D)=\\deg D+1-g",
+      "Riemann-Roch theorem"
+    ],
+    [
+      "Gelfand-Naimark",
+      "A\\cong C_0(X)\\text{ for commutative C*-algebra }A",
+      "Gelfand-Naimark theorem"
+    ],
+    [
+      "Proper base change",
+      "R^if_*\\mathcal F\\otimes k(s)\\cong H^i(X_s,\\mathcal F_s)",
+      "Proper base change theorem"
+    ],
+    [
+      "Flat base change",
+      "g^*R^if_*\\mathcal F\\cong R^if'_*g'^*\\mathcal F",
+      "Flat base change theorem"
+    ],
+    [
+      "Grothendieck-Riemann-Roch",
+      "\\operatorname{ch}(Rf_*E)\\operatorname{Td}(Y)=f_*(\\operatorname{ch}(E)\\operatorname{Td}(X))",
+      "Grothendieck-Riemann-Roch"
+    ],
+    [
+      "Tomita-Takesaki",
+      "\\sigma_t^\\varphi(M)=\\Delta_\\varphi^{it}M\\Delta_\\varphi^{-it}",
+      "Tomita-Takesaki theory"
+    ],
+    [
+      "态",
+      "\\varphi: A \\to \\mathbb{C}",
+      "State"
+    ],
+    [
+      "表示",
+      "\\pi: A \\to \\mathcal{B}(H)",
+      "Representation"
+    ],
+    [
+      "乘子代数",
+      "M(A)=\\{(L,R):L(a)b=aR(b)\\}",
+      "Multiplier algebra"
+    ],
+    [
+      "C* 张量积",
+      "A \\otimes_{\\min} B",
+      "C-star tensor product"
+    ],
+    [
+      "因子",
+      "\\mathcal{M}\\cap\\mathcal{M}' = \\mathbb{C}I",
+      "Factor"
+    ],
+    [
+      "迹",
+      "\\tau(ab)=\\tau(ba)",
+      "Trace"
+    ],
+    [
+      "Type I",
+      "\\mathcal{M}\\text{ type I}",
+      "Type I factor"
+    ],
+    [
+      "Type II₁",
+      "\\tau(1)=1",
+      "Type II1 factor"
+    ],
+    [
+      "Type III",
+      "\\mathcal{M}\\text{ type III}",
+      "Type III factor"
+    ],
+    [
+      "K₀",
+      "K_0(A) = \\operatorname{Groth}(\\operatorname{Proj}(A))",
+      "K0 group"
+    ],
+    [
+      "K₁",
+      "K_1(A) = \\pi_0(\\operatorname{GL}_\\infty(A))",
+      "K1 group"
+    ],
+    [
+      "六项正合列",
+      "\\begin{CD}K_0(I)@>>>K_0(A)@>>>K_0(A/I)\\\\@VVV@.@AAA\\\\K_1(A/I)@<<<K_1(A)@<<<K_1(I)\\end{CD}",
+      "Six-term exact sequence"
+    ],
+    [
+      "完全正映射",
+      "\\Phi: A \\to B,\\; \\Phi \\otimes \\operatorname{id}_n \\ge 0",
+      "Completely positive map"
+    ],
+    [
+      "Stinespring",
+      "\\Phi(a)=V^*\\pi(a)V",
+      "Stinespring dilation"
+    ],
+    [
+      "核 C* 代数",
+      "A \\otimes_{\\min} B \\cong A \\otimes_{\\max} B",
+      "Nuclear C-star algebra"
+    ],
+    [
+      "约化群 C* 代数",
+      "C_r^*(G)",
+      "Reduced group C-star algebra"
+    ],
+    [
+      "KK-群",
+      "KK(A,B)",
+      "Kasparov KK-group"
+    ],
+    [
+      "Kasparov 积",
+      "KK(A,B)\\otimes KK(B,C) \\to KK(A,C)",
+      "Kasparov product"
+    ],
+    [
+      "Elliott 分类",
+      "\\operatorname{KK}(A,B)_{\\mathrm{nu}} \\cong \\operatorname{Hom}(K_0(A),K_0(B))\\oplus\\operatorname{Ext}(K_1(A),K_1(B))",
+      "Elliott classification"
+    ]
+  ]
+}

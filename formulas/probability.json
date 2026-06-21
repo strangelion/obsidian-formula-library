@@ -1,0 +1,904 @@
+{
+  "id": "probability",
+  "structures": true,
+  "items": [
+    {
+      "section": "概率空间 / 条件概率",
+      "sectionEn": "Probability Spaces / Conditional Probability"
+    },
+    [
+      "概率",
+      "\\mathbb{P}(A) = \\int_A f(x)dx",
+      "Probability"
+    ],
+    [
+      "样本空间",
+      "\\Omega=\\{\\omega\\}",
+      "Sample space"
+    ],
+    [
+      "事件域",
+      "\\mathcal F\\subset 2^\\Omega",
+      "Event sigma-algebra"
+    ],
+    [
+      "概率空间",
+      "(\\Omega,\\mathcal F,\\mathbb P)",
+      "Probability space"
+    ],
+    [
+      "补事件",
+      "\\mathbb P(A^c)=1-\\mathbb P(A)",
+      "Complement rule"
+    ],
+    [
+      "加法公式",
+      "\\mathbb P(A\\cup B)=\\mathbb P(A)+\\mathbb P(B)-\\mathbb P(A\\cap B)",
+      "Addition rule"
+    ],
+    [
+      "容斥原理",
+      "\\mathbb P\\left(\\bigcup_i A_i\\right)=\\sum_i\\mathbb P(A_i)-\\sum_{i<j}\\mathbb P(A_i\\cap A_j)+\\cdots",
+      "Inclusion-exclusion"
+    ],
+    [
+      "Boole 不等式",
+      "\\mathbb P\\left(\\bigcup_i A_i\\right)\\le\\sum_i\\mathbb P(A_i)",
+      "Union bound"
+    ],
+    [
+      "条件概率",
+      "\\mathbb P(A\\mid B)=\\frac{\\mathbb P(A\\cap B)}{\\mathbb P(B)}",
+      "Conditional probability"
+    ],
+    [
+      "乘法公式",
+      "\\mathbb P(A\\cap B)=\\mathbb P(A\\mid B)\\mathbb P(B)",
+      "Multiplication rule"
+    ],
+    [
+      "全概率",
+      "\\mathbb P(A)=\\sum_i\\mathbb P(A\\mid B_i)\\mathbb P(B_i)",
+      "Law of total probability"
+    ],
+    [
+      "链式法则",
+      "\\mathbb P(A_1\\cap\\cdots\\cap A_n)=\\prod_{k=1}^n\\mathbb P(A_k\\mid A_1\\cap\\cdots\\cap A_{k-1})",
+      "Probability chain rule"
+    ],
+    [
+      "条件独立",
+      "X\\perp\\!\\!\\!\\perp Y\\mid Z",
+      "Conditional independence"
+    ],
+    [
+      "Borel-Cantelli I",
+      "\\sum_n\\mathbb P(A_n)<\\infty\\implies\\mathbb P(A_n\\;\\mathrm{i.o.})=0",
+      "Borel-Cantelli lemma I"
+    ],
+    [
+      "Borel-Cantelli II",
+      "A_n\\text{ independent},\\;\\sum_n\\mathbb P(A_n)=\\infty\\implies\\mathbb P(A_n\\;\\mathrm{i.o.})=1",
+      "Borel-Cantelli lemma II"
+    ],
+    [
+      "Radon-Nikodym",
+      "P\\ll Q\\implies \\frac{dP}{dQ}",
+      "Radon-Nikodym derivative"
+    ],
+    {
+      "section": "随机变量 / 分布 / 矩",
+      "sectionEn": "Random Variables / Distributions / Moments"
+    },
+    [
+      "期望",
+      "\\mathbb{E}[X] = \\int x\\,dF_X(x)",
+      "Expectation"
+    ],
+    [
+      "方差",
+      "\\operatorname{Var}(X) = \\mathbb{E}[(X-\\mu)^2]",
+      "Variance"
+    ],
+    [
+      "标准差",
+      "\\sigma_X = \\sqrt{\\operatorname{Var}(X)}",
+      "Standard deviation"
+    ],
+    [
+      "协方差",
+      "\\operatorname{Cov}(X,Y) = \\mathbb{E}[(X-\\mu_X)(Y-\\mu_Y)]",
+      "Covariance"
+    ],
+    [
+      "相关系数",
+      "\\rho_{XY} = \\frac{\\operatorname{Cov}(X,Y)}{\\sigma_X\\sigma_Y}",
+      "Correlation"
+    ],
+    [
+      "协方差矩阵",
+      "\\Sigma_{ij} = \\operatorname{Cov}(X_i,X_j)",
+      "Covariance matrix"
+    ],
+    [
+      "条件期望",
+      "\\mathbb{E}[X\\mid Y=y] = \\int x f_{X\\mid Y}(x\\mid y)dx",
+      "Conditional expectation"
+    ],
+    [
+      "条件方差",
+      "\\operatorname{Var}(X\\mid Y) = \\mathbb{E}[(X-\\mathbb{E}[X\\mid Y])^2\\mid Y]",
+      "Conditional variance"
+    ],
+    [
+      "矩",
+      "\\mathbb{E}[X^k] = \\int x^k dF_X(x)",
+      "Moment"
+    ],
+    [
+      "中心矩",
+      "\\mu_k = \\mathbb{E}[(X-\\mu)^k]",
+      "Central moment"
+    ],
+    [
+      "全期望公式",
+      "\\mathbb E[X]=\\mathbb E\\big[\\mathbb E[X\\mid\\mathcal G]\\big]",
+      "Tower property"
+    ],
+    [
+      "全方差公式",
+      "\\operatorname{Var}(X)=\\mathbb E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(\\mathbb E[X\\mid Y])",
+      "Law of total variance"
+    ],
+    [
+      "CDF",
+      "F_X(x)=\\mathbb P(X\\le x)",
+      "Cumulative distribution function"
+    ],
+    [
+      "PDF",
+      "f_X(x)=\\frac{d}{dx}F_X(x)",
+      "Probability density function"
+    ],
+    [
+      "PMF",
+      "p_X(k)=\\mathbb P(X=k)",
+      "Probability mass function"
+    ],
+    [
+      "分位数",
+      "Q(p)=F^{-1}(p)",
+      "Quantile function"
+    ],
+    [
+      "生存函数",
+      "S(t)=1-F(t)",
+      "Survival function"
+    ],
+    [
+      "分布收敛",
+      "X_n\\xrightarrow{d}X",
+      "Convergence in distribution"
+    ],
+    [
+      "概率收敛",
+      "X_n\\xrightarrow{p}X",
+      "Convergence in probability"
+    ],
+    [
+      "几乎处处收敛",
+      "X_n\\xrightarrow{a.s.}X",
+      "Almost sure convergence"
+    ],
+    [
+      "Lp 收敛",
+      "\\|X_n-X\\|_p\\to0",
+      "Lp convergence"
+    ],
+    {
+      "section": "常见离散分布",
+      "sectionEn": "Common Discrete Distributions"
+    },
+    [
+      "退化分布",
+      "\\mathbb P(X=c)=1",
+      "Degenerate distribution"
+    ],
+    [
+      "正态",
+      "f(x)=\\frac{1}{\\sqrt{2\\pi}\\sigma}e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}",
+      "Normal distribution"
+    ],
+    [
+      "伯努利",
+      "\\mathbb{P}(X=k)=p^k(1-p)^{1-k}",
+      "Bernoulli distribution"
+    ],
+    [
+      "二项",
+      "\\mathbb{P}(X=k)=\\binom{n}{k}p^k(1-p)^{n-k}",
+      "Binomial distribution"
+    ],
+    [
+      "负二项",
+      "\\mathbb P(X=k)=\\binom{k+r-1}{k}(1-p)^k p^r",
+      "Negative binomial distribution"
+    ],
+    [
+      "泊松",
+      "\\mathbb{P}(X=k)=\\frac{\\lambda^k e^{-\\lambda}}{k!}",
+      "Poisson distribution"
+    ],
+    [
+      "几何",
+      "\\mathbb{P}(X=k)=(1-p)^{k-1}p",
+      "Geometric distribution"
+    ],
+    [
+      "多项",
+      "\\mathbb{P}(X_i=n_i)=\\frac{n!}{\\prod n_i!}\\prod p_i^{n_i}",
+      "Multinomial distribution"
+    ],
+    [
+      "超几何",
+      "\\mathbb{P}(X=k)=\\frac{\\binom{K}{k}\\binom{N-K}{n-k}}{\\binom{N}{n}}",
+      "Hypergeometric"
+    ],
+    [
+      "Skellam",
+      "\\mathbb P(X=k)=e^{-(\\mu_1+\\mu_2)}\\left(\\frac{\\mu_1}{\\mu_2}\\right)^{k/2}I_{|k|}(2\\sqrt{\\mu_1\\mu_2})",
+      "Skellam distribution"
+    ],
+    [
+      "离散均匀",
+      "\\mathbb P(X=k)=\\frac1n",
+      "Discrete uniform distribution"
+    ],
+    {
+      "section": "常见连续分布",
+      "sectionEn": "Common Continuous Distributions"
+    },
+    [
+      "均匀",
+      "f(x)=\\frac{1}{b-a},\\;a\\le x\\le b",
+      "Uniform distribution"
+    ],
+    [
+      "指数",
+      "f(x)=\\lambda e^{-\\lambda x},\\;x\\ge0",
+      "Exponential distribution"
+    ],
+    [
+      "对数正态",
+      "f(x)=\\frac{1}{x\\sigma\\sqrt{2\\pi}}e^{-\\frac{(\\ln x-\\mu)^2}{2\\sigma^2}}",
+      "Log-normal distribution"
+    ],
+    [
+      "伽马",
+      "f(x)=\\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}",
+      "Gamma distribution"
+    ],
+    [
+      "贝塔",
+      "f(x)=\\frac{x^{\\alpha-1}(1-x)^{\\beta-1}}{\\mathrm{B}(\\alpha,\\beta)}",
+      "Beta distribution"
+    ],
+    [
+      "卡方",
+      "f(x)=\\frac{x^{k/2-1}e^{-x/2}}{2^{k/2}\\Gamma(k/2)}",
+      "Chi-squared"
+    ],
+    [
+      "t 分布",
+      "f(t)=\\frac{\\Gamma(\\frac{\\nu+1}{2})}{\\sqrt{\\nu\\pi}\\Gamma(\\frac{\\nu}{2})}\\left(1+\\frac{t^2}{\\nu}\\right)^{-\\frac{\\nu+1}{2}}",
+      "Student t"
+    ],
+    [
+      "F 分布",
+      "f(x)=\\frac{\\Gamma(\\frac{d_1+d_2}{2})}{\\Gamma(\\frac{d_1}{2})\\Gamma(\\frac{d_2}{2})}\\left(\\frac{d_1}{d_2}\\right)^{\\frac{d_1}{2}}x^{\\frac{d_1}{2}-1}\\left(1+\\frac{d_1}{d_2}x\\right)^{-\\frac{d_1+d_2}{2}}",
+      "F-distribution"
+    ],
+    [
+      "Laplace",
+      "f(x)=\\frac1{2b}e^{-|x-\\mu|/b}",
+      "Laplace distribution"
+    ],
+    [
+      "Pareto",
+      "f(x)=\\frac{\\alpha x_m^\\alpha}{x^{\\alpha+1}},\\;x\\ge x_m",
+      "Pareto distribution"
+    ],
+    [
+      "Rayleigh",
+      "f(x)=\\frac{x}{\\sigma^2}e^{-x^2/(2\\sigma^2)}",
+      "Rayleigh distribution"
+    ],
+    [
+      "Maxwell",
+      "f(v)=\\sqrt{\\frac2\\pi}\\frac{v^2}{a^3}e^{-v^2/(2a^2)}",
+      "Maxwell distribution"
+    ],
+    [
+      "逆高斯",
+      "f(x)=\\left(\\frac{\\lambda}{2\\pi x^3}\\right)^{1/2}e^{-\\lambda(x-\\mu)^2/(2\\mu^2x)}",
+      "Inverse Gaussian distribution"
+    ],
+    [
+      "条件",
+      "#? \\mid #?",
+      "Conditional bar"
+    ],
+    [
+      "独立",
+      "#? \\perp\\!\\!\\!\\perp #?",
+      "Independence"
+    ],
+    [
+      "贝叶斯",
+      "\\mathbb{P}(A|B) = \\frac{\\mathbb{P}(B|A)\\mathbb{P}(A)}{\\mathbb{P}(B)}",
+      "Bayes theorem"
+    ],
+    [
+      "似然",
+      "\\mathcal{L}(\\theta;x) = f(x\\mid\\theta)",
+      "Likelihood"
+    ],
+    {
+      "section": "多元分布 / 变换",
+      "sectionEn": "Multivariate Distributions / Transformations"
+    },
+    [
+      "联合密度",
+      "f_{X,Y}(x,y)=f_{X\\mid Y}(x\\mid y)f_Y(y)",
+      "Joint density"
+    ],
+    [
+      "边缘密度",
+      "f_X(x)=\\int f_{X,Y}(x,y)\\,dy",
+      "Marginal density"
+    ],
+    [
+      "条件密度",
+      "f_{X\\mid Y}(x\\mid y)=\\frac{f_{X,Y}(x,y)}{f_Y(y)}",
+      "Conditional density"
+    ],
+    [
+      "变量变换",
+      "f_Y(y)=f_X(g^{-1}(y))\\left|\\frac{d}{dy}g^{-1}(y)\\right|",
+      "Change of variables"
+    ],
+    [
+      "Jacobian",
+      "f_{\\mathbf Y}(\\mathbf y)=f_{\\mathbf X}(g^{-1}(\\mathbf y))\\left|\\det Dg^{-1}(\\mathbf y)\\right|",
+      "Jacobian density transform"
+    ],
+    [
+      "多元正态",
+      "f(x)=\\frac{1}{(2\\pi)^{d/2}|\\Sigma|^{1/2}}e^{-\\frac12(x-\\mu)^T\\Sigma^{-1}(x-\\mu)}",
+      "Multivariate normal"
+    ],
+    [
+      "Wishart",
+      "S\\sim W_p(n,\\Sigma)",
+      "Wishart distribution"
+    ],
+    [
+      "Copula",
+      "F(x_1,\\ldots,x_d)=C(F_1(x_1),\\ldots,F_d(x_d))",
+      "Copula"
+    ],
+    {
+      "section": "信息论 / 生成函数",
+      "sectionEn": "Information Theory / Generating Functions"
+    },
+    [
+      "信息熵",
+      "H(X) = -\\sum_{x} p(x)\\log p(x)",
+      "Entropy"
+    ],
+    [
+      "条件熵",
+      "H(X\\mid Y)=H(X,Y)-H(Y)",
+      "Conditional entropy"
+    ],
+    [
+      "交叉熵",
+      "H(P,Q)=-\\sum_xp(x)\\log q(x)",
+      "Cross entropy"
+    ],
+    [
+      "KL 散度",
+      "D_{\\mathrm{KL}}(P\\|Q) = \\sum_x p(x)\\log\\frac{p(x)}{q(x)}",
+      "KL divergence"
+    ],
+    [
+      "总变差距离",
+      "\\|P-Q\\|_{TV}=\\sup_A|P(A)-Q(A)|",
+      "Total variation distance"
+    ],
+    [
+      "Hellinger",
+      "H^2(P,Q)=\\frac12\\int(\\sqrt p-\\sqrt q)^2",
+      "Hellinger distance"
+    ],
+    [
+      "Fisher 信息",
+      "I(\\theta)=\\mathbb E\\left[\\left(\\frac{\\partial}{\\partial\\theta}\\log f(X;\\theta)\\right)^2\\right]",
+      "Fisher information"
+    ],
+    [
+      "互信息",
+      "I(X;Y) = \\sum_{x,y} p(x,y)\\log\\frac{p(x,y)}{p(x)p(y)}",
+      "Mutual information"
+    ],
+    [
+      "特征函数",
+      "\\varphi_X(t) = \\mathbb{E}[e^{itX}]",
+      "Characteristic function"
+    ],
+    [
+      "生成函数",
+      "M_X(t) = \\mathbb{E}[e^{tX}]",
+      "Moment generating function"
+    ],
+    [
+      "概率母函数",
+      "G_X(s)=\\mathbb E[s^X]",
+      "Probability generating function"
+    ],
+    [
+      "累积量生成",
+      "K_X(t)=\\log M_X(t)",
+      "Cumulant generating function"
+    ],
+    [
+      "累积量",
+      "\\kappa_n=K_X^{(n)}(0)",
+      "Cumulant"
+    ],
+    {
+      "section": "极限定理 / 不等式 / 大偏差",
+      "sectionEn": "Limit Theorems / Inequalities / Large Deviations"
+    },
+    [
+      "大数定律",
+      "\\bar{X}_n \\xrightarrow{p} \\mu",
+      "Law of large numbers"
+    ],
+    [
+      "强大数律",
+      "\\bar X_n\\xrightarrow{a.s.}\\mathbb E[X]",
+      "Strong law of large numbers"
+    ],
+    [
+      "中心极限",
+      "\\sqrt{n}(\\bar{X}_n-\\mu) \\xrightarrow{d} \\mathcal{N}(0,\\sigma^2)",
+      "Central limit theorem"
+    ],
+    [
+      "马尔可夫",
+      "\\mathbb{P}(X\\ge a) \\le \\frac{\\mathbb{E}[X]}{a}",
+      "Markov inequality"
+    ],
+    [
+      "切比雪夫",
+      "\\mathbb{P}(|X-\\mu|\\ge k\\sigma) \\le \\frac{1}{k^2}",
+      "Chebyshev inequality"
+    ],
+    [
+      "Jensen",
+      "\\varphi(\\mathbb E X)\\le\\mathbb E\\varphi(X)",
+      "Jensen inequality"
+    ],
+    [
+      "Hoeffding",
+      "\\mathbb P(\\bar X-\\mathbb E\\bar X\\ge t)\\le e^{-2nt^2/(b-a)^2}",
+      "Hoeffding inequality"
+    ],
+    [
+      "Chernoff",
+      "\\mathbb P(X\\ge a)\\le\\inf_{t>0}e^{-ta}M_X(t)",
+      "Chernoff bound"
+    ],
+    [
+      "Azuma-Hoeffding",
+      "\\mathbb P(M_n-M_0\\ge t)\\le e^{-t^2/(2\\sum c_i^2)}",
+      "Azuma-Hoeffding inequality"
+    ],
+    [
+      "Slutsky",
+      "X_n\\Rightarrow X,\\;Y_n\\xrightarrow{p}c\\implies X_nY_n\\Rightarrow cX",
+      "Slutsky theorem"
+    ],
+    [
+      "Delta 方法",
+      "\\sqrt n(g(\\hat\\theta)-g(\\theta))\\Rightarrow N(0,g'(\\theta)^2\\sigma^2)",
+      "Delta method"
+    ],
+    [
+      "Glivenko-Cantelli",
+      "\\sup_x|F_n(x)-F(x)|\\xrightarrow{a.s.}0",
+      "Glivenko-Cantelli theorem"
+    ],
+    [
+      "Donsker",
+      "\\sqrt n(F_n-F)\\Rightarrow\\mathbb B_F",
+      "Donsker theorem"
+    ],
+    [
+      "Weibull",
+      "f(x)=\\frac{k}{\\lambda}\\left(\\frac{x}{\\lambda}\\right)^{k-1}e^{-(x/\\lambda)^k}",
+      "Weibull distribution"
+    ],
+    [
+      "Dirichlet",
+      "f(\\mathbf{x};\\boldsymbol{\\alpha})=\\frac{1}{\\mathrm{B}(\\boldsymbol{\\alpha})}\\prod_{i=1}^k x_i^{\\alpha_i-1}",
+      "Dirichlet distribution"
+    ],
+    [
+      "Cauchy",
+      "f(x)=\\frac{1}{\\pi\\gamma\\left(1+\\left(\\frac{x-x_0}{\\gamma}\\right)^2\\right)}",
+      "Cauchy distribution"
+    ],
+    {
+      "section": "数理统计 / 推断",
+      "sectionEn": "Mathematical Statistics / Inference"
+    },
+    [
+      "顺序统计量",
+      "X_{(k)}",
+      "Order statistic"
+    ],
+    [
+      "顺序统计密度",
+      "f_{X_{(k)}}(x)=\\frac{n!}{(k-1)!(n-k)!}F(x)^{k-1}(1-F(x))^{n-k}f(x)",
+      "Order statistic density"
+    ],
+    [
+      "经验分布",
+      "F_n(x) = \\frac1n\\sum_{i=1}^n \\mathbf{1}_{\\{X_i\\le x\\}}",
+      "Empirical CDF"
+    ],
+    [
+      "置信区间",
+      "\\bar{X} \\pm z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}}",
+      "Confidence interval"
+    ],
+    [
+      "样本均值",
+      "\\bar X=\\frac1n\\sum_{i=1}^nX_i",
+      "Sample mean"
+    ],
+    [
+      "样本方差",
+      "S^2=\\frac1{n-1}\\sum_{i=1}^n(X_i-\\bar X)^2",
+      "Sample variance"
+    ],
+    [
+      "MLE",
+      "\\hat\\theta=\\arg\\max_\\theta L(\\theta;x)",
+      "Maximum likelihood estimator"
+    ],
+    [
+      "得分函数",
+      "U(\\theta)=\\frac{\\partial}{\\partial\\theta}\\log L(\\theta)",
+      "Score function"
+    ],
+    [
+      "Cramer-Rao",
+      "\\operatorname{Var}(\\hat\\theta)\\ge\\frac1{I(\\theta)}",
+      "Cramer-Rao lower bound"
+    ],
+    [
+      "Wald 检验",
+      "W=\\frac{(\\hat\\theta-\\theta_0)^2}{\\widehat{\\operatorname{Var}}(\\hat\\theta)}",
+      "Wald test"
+    ],
+    [
+      "似然比检验",
+      "\\Lambda=\\frac{\\sup_{\\theta\\in\\Theta_0}L(\\theta)}{\\sup_{\\theta\\in\\Theta}L(\\theta)}",
+      "Likelihood ratio test"
+    ],
+    [
+      "p 值",
+      "p=\\mathbb P_{H_0}(T\\ge T_{obs})",
+      "p-value"
+    ],
+    [
+      "贝叶斯后验",
+      "p(\\theta\\mid x)=\\frac{p(x\\mid\\theta)p(\\theta)}{p(x)}",
+      "Bayesian posterior"
+    ],
+    [
+      "共轭先验",
+      "p(\\theta\\mid x)\\propto p(x\\mid\\theta)p(\\theta)",
+      "Conjugate prior"
+    ],
+    [
+      "AIC",
+      "\\mathrm{AIC}=2k-2\\log L",
+      "Akaike information criterion"
+    ],
+    [
+      "BIC",
+      "\\mathrm{BIC}=k\\log n-2\\log L",
+      "Bayesian information criterion"
+    ],
+    [
+      "线性回归",
+      "\\hat\\beta=(X^TX)^{-1}X^Ty",
+      "Linear regression"
+    ],
+    [
+      "Logistic 回归",
+      "\\mathbb P(Y=1\\mid x)=\\frac1{1+e^{-x^T\\beta}}",
+      "Logistic regression"
+    ],
+    {
+      "section": "可靠性 / 生存分析 / 极值",
+      "sectionEn": "Reliability / Survival Analysis / Extreme Values"
+    },
+    [
+      "风险率",
+      "h(t) = \\frac{f(t)}{1-F(t)}",
+      "Hazard rate"
+    ],
+    [
+      "累积风险",
+      "H(t)=\\int_0^t h(s)\\,ds=-\\log S(t)",
+      "Cumulative hazard"
+    ],
+    [
+      "Kaplan-Meier",
+      "\\hat S(t)=\\prod_{t_i\\le t}\\left(1-\\frac{d_i}{n_i}\\right)",
+      "Kaplan-Meier estimator"
+    ],
+    [
+      "Cox 模型",
+      "h(t\\mid x)=h_0(t)e^{x^T\\beta}",
+      "Cox proportional hazards model"
+    ],
+    [
+      "GEV",
+      "G(z)=\\exp\\left\\{-\\left[1+\\xi\\left(\\frac{z-\\mu}{\\sigma}\\right)\\right]^{-1/\\xi}\\right\\}",
+      "Generalized extreme value"
+    ],
+    [
+      "GPD",
+      "G(y)=1-\\left(1+\\frac{\\xi y}{\\sigma}\\right)^{-1/\\xi}",
+      "Generalized Pareto distribution"
+    ],
+    {
+      "section": "随机过程 / 马尔可夫过程",
+      "sectionEn": "Stochastic Processes / Markov Processes"
+    },
+    [
+      "随机过程",
+      "\\{X_t\\}_{t\\in T}",
+      "Stochastic process"
+    ],
+    [
+      "马尔可夫链",
+      "\\mathbb{P}(X_{n+1}=j\\mid X_n=i) = p_{ij}",
+      "Markov chain"
+    ],
+    [
+      "转移矩阵",
+      "P^{(n)}=P^n",
+      "Transition matrix"
+    ],
+    [
+      "Chapman-Kolmogorov",
+      "p_{ij}^{(m+n)}=\\sum_kp_{ik}^{(m)}p_{kj}^{(n)}",
+      "Chapman-Kolmogorov equation"
+    ],
+    [
+      "平稳分布",
+      "\\pi P=\\pi",
+      "Stationary distribution"
+    ],
+    [
+      "细致平衡",
+      "\\pi_i p_{ij}=\\pi_jp_{ji}",
+      "Detailed balance"
+    ],
+    [
+      "生成矩阵",
+      "q_{ij}=\\lim_{h\\downarrow0}\\frac{p_{ij}(h)}h",
+      "Generator matrix"
+    ],
+    [
+      "泊松过程",
+      "N_t \\sim \\operatorname{Pois}(\\lambda t)",
+      "Poisson process"
+    ],
+    [
+      "指数等待时",
+      "T\\sim\\operatorname{Exp}(\\lambda)",
+      "Exponential waiting time"
+    ],
+    [
+      "更新过程",
+      "N(t)=\\max\\{n:S_n\\le t\\}",
+      "Renewal process"
+    ],
+    [
+      "更新方程",
+      "m(t)=F(t)+\\int_0^t m(t-x)\\,dF(x)",
+      "Renewal equation"
+    ],
+    [
+      "分支过程",
+      "Z_{n+1}=\\sum_{i=1}^{Z_n}\\xi_{n,i}",
+      "Branching process"
+    ],
+    [
+      "Galton-Watson",
+      "\\mathbb E[Z_n]=m^n",
+      "Galton-Watson process"
+    ],
+    [
+      "排队 M/M/1",
+      "\\rho=\\frac\\lambda\\mu,\\quad L=\\frac{\\rho}{1-\\rho}",
+      "M/M/1 queue"
+    ],
+    {
+      "section": "鞅 / 布朗运动 / 随机分析",
+      "sectionEn": "Martingales / Brownian Motion / Stochastic Analysis"
+    },
+    [
+      "布朗运动",
+      "B_t \\sim \\mathcal{N}(0,t)",
+      "Brownian motion"
+    ],
+    [
+      "鞅",
+      "\\mathbb{E}[X_{t+s}\\mid\\mathcal{F}_t] = X_t",
+      "Martingale"
+    ],
+    [
+      "次鞅",
+      "\\mathbb E[X_t\\mid\\mathcal F_s]\\ge X_s",
+      "Submartingale"
+    ],
+    [
+      "上鞅",
+      "\\mathbb E[X_t\\mid\\mathcal F_s]\\le X_s",
+      "Supermartingale"
+    ],
+    [
+      "停时",
+      "\\tau = \\inf\\{t: X_t \\in A\\}",
+      "Stopping time"
+    ],
+    [
+      "随机游走",
+      "S_n = X_1 + \\cdots + X_n",
+      "Random walk"
+    ],
+    [
+      "反射原理",
+      "\\mathbb P(\\sup_{s\\le t}B_s\\ge a)=2\\mathbb P(B_t\\ge a)",
+      "Reflection principle"
+    ],
+    [
+      "强马尔可夫性",
+      "\\mathbb P_x(X_{\\tau+t}\\in A\\mid\\mathcal F_\\tau)=\\mathbb P_{X_\\tau}(X_t\\in A)",
+      "Strong Markov property"
+    ],
+    [
+      "Itô 积分",
+      "\\int_0^t X_s\\,dB_s",
+      "Ito integral"
+    ],
+    [
+      "Itô 引理",
+      "df = \\left(\\frac{\\partial f}{\\partial t}+\\mu\\frac{\\partial f}{\\partial x}+\\frac12\\sigma^2\\frac{\\partial^2 f}{\\partial x^2}\\right)dt + \\sigma\\frac{\\partial f}{\\partial x}dB",
+      "Ito lemma"
+    ],
+    [
+      "随机微分方程",
+      "dX_t = \\mu(X_t,t)dt + \\sigma(X_t,t)dB_t",
+      "SDE"
+    ],
+    [
+      "Kolmogorov 方程",
+      "\\frac{\\partial p}{\\partial t} = -\\frac{\\partial}{\\partial x}(\\mu p) + \\frac12\\frac{\\partial^2}{\\partial x^2}(\\sigma^2 p)",
+      "Kolmogorov eqn"
+    ],
+    [
+      "Feynman-Kac",
+      "u(x,t) = \\mathbb{E}\\left[e^{-\\int_t^T r\\,ds}\\varphi(X_T)\\mid X_t=x\\right]",
+      "Feynman-Kac"
+    ],
+    [
+      "二次变分",
+      "[X,X]_t = \\lim_{|\\Pi|\\to0}\\sum_{i}(X_{t_i}-X_{t_{i-1}})^2",
+      "Quadratic variation"
+    ],
+    [
+      "遍历定理",
+      "\\frac1T\\int_0^T X_t\\,dt \\xrightarrow{a.s.} \\mathbb{E}[X_0]",
+      "Ergodic theorem"
+    ],
+    [
+      "Doob 停时",
+      "\\mathbb{E}[X_\\tau] = \\mathbb{E}[X_0]",
+      "Doob optional stopping"
+    ],
+    [
+      "Doob 不等式",
+      "\\mathbb P\\left(\\sup_{k\\le n}|M_k|\\ge\\lambda\\right)\\le\\frac{\\mathbb E|M_n|^p}{\\lambda^p}",
+      "Doob maximal inequality"
+    ],
+    [
+      "BDG 不等式",
+      "\\mathbb E\\sup_{t\\le T}|M_t|^p\\asymp\\mathbb E[M]_T^{p/2}",
+      "Burkholder-Davis-Gundy inequality"
+    ],
+    [
+      "Girsanov",
+      "\\frac{d\\mathbb Q}{d\\mathbb P}\\bigg|_{\\mathcal F_t}=\\exp\\left(\\int_0^t\\theta_s\\,dB_s-\\frac12\\int_0^t\\theta_s^2ds\\right)",
+      "Girsanov theorem"
+    ],
+    [
+      "OU 过程",
+      "dX_t=\\theta(\\mu-X_t)dt+\\sigma dB_t",
+      "Ornstein-Uhlenbeck process"
+    ],
+    [
+      "几何布朗运动",
+      "dS_t=\\mu S_tdt+\\sigma S_tdB_t",
+      "Geometric Brownian motion"
+    ],
+    {
+      "section": "贝叶斯 / 机器学习概率",
+      "sectionEn": "Bayesian / Probabilistic Machine Learning"
+    },
+    [
+      "贝叶斯预测",
+      "p(x_*\\mid x)=\\int p(x_*\\mid\\theta)p(\\theta\\mid x)d\\theta",
+      "Posterior predictive"
+    ],
+    [
+      "MAP",
+      "\\hat\\theta_{MAP}=\\arg\\max_\\theta p(\\theta\\mid x)",
+      "Maximum a posteriori"
+    ],
+    [
+      "变分推断",
+      "\\mathrm{ELBO}=\\mathbb E_q[\\log p(x,z)]-\\mathbb E_q[\\log q(z)]",
+      "Variational inference"
+    ],
+    [
+      "EM 算法",
+      "Q(\\theta\\mid\\theta^{old})=\\mathbb E_{Z\\mid X,\\theta^{old}}[\\log p(X,Z\\mid\\theta)]",
+      "EM algorithm"
+    ],
+    [
+      "高斯过程",
+      "f\\sim\\mathcal{GP}(m,k)",
+      "Gaussian process"
+    ],
+    [
+      "核协方差",
+      "k(x,x')=\\sigma^2\\exp\\left(-\\frac{\\|x-x'\\|^2}{2\\ell^2}\\right)",
+      "Squared exponential kernel"
+    ],
+    [
+      "隐马尔可夫",
+      "p(x_{1:T},z_{1:T})=p(z_1)\\prod_t p(x_t\\mid z_t)\\prod_{t>1}p(z_t\\mid z_{t-1})",
+      "Hidden Markov model"
+    ],
+    [
+      "Kalman 预测",
+      "x_t=Ax_{t-1}+w_t,\\quad y_t=Hx_t+v_t",
+      "Kalman state space model"
+    ],
+    [
+      "大偏差",
+      "\\mathbb{P}(\\bar X_n > a) \\asymp e^{-nI(a)}",
+      "Large deviation"
+    ]
+  ]
+}

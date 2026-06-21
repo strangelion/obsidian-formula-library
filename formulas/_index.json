@@ -1,0 +1,22 @@
+{
+  "order": [
+    "greek",
+    "structures",
+    "delimiters",
+    "analysis",
+    "algebra",
+    "geometry",
+    "topology",
+    "numberTheory",
+    "relations",
+    "operators",
+    "bigops",
+    "arrows",
+    "sets",
+    "functions",
+    "probability",
+    "physics",
+    "chemistry",
+    "misc"
+  ]
+}

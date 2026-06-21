@@ -1,0 +1,719 @@
+{
+  "id": "geometry",
+  "structures": true,
+  "items": [
+    {
+      "section": "经典 / 仿射 / 射影几何 - 概念 / 性质",
+      "sectionEn": "Classical / Affine / Projective Geometry - Concepts / Properties"
+    },
+    [
+      "欧氏距离",
+      "d(p,q)=\\|p-q\\|",
+      "Euclidean distance"
+    ],
+    [
+      "两点距离",
+      "d=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}",
+      "Distance between points"
+    ],
+    [
+      "中点公式",
+      "M=\\left(\\frac{x_1+x_2}{2},\\frac{y_1+y_2}{2}\\right)",
+      "Midpoint formula"
+    ],
+    [
+      "斜率",
+      "k=\\frac{y_2-y_1}{x_2-x_1}",
+      "Slope"
+    ],
+    [
+      "直线方程",
+      "Ax+By+C=0",
+      "Line equation"
+    ],
+    [
+      "点到直线距离",
+      "d=\\frac{|Ax_0+By_0+C|}{\\sqrt{A^2+B^2}}",
+      "Point-line distance"
+    ],
+    [
+      "圆方程",
+      "(x-a)^2+(y-b)^2=r^2",
+      "Circle equation"
+    ],
+    [
+      "椭圆方程",
+      "\\frac{x^2}{a^2}+\\frac{y^2}{b^2}=1",
+      "Ellipse equation"
+    ],
+    [
+      "抛物线方程",
+      "y^2=2px",
+      "Parabola equation"
+    ],
+    [
+      "双曲线方程",
+      "\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1",
+      "Hyperbola equation"
+    ],
+    [
+      "三角形面积",
+      "S=\\frac12 ab\\sin C",
+      "Triangle area"
+    ],
+    [
+      "圆面积",
+      "S=\\pi r^2",
+      "Circle area"
+    ],
+    [
+      "球体积",
+      "V=\\frac43\\pi r^3",
+      "Sphere volume"
+    ],
+    [
+      "仿射空间",
+      "\\mathbb A^n",
+      "Affine space"
+    ],
+    [
+      "射影空间",
+      "\\mathbb P^n",
+      "Projective space"
+    ],
+    [
+      "交比",
+      "[a,b;c,d]",
+      "Cross ratio"
+    ],
+    [
+      "二次曲面",
+      "x^TAx+bx+c=0",
+      "Quadric"
+    ],
+    {
+      "section": "经典 / 仿射 / 射影几何 - 定理 / 公式",
+      "sectionEn": "Classical / Affine / Projective Geometry - Theorems / Formulas"
+    },
+    [
+      "勾股定理",
+      "a^2+b^2=c^2",
+      "Pythagorean theorem"
+    ],
+    [
+      "正弦定理",
+      "\\frac a{\\sin A}=\\frac b{\\sin B}=\\frac c{\\sin C}",
+      "Law of sines"
+    ],
+    [
+      "余弦定理",
+      "c^2=a^2+b^2-2ab\\cos C",
+      "Law of cosines"
+    ],
+    [
+      "Heron 公式",
+      "\\Delta=\\sqrt{s(s-a)(s-b)(s-c)}",
+      "Heron formula"
+    ],
+    [
+      "Ceva 定理",
+      "\\frac{AF}{FB}\\frac{BD}{DC}\\frac{CE}{EA}=1",
+      "Ceva theorem"
+    ],
+    [
+      "Menelaus 定理",
+      "\\frac{AF}{FB}\\frac{BD}{DC}\\frac{CE}{EA}=-1",
+      "Menelaus theorem"
+    ],
+    [
+      "Pascal 定理",
+      "\\text{opposite side intersections of hexagon on conic are collinear}",
+      "Pascal theorem"
+    ],
+    [
+      "Brianchon 定理",
+      "\\text{diagonals of hexagon tangent to conic are concurrent}",
+      "Brianchon theorem"
+    ],
+    [
+      "圆周角定理",
+      "\\angle ACB=\\frac12\\angle AOB",
+      "Inscribed angle theorem"
+    ],
+    [
+      "相似三角形",
+      "\\frac{AB}{DE}=\\frac{BC}{EF}=\\frac{CA}{FD}",
+      "Similar triangles"
+    ],
+    [
+      "垂径定理",
+      "OM\\perp AB\\implies AM=MB",
+      "Perpendicular chord theorem"
+    ],
+    {
+      "section": "微分流形 / 张量几何 - 概念 / 性质",
+      "sectionEn": "Differentiable Manifolds / Tensor Geometry - Concepts / Properties"
+    },
+    [
+      "光滑流形",
+      "(M,\\mathcal A)\\text{ is a smooth }n\\text{-manifold}",
+      "Smooth manifold"
+    ],
+    [
+      "切空间",
+      "T_pM",
+      "Tangent space"
+    ],
+    [
+      "余切空间",
+      "T_p^*M",
+      "Cotangent space"
+    ],
+    [
+      "向量场",
+      "X\\in\\Gamma(TM)",
+      "Vector field"
+    ],
+    [
+      "张量场",
+      "T\\in\\Gamma(T^r_sM)",
+      "Tensor field"
+    ],
+    [
+      "微分形式",
+      "\\Omega^k(M)",
+      "Differential form"
+    ],
+    [
+      "外微分",
+      "d:\\Omega^k(M)\\to\\Omega^{k+1}(M)",
+      "Exterior derivative"
+    ],
+    [
+      "楔积",
+      "\\omega\\wedge\\eta",
+      "Wedge product"
+    ],
+    [
+      "李导数",
+      "\\mathcal L_XY=[X,Y]",
+      "Lie derivative"
+    ],
+    [
+      "流",
+      "\\varphi_t:M\\to M",
+      "Flow"
+    ],
+    [
+      "参数曲线",
+      "\\gamma(t)=(x(t),y(t),z(t))",
+      "Parametric curve"
+    ],
+    [
+      "切向量",
+      "T=\\frac{\\gamma'}{\\|\\gamma'\\|}",
+      "Unit tangent vector"
+    ],
+    [
+      "法向量",
+      "N=\\frac{T'}{\\|T'\\|}",
+      "Principal normal vector"
+    ],
+    [
+      "曲面参数化",
+      "X:U\\subset\\mathbb R^2\\to\\mathbb R^3,\\quad X=X(u,v)",
+      "Surface parametrization"
+    ],
+    [
+      "切平面",
+      "T_pS=\\operatorname{span}\\{X_u,X_v\\}",
+      "Tangent plane"
+    ],
+    [
+      "法向量",
+      "n=\\frac{X_u\\times X_v}{\\|X_u\\times X_v\\|}",
+      "Surface normal"
+    ],
+    {
+      "section": "微分流形 / 张量几何 - 定理 / 公式",
+      "sectionEn": "Differentiable Manifolds / Tensor Geometry - Theorems / Formulas"
+    },
+    [
+      "Stokes 定理",
+      "\\int_{\\partial M}\\omega=\\int_M d\\omega",
+      "Stokes theorem"
+    ],
+    [
+      "de Rham 定理",
+      "H^k_{\\mathrm{dR}}(M)\\cong H^k(M;\\mathbb R)",
+      "de Rham theorem"
+    ],
+    [
+      "Frobenius 定理",
+      "\\mathcal D\\text{ involutive}\\Longleftrightarrow\\mathcal D\\text{ integrable}",
+      "Frobenius theorem"
+    ],
+    [
+      "Sard 定理",
+      "\\operatorname{CritVal}(f)\\text{ has measure }0",
+      "Sard theorem"
+    ],
+    [
+      "Whitney 嵌入",
+      "M^n\\hookrightarrow\\mathbb R^{2n}",
+      "Whitney embedding theorem"
+    ],
+    [
+      "Whitney 浸入",
+      "M^n\\looparrowright\\mathbb R^{2n-1}",
+      "Whitney immersion theorem"
+    ],
+    [
+      "横截性定理",
+      "f\\pitchfork S\\text{ after small perturbation}",
+      "Transversality theorem"
+    ],
+    [
+      "管状邻域",
+      "\\nu(N)\\supset U\\cong\\text{tubular neighborhood of }N",
+      "Tubular neighborhood theorem"
+    ],
+    [
+      "Ehresmann 纤维化",
+      "f:M\\to N\\text{ proper submersion}\\implies f\\text{ locally trivial fibration}",
+      "Ehresmann fibration theorem"
+    ],
+    [
+      "同位延拓",
+      "i_t:N\\hookrightarrow M\\implies\\exists \\Phi_t:M\\to M",
+      "Isotopy extension theorem"
+    ],
+    {
+      "section": "曲线曲面 / 黎曼几何 - 概念 / 性质",
+      "sectionEn": "Curves Surfaces / Riemannian Geometry - Concepts / Properties"
+    },
+    [
+      "曲率",
+      "\\kappa=\\frac{|r'\\times r''|}{|r'|^3}",
+      "Curvature"
+    ],
+    [
+      "挠率",
+      "\\tau=\\frac{(r'\\times r'')\\cdot r'''}{|r'\\times r''|^2}",
+      "Torsion"
+    ],
+    [
+      "弧长",
+      "s=\\int_a^b\\|\\gamma'(t)\\|dt",
+      "Arc length"
+    ],
+    [
+      "第一基本形式",
+      "I=E\\,du^2+2F\\,du\\,dv+G\\,dv^2",
+      "First fundamental form"
+    ],
+    [
+      "第二基本形式",
+      "II=L\\,du^2+2M\\,du\\,dv+N\\,dv^2",
+      "Second fundamental form"
+    ],
+    [
+      "面积元",
+      "dA=\\|X_u\\times X_v\\|\\,du\\,dv",
+      "Surface area element"
+    ],
+    [
+      "高斯曲率",
+      "K=\\frac{LN-M^2}{EG-F^2}",
+      "Gaussian curvature"
+    ],
+    [
+      "平均曲率",
+      "H=\\frac{EN+GL-2FM}{2(EG-F^2)}",
+      "Mean curvature"
+    ],
+    [
+      "度量张量",
+      "g=g_{ij}dx^i\\otimes dx^j",
+      "Metric tensor"
+    ],
+    [
+      "Levi-Civita 联络",
+      "\\nabla g=0,\\quad T^\\nabla=0",
+      "Levi-Civita connection"
+    ],
+    [
+      "测地线",
+      "\\ddot x^k+\\Gamma^k_{ij}\\dot x^i\\dot x^j=0",
+      "Geodesic"
+    ],
+    [
+      "Riemann 曲率",
+      "R(X,Y)Z=\\nabla_X\\nabla_YZ-\\nabla_Y\\nabla_XZ-\\nabla_{[X,Y]}Z",
+      "Riemann curvature"
+    ],
+    [
+      "Ricci 曲率",
+      "\\operatorname{Ric}_{ij}=R^k_{ikj}",
+      "Ricci curvature"
+    ],
+    [
+      "标量曲率",
+      "R=g^{ij}\\operatorname{Ric}_{ij}",
+      "Scalar curvature"
+    ],
+    [
+      "截面曲率",
+      "K(\\sigma)=\\frac{\\langle R(X,Y)Y,X\\rangle}{|X\\wedge Y|^2}",
+      "Sectional curvature"
+    ],
+    {
+      "section": "曲线曲面 / 黎曼几何 - 定理 / 公式",
+      "sectionEn": "Curves Surfaces / Riemannian Geometry - Theorems / Formulas"
+    },
+    [
+      "Frenet-Serret",
+      "\\frac d{ds}\\begin{bmatrix}T\\\\N\\\\B\\end{bmatrix}=\\begin{bmatrix}0&\\kappa&0\\\\-\\kappa&0&\\tau\\\\0&-\\tau&0\\end{bmatrix}\\begin{bmatrix}T\\\\N\\\\B\\end{bmatrix}",
+      "Frenet-Serret formulas"
+    ],
+    [
+      "Gauss 绝妙定理",
+      "K=\\frac{R_{1212}}{\\det(g_{ij})}",
+      "Theorema egregium"
+    ],
+    [
+      "Gauss-Codazzi",
+      "R_{ijkl}=h_{ik}h_{jl}-h_{il}h_{jk},\\quad\\nabla_i h_{jk}=\\nabla_jh_{ik}",
+      "Gauss-Codazzi equations"
+    ],
+    [
+      "Bonnet 定理",
+      "g,h\\text{ satisfy Gauss-Codazzi}\\implies\\text{ surface exists}",
+      "Bonnet theorem"
+    ],
+    [
+      "Gauss-Bonnet",
+      "\\int_MK\\,dA+\\int_{\\partial M}k_g\\,ds=2\\pi\\chi(M)",
+      "Gauss-Bonnet theorem"
+    ],
+    [
+      "Hopf-Rinow",
+      "\\text{geodesically complete}\\Longleftrightarrow\\text{ metric complete}",
+      "Hopf-Rinow theorem"
+    ],
+    [
+      "Cartan-Hadamard",
+      "K\\le0,\\;M\\text{ complete simply connected}\\implies\\exp_p:T_pM\\to M",
+      "Cartan-Hadamard theorem"
+    ],
+    [
+      "Bonnet-Myers",
+      "\\operatorname{Ric}\\ge(n-1)k>0\\implies\\operatorname{diam}M\\le\\pi/\\sqrt k",
+      "Bonnet-Myers theorem"
+    ],
+    [
+      "Synge 定理",
+      "M^{2m}\\text{ orientable},\\;K>0\\implies\\pi_1(M)=0",
+      "Synge theorem"
+    ],
+    [
+      "Rauch 比较",
+      "K_M\\le K_N\\implies |J_M|\\ge |J_N|",
+      "Rauch comparison theorem"
+    ],
+    [
+      "Bishop-Gromov",
+      "\\frac{\\operatorname{Vol}B(p,r)}{V_k(r)}\\text{ is nonincreasing}",
+      "Bishop-Gromov theorem"
+    ],
+    [
+      "Toponogov 比较",
+      "K\\ge k\\implies\\text{geodesic triangles compare with }M_k",
+      "Toponogov theorem"
+    ],
+    [
+      "Cheeger-Gromoll",
+      "\\operatorname{Ric}\\ge0\\text{ and line}\\implies M\\cong N\\times\\mathbb R",
+      "Cheeger-Gromoll splitting"
+    ],
+    [
+      "Preissmann 定理",
+      "M\\text{ compact},\\;K<0\\implies\\text{nontrivial abelian subgroup of }\\pi_1(M)\\text{ is }\\mathbb Z",
+      "Preissmann theorem"
+    ],
+    [
+      "Cheeger 有限性",
+      "|K|\\le C,\\;\\operatorname{diam}\\le D,\\;\\operatorname{vol}\\ge v\\implies\\text{finitely many diffeomorphism types}",
+      "Cheeger finiteness theorem"
+    ],
+    [
+      "Gromov 紧性",
+      "\\operatorname{Ric}\\ge(n-1)k,\\;\\operatorname{diam}\\le D\\implies\\text{precompact in GH topology}",
+      "Gromov compactness theorem"
+    ],
+    {
+      "section": "复几何 / Kähler / 代数几何交界 - 概念 / 性质",
+      "sectionEn": "Complex / Kahler / Algebraic Geometry Interface - Concepts / Properties"
+    },
+    [
+      "复流形",
+      "(M,J)",
+      "Complex manifold"
+    ],
+    [
+      "Kähler 形式",
+      "\\omega=g(J\\cdot,\\cdot)",
+      "Kahler form"
+    ],
+    [
+      "Dolbeault 上同调",
+      "H^{p,q}_{\\bar\\partial}(M)",
+      "Dolbeault cohomology"
+    ],
+    [
+      "陈类",
+      "c_i(E)\\in H^{2i}(M;\\mathbb Z)",
+      "Chern class"
+    ],
+    [
+      "Calabi-Yau",
+      "c_1(M)=0",
+      "Calabi-Yau manifold"
+    ],
+    {
+      "section": "复几何 / Kähler / 代数几何交界 - 定理 / 公式",
+      "sectionEn": "Complex / Kahler / Algebraic Geometry Interface - Theorems / Formulas"
+    },
+    [
+      "Newlander-Nirenberg",
+      "N_J=0\\implies J\\text{ integrable}",
+      "Newlander-Nirenberg theorem"
+    ],
+    [
+      "Hodge 分解",
+      "H^k(M;\\mathbb C)=\\bigoplus_{p+q=k}H^{p,q}(M)",
+      "Hodge decomposition"
+    ],
+    [
+      "Lefschetz 超平面",
+      "H^i(X)\\cong H^i(Y)\\quad i<\\dim Y",
+      "Lefschetz hyperplane theorem"
+    ],
+    [
+      "Kodaira 消灭",
+      "H^q(X,K_X\\otimes L)=0\\quad(q>0)",
+      "Kodaira vanishing theorem"
+    ],
+    [
+      "Calabi-Yau 定理",
+      "c_1(M)=0\\implies\\exists\\text{ Ricci-flat Kähler metric}",
+      "Calabi-Yau theorem"
+    ],
+    {
+      "section": "辛几何 / 接触几何 / Poisson - 概念 / 性质",
+      "sectionEn": "Symplectic / Contact / Poisson Geometry - Concepts / Properties"
+    },
+    [
+      "辛流形",
+      "(M,\\omega),\\quad d\\omega=0",
+      "Symplectic manifold"
+    ],
+    [
+      "Hamilton 向量场",
+      "\\iota_{X_H}\\omega=dH",
+      "Hamiltonian vector field"
+    ],
+    [
+      "Poisson 括号",
+      "\\{f,g\\}=\\omega(X_f,X_g)",
+      "Poisson bracket"
+    ],
+    [
+      "矩映射",
+      "\\mu:M\\to\\mathfrak g^*",
+      "Moment map"
+    ],
+    [
+      "接触形式",
+      "\\alpha\\wedge(d\\alpha)^n\\ne0",
+      "Contact form"
+    ],
+    {
+      "section": "辛几何 / 接触几何 / Poisson - 定理 / 公式",
+      "sectionEn": "Symplectic / Contact / Poisson Geometry - Theorems / Formulas"
+    },
+    [
+      "Darboux 定理",
+      "\\omega=\\sum_i dq_i\\wedge dp_i\\text{ locally}",
+      "Darboux theorem"
+    ],
+    [
+      "Moser 稳定性",
+      "[\\omega_t]\\text{ constant}\\implies\\phi_t^*\\omega_t=\\omega_0",
+      "Moser stability theorem"
+    ],
+    [
+      "Marsden-Weinstein 约化",
+      "M//G=\\mu^{-1}(0)/G",
+      "Marsden-Weinstein reduction"
+    ],
+    [
+      "Gromov 非挤压",
+      "B^{2n}(R)\\hookrightarrow Z^{2n}(r)\\implies R\\le r",
+      "Gromov nonsqueezing theorem"
+    ],
+    [
+      "Arnold 猜想",
+      "\\#\\operatorname{Fix}(\\phi_H)\\ge\\sum_i b_i(M)",
+      "Arnold conjecture"
+    ],
+    [
+      "Floer 同调",
+      "HF^*(M,\\omega,H)",
+      "Floer homology"
+    ],
+    [
+      "J-全纯曲线",
+      "\\bar\\partial_Ju=0",
+      "J-holomorphic curve"
+    ],
+    [
+      "Hofer 范数",
+      "\\|\\phi_H\\|=\\inf_H\\int_0^1(\\max H_t-\\min H_t)dt",
+      "Hofer norm"
+    ],
+    [
+      "Gray 稳定性",
+      "\\xi_t\\text{ contact structures}\\implies\\phi_t^*\\xi_t=\\xi_0",
+      "Gray stability theorem"
+    ],
+    [
+      "Reeb 向量场",
+      "\\alpha(R)=1,\\quad \\iota_Rd\\alpha=0",
+      "Reeb vector field"
+    ],
+    {
+      "section": "几何分析 / 全局分析 / 规范理论 - 概念 / 性质",
+      "sectionEn": "Geometric Analysis / Global Analysis / Gauge Theory - Concepts / Properties"
+    },
+    [
+      "Hodge 星",
+      "\\star:\\Omega^k(M)\\to\\Omega^{n-k}(M)",
+      "Hodge star"
+    ],
+    [
+      "Hodge Laplacian",
+      "\\Delta=d\\delta+\\delta d",
+      "Hodge Laplacian"
+    ],
+    [
+      "Dirac 算子",
+      "\\displaystyle{\\not}D=\\gamma^\\mu\\nabla_\\mu",
+      "Dirac operator"
+    ],
+    [
+      "曲率形式",
+      "F_\\nabla=dA+A\\wedge A",
+      "Curvature form"
+    ],
+    [
+      "Yang-Mills",
+      "D_A^*F_A=0",
+      "Yang-Mills equation"
+    ],
+    [
+      "Ricci 流",
+      "\\partial_tg=-2\\operatorname{Ric}(g)",
+      "Ricci flow"
+    ],
+    [
+      "平均曲率流",
+      "\\partial_tF=H\\nu",
+      "Mean curvature flow"
+    ],
+    [
+      "调和映射",
+      "\\tau(u)=0",
+      "Harmonic map"
+    ],
+    [
+      "极小曲面",
+      "H=0",
+      "Minimal surface"
+    ],
+    [
+      "Seiberg-Witten",
+      "\\displaystyle{\\not}D_A\\psi=0,\\quad F_A^+=q(\\psi)",
+      "Seiberg-Witten equations"
+    ],
+    [
+      "Uhlenbeck 紧性",
+      "A_i\\text{ Yang-Mills bounded}\\implies A_i\\to A\\text{ modulo gauge}",
+      "Uhlenbeck compactness"
+    ],
+    {
+      "section": "几何分析 / 全局分析 / 规范理论 - 定理 / 公式",
+      "sectionEn": "Geometric Analysis / Global Analysis / Gauge Theory - Theorems / Formulas"
+    },
+    [
+      "Hodge 定理",
+      "H^k_{\\mathrm{dR}}(M)\\cong\\mathcal H^k(M)",
+      "Hodge theorem"
+    ],
+    [
+      "Bochner 公式",
+      "\\frac12\\Delta|\\omega|^2=|\\nabla\\omega|^2+\\langle\\Delta\\omega,\\omega\\rangle+\\operatorname{Ric}(\\omega,\\omega)",
+      "Bochner formula"
+    ],
+    [
+      "Weitzenbock 公式",
+      "D^2=\\nabla^*\\nabla+\\mathcal R",
+      "Weitzenbock formula"
+    ],
+    [
+      "Atiyah-Singer",
+      "\\operatorname{ind}D=\\int_M\\hat A(M)\\operatorname{ch}(E)",
+      "Atiyah-Singer index theorem"
+    ],
+    [
+      "Chern-Weil",
+      "P(F_\\nabla)\\text{ represents characteristic classes}",
+      "Chern-Weil theorem"
+    ],
+    [
+      "Gauss-Bonnet-Chern",
+      "\\int_M\\operatorname{Pf}(\\Omega)=(2\\pi)^n\\chi(M)",
+      "Chern-Gauss-Bonnet theorem"
+    ],
+    [
+      "Yamabe 问题",
+      "\\exists\\tilde g\\in[g]: R_{\\tilde g}\\text{ constant}",
+      "Yamabe theorem"
+    ],
+    [
+      "正质量定理",
+      "R_g\\ge0\\implies m_{ADM}\\ge0",
+      "Positive mass theorem"
+    ],
+    [
+      "Donaldson 定理",
+      "Q_M\\text{ definite}\\implies Q_M\\cong\\pm I",
+      "Donaldson theorem"
+    ],
+    [
+      "Sacks-Uhlenbeck",
+      "\\text{harmonic maps exist after }\\alpha\\text{-energy approximation}",
+      "Sacks-Uhlenbeck theorem"
+    ],
+    [
+      "Eells-Sampson",
+      "E(u)=\\frac12\\int_M|du|^2,\\;K_N\\le0\\implies\\exists u\\text{ harmonic}",
+      "Eells-Sampson theorem"
+    ],
+    [
+      "Huisken 单调性",
+      "\\frac{d}{dt}\\int_{M_t}\\rho_{x_0,t_0}\\,d\\mu_t\\le0",
+      "Huisken monotonicity formula"
+    ]
+  ]
+}

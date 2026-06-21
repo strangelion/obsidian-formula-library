@@ -1,0 +1,186 @@
+{
+  "id": "delimiters",
+  "structures": false,
+  "items": [
+    [
+      "( )",
+      "\\left( #? \\right)",
+      "Parentheses"
+    ],
+    [
+      "[ ]",
+      "\\left[ #? \\right]",
+      "Brackets"
+    ],
+    [
+      "{ }",
+      "\\left\\{ #? \\right\\}",
+      "Braces"
+    ],
+    [
+      "| |",
+      "\\left| #? \\right|",
+      "Absolute value"
+    ],
+    [
+      "‖ ‖",
+      "\\left\\| #? \\right\\|",
+      "Norm"
+    ],
+    [
+      "⟨ ⟩",
+      "\\left\\langle #? \\right\\rangle",
+      "Angle brackets"
+    ],
+    [
+      "⎡ ⎤",
+      "\\left\\lceil #? \\right\\rceil",
+      "Ceiling"
+    ],
+    [
+      "⎣ ⎦",
+      "\\left\\lfloor #? \\right\\rfloor",
+      "Floor"
+    ],
+    [
+      "⟦ ⟧",
+      "\\left\\llbracket #? \\right\\rrbracket",
+      "Double brackets"
+    ],
+    [
+      "( ]",
+      "\\left( #? \\right]",
+      "Half-open left"
+    ],
+    [
+      "[ )",
+      "\\left[ #? \\right)",
+      "Half-open right"
+    ],
+    [
+      "( ⋅",
+      "\\left( #? \\right.",
+      "Left parenthesis"
+    ],
+    [
+      "⋅ )",
+      "\\left. #? \\right)",
+      "Right parenthesis"
+    ],
+    [
+      "[ ⋅",
+      "\\left[ #? \\right.",
+      "Left bracket"
+    ],
+    [
+      "⋅ ]",
+      "\\left. #? \\right]",
+      "Right bracket"
+    ],
+    [
+      "{ ⋅",
+      "\\left\\{ #? \\right.",
+      "Left brace"
+    ],
+    [
+      "⋅ }",
+      "\\left. #? \\right\\}",
+      "Right brace"
+    ],
+    [
+      "⟨ ⋅",
+      "\\left\\langle #? \\right.",
+      "Left angle bracket"
+    ],
+    [
+      "⋅ ⟩",
+      "\\left. #? \\right\\rangle",
+      "Right angle bracket"
+    ],
+    [
+      "|ₓ",
+      "\\left. #? \\right|_{#?}",
+      "Evaluation at"
+    ],
+    [
+      "⟨ψ|",
+      "\\left\\langle #? \\right|",
+      "Bra"
+    ],
+    [
+      "|ψ⟩",
+      "\\left| #? \\right\\rangle",
+      "Ket"
+    ],
+    [
+      "⟨ψ|φ⟩",
+      "\\left\\langle #? \\middle| #? \\right\\rangle",
+      "Bra-ket"
+    ],
+    [
+      "⎛ ⎞",
+      "\\bigl(#?\\bigr)",
+      "Big parentheses"
+    ],
+    [
+      "⎡ ⎤",
+      "\\bigl[#?\\bigr]",
+      "Big brackets"
+    ],
+    [
+      "⦃ ⦄",
+      "\\bigl\\{#?\\bigr\\}",
+      "Big braces"
+    ],
+    [
+      "⟪ ⟫",
+      "\\bigl\\langle#?\\bigr\\rangle",
+      "Big angle brackets"
+    ],
+    [
+      "❘ ❘",
+      "\\bigl\\lvert#?\\bigr\\rvert",
+      "Big absolute"
+    ],
+    [
+      "❙ ❙",
+      "\\bigl\\lVert#?\\bigr\\rVert",
+      "Big norm"
+    ],
+    [
+      "⌜ ⌝",
+      "\\left\\ulcorner #? \\right\\urcorner",
+      "Top corners"
+    ],
+    [
+      "⌞ ⌟",
+      "\\left\\llcorner #? \\right\\lrcorner",
+      "Bottom corners"
+    ],
+    [
+      "/",
+      "/",
+      "Slash"
+    ],
+    [
+      "\\",
+      "\\backslash",
+      "Backslash"
+    ],
+    [
+      "⎛ ⎞",
+      "\\left\\lgroup #? \\right\\rgroup",
+      "Grouping parentheses"
+    ],
+    [
+      "⎰",
+      "\\lmoustache",
+      "Left moustache"
+    ],
+    [
+      "⎱",
+      "\\rmoustache",
+      "Right moustache"
+    ]
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "id": "sets",
+  "structures": false,
+  "items": [
+    [
+      "∈",
+      "\\in"
+    ],
+    [
+      "∉",
+      "\\notin"
+    ],
+    [
+      "∋",
+      "\\ni"
+    ],
+    [
+      "∌",
+      "\\notni"
+    ],
+    [
+      "∅",
+      "\\emptyset"
+    ],
+    [
+      "∅",
+      "\\varnothing"
+    ],
+    [
+      "∀",
+      "\\forall"
+    ],
+    [
+      "∃",
+      "\\exists"
+    ],
+    [
+      "∄",
+      "\\nexists"
+    ],
+    [
+      "¬",
+      "\\neg"
+    ],
+    [
+      "∧",
+      "\\land"
+    ],
+    [
+      "∨",
+      "\\lor"
+    ],
+    [
+      "⟹",
+      "\\implies"
+    ],
+    [
+      "⟺",
+      "\\iff"
+    ],
+    [
+      "∴",
+      "\\therefore"
+    ],
+    [
+      "∵",
+      "\\because"
+    ],
+    [
+      "∁",
+      "\\complement"
+    ],
+    [
+      "𝒫(A)",
+      "\\mathcal{P}(#?)",
+      "Power set"
+    ],
+    [
+      "{x∈A|P}",
+      "\\left\\{#?\\in#?\\mid#?\\right\\}",
+      "Set-builder notation"
+    ],
+    [
+      "A×B",
+      "#?\\times#?",
+      "Cartesian product"
+    ],
+    [
+      "Aᶜ",
+      "#?^{c}",
+      "Complement"
+    ],
+    [
+      "𝟙_A",
+      "\\mathbf{1}_{#?}",
+      "Indicator function"
+    ],
+    [
+      "△",
+      "#? \\triangle #?",
+      "Symmetric difference"
+    ],
+    [
+      "|A|",
+      "|#?|",
+      "Cardinality"
+    ],
+    [
+      "ℝ",
+      "\\mathbb{R}"
+    ],
+    [
+      "ℕ",
+      "\\mathbb{N}"
+    ],
+    [
+      "ℤ",
+      "\\mathbb{Z}"
+    ],
+    [
+      "ℚ",
+      "\\mathbb{Q}"
+    ],
+    [
+      "ℂ",
+      "\\mathbb{C}"
+    ],
+    [
+      "ℙ",
+      "\\mathbb{P}"
+    ],
+    [
+      "ℍ",
+      "\\mathbb{H}"
+    ],
+    [
+      "{Aᵢ}",
+      "\\{#?\\}_{#?\\in #?}",
+      "Family of sets"
+    ],
+    [
+      "limsup Aₙ",
+      "\\limsup_{n\\to\\infty} #?",
+      "Set limsup"
+    ],
+    [
+      "liminf Aₙ",
+      "\\liminf_{n\\to\\infty} #?",
+      "Set liminf"
+    ],
+    [
+      "|A∪B|",
+      "|A\\cup B| = |A|+|B|-|A\\cap B|",
+      "Inclusion-exclusion"
+    ],
+    [
+      "𝔠",
+      "\\mathfrak{c} = 2^{\\aleph_0}",
+      "Continuum"
+    ],
+    [
+      "⊤",
+      "\\top"
+    ],
+    [
+      "⊥",
+      "\\bot"
+    ],
+    [
+      "⋐",
+      "\\Subset",
+      "Double subset"
+    ],
+    [
+      "⋑",
+      "\\Supset",
+      "Double superset"
+    ]
+  ]
+}

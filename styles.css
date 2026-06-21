@@ -195,7 +195,7 @@
 }
 
 /* ========================================
-   Editor Modal - LARGE
+   Editor Modal
    ======================================== */
 
 .formula-editor-modal {
@@ -206,7 +206,7 @@
 }
 
 .modal-container:has(.formula-editor-modal) {
-  max-width: 1400px;
+  max-width: 1600px;
   width: 96vw;
   max-height: 95vh;
 }
@@ -290,15 +290,29 @@
 .fe-preview-area {
   flex: 65;
   min-height: 200px;
-  padding: 20px;
+  padding: 12px;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--radius-s);
   background: var(--background-primary);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
   overflow: auto;
   gap: 12px;
+}
+
+.fe-preview-area math-field {
+  width: 100%;
+  min-height: 120px;
+  font-size: 20px;
+  --math-font-style: italic;
+  --text-color: var(--text-normal);
+  --background-color: transparent;
+  --border-color: transparent;
+  --focus-border-color: var(--interactive-accent);
+  user-select: text;
+  -webkit-user-select: text;
+  pointer-events: auto;
 }
 
 /* Textarea takes 35% of the left pane */
@@ -338,7 +352,7 @@
   overflow: hidden;
 }
 
-.fe-library-panel .fl-grid { grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.fe-library-panel .fl-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 3px; }
 
 .fe-library-panel .fl-symbol-btn {
   min-height: 40px;

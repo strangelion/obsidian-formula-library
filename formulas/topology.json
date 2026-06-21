@@ -1,0 +1,892 @@
+{
+  "id": "topology",
+  "structures": true,
+  "items": [
+    {
+      "section": "点集拓扑 / 度量拓扑 - 概念 / 性质",
+      "sectionEn": "Point-Set / Metric Topology - Concepts / Properties"
+    },
+    [
+      "拓扑空间",
+      "(X,\\mathcal T)",
+      "Topological space"
+    ],
+    [
+      "开集",
+      "U\\in\\mathcal T",
+      "Open set"
+    ],
+    [
+      "闭集",
+      "F=X\\setminus U",
+      "Closed set"
+    ],
+    [
+      "闭包",
+      "\\overline A",
+      "Closure"
+    ],
+    [
+      "内部",
+      "\\operatorname{int}A",
+      "Interior"
+    ],
+    [
+      "边界",
+      "\\partial A",
+      "Boundary"
+    ],
+    [
+      "邻域",
+      "U\\ni x",
+      "Neighborhood"
+    ],
+    [
+      "聚点",
+      "x\\in A'",
+      "Limit point"
+    ],
+    [
+      "导集",
+      "A'",
+      "Derived set"
+    ],
+    [
+      "紧致",
+      "K\\text{ compact}",
+      "Compactness"
+    ],
+    [
+      "连通",
+      "X\\text{ connected}",
+      "Connectedness"
+    ],
+    [
+      "道路连通",
+      "X\\text{ path connected}",
+      "Path connectedness"
+    ],
+    [
+      "开覆盖",
+      "X=\\bigcup_{\\alpha}U_\\alpha",
+      "Open cover"
+    ],
+    [
+      "子空间拓扑",
+      "\\mathcal T_A=\\{U\\cap A:U\\in\\mathcal T\\}",
+      "Subspace topology"
+    ],
+    [
+      "积拓扑",
+      "\\prod_i X_i",
+      "Product topology"
+    ],
+    [
+      "商拓扑",
+      "X/{\\sim}",
+      "Quotient topology"
+    ],
+    [
+      "连续映射",
+      "f:X\\to Y\\text{ continuous}",
+      "Continuous map"
+    ],
+    [
+      "同胚",
+      "X\\cong Y",
+      "Homeomorphism"
+    ],
+    [
+      "嵌入",
+      "f:X\\hookrightarrow Y",
+      "Embedding"
+    ],
+    [
+      "Hausdorff",
+      "T_2",
+      "Hausdorff space"
+    ],
+    [
+      "第一可数",
+      "X\\text{ first countable}",
+      "First countable"
+    ],
+    [
+      "第二可数",
+      "X\\text{ second countable}",
+      "Second countable"
+    ],
+    [
+      "可分空间",
+      "X\\text{ separable}",
+      "Separable space"
+    ],
+    [
+      "正规空间",
+      "T_4",
+      "Normal space"
+    ],
+    [
+      "仿紧",
+      "X\\text{ paracompact}",
+      "Paracompactness"
+    ],
+    [
+      "Stone-Cech 紧化",
+      "\\beta X",
+      "Stone-Cech compactification"
+    ],
+    [
+      "覆盖维数",
+      "\\dim X",
+      "Covering dimension"
+    ],
+    {
+      "section": "点集拓扑 / 度量拓扑 - 定理 / 公式",
+      "sectionEn": "Point-Set / Metric Topology - Theorems / Formulas"
+    },
+    [
+      "Urysohn 引理",
+      "A,B\\text{ closed disjoint}\\implies\\exists f:X\\to[0,1]",
+      "Urysohn lemma"
+    ],
+    [
+      "Tietze 扩张",
+      "f:A\\to\\mathbb R\\implies\\exists F:X\\to\\mathbb R",
+      "Tietze extension theorem"
+    ],
+    [
+      "Tychonoff 定理",
+      "\\prod_i X_i\\text{ compact}",
+      "Tychonoff theorem"
+    ],
+    [
+      "Baire 定理",
+      "X\\text{ complete metric}\\implies\\bigcap_nU_n\\text{ dense}",
+      "Baire category theorem"
+    ],
+    [
+      "Alexander 子基",
+      "\\mathcal S\\text{ subbase cover}\\implies\\text{ finite subcover}",
+      "Alexander subbase theorem"
+    ],
+    [
+      "Lebesgue 数引理",
+      "\\mathcal U\\text{ open cover of compact metric }X\\implies\\exists\\delta>0",
+      "Lebesgue number lemma"
+    ],
+    [
+      "度量化定理",
+      "X\\text{ regular second countable}\\implies X\\text{ metrizable}",
+      "Urysohn metrization theorem"
+    ],
+    [
+      "Stone-Cech 泛性质",
+      "f:X\\to K\\text{ compact Hausdorff}\\implies\\exists!\\bar f:\\beta X\\to K",
+      "Stone-Cech universal property"
+    ],
+    [
+      "Nagata-Smirnov",
+      "X\\text{ metrizable}\\Longleftrightarrow X\\text{ regular with sigma-locally finite base}",
+      "Nagata-Smirnov metrization"
+    ],
+    [
+      "Michael 选择",
+      "F:X\\to 2^Y\\text{ l.s.c. convex}\\implies\\exists\\text{ continuous selection}",
+      "Michael selection theorem"
+    ],
+    {
+      "section": "代数拓扑 / 同调上同调 - 概念 / 性质",
+      "sectionEn": "Algebraic Topology / Homology Cohomology - Concepts / Properties"
+    },
+    [
+      "同伦",
+      "f\\simeq g",
+      "Homotopy"
+    ],
+    [
+      "道路",
+      "\\gamma:[0,1]\\to X",
+      "Path"
+    ],
+    [
+      "环路",
+      "\\gamma:(S^1,*)\\to(X,x_0)",
+      "Loop"
+    ],
+    [
+      "道路复合",
+      "\\gamma*\\eta",
+      "Path composition"
+    ],
+    [
+      "基本群",
+      "\\pi_1(X,x_0)",
+      "Fundamental group"
+    ],
+    [
+      "高阶同伦群",
+      "\\pi_n(X)",
+      "Higher homotopy group"
+    ],
+    [
+      "覆叠空间",
+      "p:\\tilde X\\to X",
+      "Covering space"
+    ],
+    [
+      "万有覆叠",
+      "\\tilde X\\to X",
+      "Universal cover"
+    ],
+    [
+      "提升",
+      "\\tilde f:Y\\to\\tilde X,\\quad p\\circ\\tilde f=f",
+      "Lifting"
+    ],
+    [
+      "奇异同调",
+      "H_n(X;G)",
+      "Singular homology"
+    ],
+    [
+      "上同调",
+      "H^n(X;G)",
+      "Cohomology"
+    ],
+    [
+      "杯积",
+      "\\smile:H^p\\times H^q\\to H^{p+q}",
+      "Cup product"
+    ],
+    [
+      "链群",
+      "C_n(X)",
+      "Chain group"
+    ],
+    [
+      "边界算子",
+      "\\partial_n:C_n\\to C_{n-1}",
+      "Boundary operator"
+    ],
+    [
+      "循环",
+      "Z_n=\\ker\\partial_n",
+      "Cycle group"
+    ],
+    [
+      "边界",
+      "B_n=\\operatorname{im}\\partial_{n+1}",
+      "Boundary group"
+    ],
+    [
+      "相对同调",
+      "H_n(X,A)",
+      "Relative homology"
+    ],
+    [
+      "约化同调",
+      "\\widetilde H_n(X)",
+      "Reduced homology"
+    ],
+    [
+      "CW 复形",
+      "X=\\bigcup_nX^{(n)}",
+      "CW complex"
+    ],
+    [
+      "单纯复形",
+      "K",
+      "Simplicial complex"
+    ],
+    [
+      "胞腔复形",
+      "X^{(n)}",
+      "Cell complex"
+    ],
+    [
+      "Mayer-Vietoris 序列",
+      "\\cdots\\to H_n(A\\cap B)\\to H_n(A)\\oplus H_n(B)\\to H_n(X)\\to\\cdots",
+      "Mayer-Vietoris sequence"
+    ],
+    {
+      "section": "代数拓扑 / 同调上同调 - 定理 / 公式",
+      "sectionEn": "Algebraic Topology / Homology Cohomology - Theorems / Formulas"
+    },
+    [
+      "Seifert-van Kampen",
+      "\\pi_1(X)\\cong\\pi_1(U)*_{\\pi_1(U\\cap V)}\\pi_1(V)",
+      "Seifert-van Kampen theorem"
+    ],
+    [
+      "切除定理",
+      "H_n(X,A)\\cong H_n(X\\setminus Z,A\\setminus Z)",
+      "Excision theorem"
+    ],
+    [
+      "Mayer-Vietoris",
+      "\\cdots\\to H_n(A\\cap B)\\to H_n(A)\\oplus H_n(B)\\to H_n(X)\\to\\cdots",
+      "Mayer-Vietoris sequence"
+    ],
+    [
+      "万有系数定理",
+      "0\\to H_n(X)\\otimes G\\to H_n(X;G)\\to\\operatorname{Tor}(H_{n-1}(X),G)\\to0",
+      "Universal coefficient theorem"
+    ],
+    [
+      "Kunneth 公式",
+      "H_n(X\\times Y)\\cong\\bigoplus_{p+q=n}H_p(X)\\otimes H_q(Y)\\oplus\\operatorname{Tor}",
+      "Kunneth formula"
+    ],
+    [
+      "Poincare 对偶",
+      "H^k(M;R)\\cong H_{n-k}(M;R)",
+      "Poincare duality"
+    ],
+    [
+      "Alexander 对偶",
+      "\\widetilde H^i(S^n\\setminus A)\\cong\\widetilde H_{n-i-1}(A)",
+      "Alexander duality"
+    ],
+    [
+      "Lefschetz 不动点",
+      "L(f)\\ne0\\implies\\operatorname{Fix}(f)\\ne\\varnothing",
+      "Lefschetz fixed point theorem"
+    ],
+    [
+      "Brouwer 不动点",
+      "f:D^n\\to D^n\\implies\\exists x=f(x)",
+      "Brouwer fixed point theorem"
+    ],
+    [
+      "Borsuk-Ulam",
+      "f:S^n\\to\\mathbb R^n\\implies\\exists x:\\,f(x)=f(-x)",
+      "Borsuk-Ulam theorem"
+    ],
+    [
+      "Eilenberg-Steenrod",
+      "H_*\\text{ satisfies homotopy, exactness, excision, dimension}",
+      "Eilenberg-Steenrod axioms"
+    ],
+    [
+      "路径提升",
+      "p:\\tilde X\\to X,\\;\\gamma(0)=p(\\tilde x_0)\\implies\\exists!\\tilde\\gamma",
+      "Path lifting theorem"
+    ],
+    [
+      "覆叠分类",
+      "\\{\\text{connected coverings of }X\\}\\leftrightarrow\\{H\\le\\pi_1(X)\\}",
+      "Classification of covering spaces"
+    ],
+    [
+      "单纯同调等价",
+      "H_n^{\\Delta}(K)\\cong H_n(|K|)",
+      "Simplicial homology theorem"
+    ],
+    {
+      "section": "同伦论 / 谱序列 / 稳定同伦 - 概念 / 性质",
+      "sectionEn": "Homotopy Theory / Spectral Sequences / Stable Homotopy - Concepts / Properties"
+    },
+    [
+      "纤维化",
+      "F\\to E\\to B",
+      "Fibration"
+    ],
+    [
+      "同伦纤维",
+      "\\operatorname{hofib}(f)",
+      "Homotopy fiber"
+    ],
+    [
+      "Postnikov 塔",
+      "\\cdots\\to X_n\\to X_{n-1}\\to\\cdots",
+      "Postnikov tower"
+    ],
+    [
+      "谱序列",
+      "E_r^{p,q}\\Rightarrow H^{p+q}",
+      "Spectral sequence"
+    ],
+    [
+      "谱",
+      "\\mathbb E",
+      "Spectrum"
+    ],
+    [
+      "稳定同伦群",
+      "\\pi_n^S",
+      "Stable homotopy group"
+    ],
+    [
+      "Eilenberg-MacLane",
+      "K(G,n)",
+      "Eilenberg-MacLane space"
+    ],
+    [
+      "上纤维序列",
+      "F\\to E\\to B",
+      "Fiber sequence"
+    ],
+    [
+      "上余纤维序列",
+      "A\\to X\\to X/A",
+      "Cofiber sequence"
+    ],
+    [
+      "Brown-Peterson 谱",
+      "BP",
+      "Brown-Peterson spectrum"
+    ],
+    {
+      "section": "同伦论 / 谱序列 / 稳定同伦 - 定理 / 公式",
+      "sectionEn": "Homotopy Theory / Spectral Sequences / Stable Homotopy - Theorems / Formulas"
+    },
+    [
+      "Hurewicz 定理",
+      "\\pi_i(X)=0\\;(i<n)\\implies h:\\pi_n(X)\\cong H_n(X)",
+      "Hurewicz theorem"
+    ],
+    [
+      "Whitehead 定理",
+      "f_*:\\pi_n(X)\\cong\\pi_n(Y)\\;\\forall n\\implies f\\text{ homotopy equivalence}",
+      "Whitehead theorem"
+    ],
+    [
+      "Brown 表示",
+      "F\\text{ homotopy functor}\\implies F(-)\\cong[-,Y]",
+      "Brown representability"
+    ],
+    [
+      "CW 逼近",
+      "\\exists K\\to X\\text{ weak equivalence with }K\\text{ CW}",
+      "CW approximation theorem"
+    ],
+    [
+      "Serre 谱序列",
+      "E^2_{p,q}=H_p(B;H_q(F))\\Rightarrow H_{p+q}(E)",
+      "Serre spectral sequence"
+    ],
+    [
+      "Adams 谱序列",
+      "\\operatorname{Ext}_{\\mathcal A}^{s,t}(H^*Y,H^*X)\\Rightarrow [X,Y]_{t-s}",
+      "Adams spectral sequence"
+    ],
+    [
+      "Adams-Novikov",
+      "\\operatorname{Ext}_{BP_*BP}^{s,t}(BP_*,BP_*)\\Rightarrow\\pi_{t-s}^S",
+      "Adams-Novikov spectral sequence"
+    ],
+    [
+      "Freudenthal 悬垂",
+      "\\pi_k(X)\\to\\pi_{k+1}(\\Sigma X)\\text{ stable range iso}",
+      "Freudenthal suspension theorem"
+    ],
+    [
+      "EHP 序列",
+      "\\cdots\\to\\pi_{q+1}(S^{2n+1})\\xrightarrow{P}\\pi_{q-1}(S^n)\\xrightarrow{E}\\pi_q(S^{n+1})\\xrightarrow{H}\\cdots",
+      "EHP sequence"
+    ],
+    {
+      "section": "纤维丛 / 示性类 / K 理论 - 概念 / 性质",
+      "sectionEn": "Bundles / Characteristic Classes / K-Theory - Concepts / Properties"
+    },
+    [
+      "纤维丛",
+      "F\\to E\\xrightarrow{\\pi}B",
+      "Fiber bundle"
+    ],
+    [
+      "向量丛",
+      "E\\to B",
+      "Vector bundle"
+    ],
+    [
+      "主丛",
+      "P\\to B",
+      "Principal bundle"
+    ],
+    [
+      "分类空间",
+      "BG",
+      "Classifying space"
+    ],
+    [
+      "Thom 类",
+      "u_E\\in H^n(E,E\\setminus B)",
+      "Thom class"
+    ],
+    [
+      "Euler 类",
+      "e(E)\\in H^n(B)",
+      "Euler class"
+    ],
+    [
+      "Stiefel-Whitney 类",
+      "w_i(E)\\in H^i(B;\\mathbb Z_2)",
+      "Stiefel-Whitney class"
+    ],
+    [
+      "Chern 类",
+      "c_i(E)\\in H^{2i}(B;\\mathbb Z)",
+      "Chern class"
+    ],
+    [
+      "Pontryagin 类",
+      "p_i(E)\\in H^{4i}(B;\\mathbb Z)",
+      "Pontryagin class"
+    ],
+    [
+      "K 理论",
+      "K^0(X)",
+      "K-theory"
+    ],
+    [
+      "Wu 类",
+      "v_i\\in H^i(M;\\mathbb Z_2)",
+      "Wu class"
+    ],
+    [
+      "Todd 类",
+      "\\operatorname{Td}(E)",
+      "Todd class"
+    ],
+    [
+      "A-hat 属",
+      "\\hat A(M)=\\prod_i\\frac{x_i/2}{\\sinh(x_i/2)}",
+      "A-hat genus"
+    ],
+    [
+      "L-属",
+      "L(M)=\\prod_i\\frac{x_i}{\\tanh x_i}",
+      "L-genus"
+    ],
+    [
+      "Chern 特征",
+      "\\operatorname{ch}:K(X)\\to H^{\\mathrm{even}}(X;\\mathbb Q)",
+      "Chern character"
+    ],
+    {
+      "section": "纤维丛 / 示性类 / K 理论 - 定理 / 公式",
+      "sectionEn": "Bundles / Characteristic Classes / K-Theory - Theorems / Formulas"
+    },
+    [
+      "Thom 同构",
+      "H^k(B)\\cong H^{k+n}(E,E\\setminus B)",
+      "Thom isomorphism"
+    ],
+    [
+      "Gysin 序列",
+      "\\cdots\\to H^k(B)\\to H^k(E)\\to H^{k-n+1}(B)\\to\\cdots",
+      "Gysin sequence"
+    ],
+    [
+      "Whitney 乘积公式",
+      "w(E\\oplus F)=w(E)w(F),\\quad c(E\\oplus F)=c(E)c(F)",
+      "Whitney product formula"
+    ],
+    [
+      "Chern-Weil",
+      "P(F_\\nabla)\\text{ represents characteristic classes}",
+      "Chern-Weil theorem"
+    ],
+    [
+      "Bott 周期性",
+      "K^{i+2}(X)\\cong K^i(X)",
+      "Bott periodicity"
+    ],
+    [
+      "Atiyah-Hirzebruch 谱序列",
+      "E_2^{p,q}=H^p(X;K^q(*))\\Rightarrow K^{p+q}(X)",
+      "Atiyah-Hirzebruch spectral sequence"
+    ],
+    [
+      "Hirzebruch 签名",
+      "\\sigma(M)=\\langle L(M),[M]\\rangle",
+      "Hirzebruch signature theorem"
+    ],
+    [
+      "Riemann-Roch-Hirzebruch",
+      "\\chi(E)=\\int_X\\operatorname{ch}(E)\\operatorname{Td}(TX)",
+      "Hirzebruch-Riemann-Roch"
+    ],
+    {
+      "section": "微分拓扑 / Morse 理论 / 流形拓扑 - 概念 / 性质",
+      "sectionEn": "Differential Topology / Morse Theory / Manifold Topology - Concepts / Properties"
+    },
+    [
+      "光滑映射",
+      "f:M\\to N",
+      "Smooth map"
+    ],
+    [
+      "映射度",
+      "\\deg f",
+      "Mapping degree"
+    ],
+    [
+      "横截",
+      "f\\pitchfork S",
+      "Transversality"
+    ],
+    [
+      "Morse 函数",
+      "f:M\\to\\mathbb R\\text{ Morse}",
+      "Morse function"
+    ],
+    [
+      "临界点指数",
+      "\\operatorname{ind}_p(f)",
+      "Morse index"
+    ],
+    [
+      "柄分解",
+      "M=\\bigcup\\text{ handles}",
+      "Handle decomposition"
+    ],
+    [
+      "配边",
+      "W:\\;\\partial W=M_0\\sqcup M_1",
+      "Cobordism"
+    ],
+    [
+      "手术",
+      "\\chi:S^k\\times D^{n-k}\\hookrightarrow M",
+      "Surgery"
+    ],
+    [
+      "奇异球面",
+      "\\Sigma^n\\simeq S^n,\\;\\Sigma^n\\not\\cong S^n",
+      "Exotic sphere"
+    ],
+    [
+      "Kirby 图",
+      "\\text{framed link diagram}",
+      "Kirby diagram"
+    ],
+    {
+      "section": "微分拓扑 / Morse 理论 / 流形拓扑 - 定理 / 公式",
+      "sectionEn": "Differential Topology / Morse Theory / Manifold Topology - Theorems / Formulas"
+    },
+    [
+      "Poincaré-Hopf",
+      "\\sum_{p\\in\\operatorname{Zero}(X)}\\operatorname{ind}_p(X)=\\chi(M)",
+      "Poincare-Hopf theorem"
+    ],
+    [
+      "庞加莱-霍普夫指标",
+      "\\operatorname{Ind}(X)=\\chi(M)",
+      "Poincare-Hopf index theorem"
+    ],
+    [
+      "Morse 引理",
+      "f=f(p)-x_1^2-\\cdots-x_\\lambda^2+x_{\\lambda+1}^2+\\cdots+x_n^2",
+      "Morse lemma"
+    ],
+    [
+      "Morse 不等式",
+      "M_k-M_{k-1}+\\cdots\\ge b_k-b_{k-1}+\\cdots",
+      "Morse inequalities"
+    ],
+    [
+      "Sard 定理",
+      "\\operatorname{CritVal}(f)\\text{ has measure }0",
+      "Sard theorem"
+    ],
+    [
+      "Thom 横截性",
+      "\\{f:f\\pitchfork S\\}\\text{ is residual}",
+      "Thom transversality theorem"
+    ],
+    [
+      "h-cobordism",
+      "W\\text{ h-cobordism},\\;\\dim W\\ge6\\implies W\\cong M\\times[0,1]",
+      "h-cobordism theorem"
+    ],
+    [
+      "Poincare 猜想",
+      "M^3\\simeq S^3\\implies M^3\\cong S^3",
+      "Poincare conjecture"
+    ],
+    [
+      "手术正合列",
+      "\\cdots\\to\\mathcal S(M)\\to [M,G/O]\\to L_n(\\pi_1M)",
+      "Surgery exact sequence"
+    ],
+    [
+      "Kervaire-Milnor",
+      "\\Theta_n\\text{ finite abelian group of homotopy spheres}",
+      "Kervaire-Milnor theorem"
+    ],
+    [
+      "Kirby 演算",
+      "M\\cong M'\\Longleftrightarrow\\text{Kirby moves relate diagrams}",
+      "Kirby calculus"
+    ],
+    {
+      "section": "低维拓扑 / 纽结 / 几何拓扑 - 概念 / 性质",
+      "sectionEn": "Low-Dimensional / Knot / Geometric Topology - Concepts / Properties"
+    },
+    [
+      "纽结",
+      "K:S^1\\hookrightarrow S^3",
+      "Knot"
+    ],
+    [
+      "链环",
+      "L=K_1\\sqcup\\cdots\\sqcup K_m",
+      "Link"
+    ],
+    [
+      "Seifert 曲面",
+      "\\partial\\Sigma=K",
+      "Seifert surface"
+    ],
+    [
+      "Heegaard 分解",
+      "M=H_g\\cup_\\phi H_g",
+      "Heegaard splitting"
+    ],
+    [
+      "Dehn surgery",
+      "M_{p/q}(K)",
+      "Dehn surgery"
+    ],
+    [
+      "双曲流形",
+      "M=\\mathbb H^n/\\Gamma",
+      "Hyperbolic manifold"
+    ],
+    [
+      "Thurston 范数",
+      "x(\\alpha)=\\min\\{-\\chi_-(S):[S]=\\alpha\\}",
+      "Thurston norm"
+    ],
+    [
+      "Seiberg-Witten Floer",
+      "HM_*(Y,\\mathfrak s)",
+      "Seiberg-Witten Floer homology"
+    ],
+    {
+      "section": "低维拓扑 / 纽结 / 几何拓扑 - 定理 / 公式",
+      "sectionEn": "Low-Dimensional / Knot / Geometric Topology - Theorems / Formulas"
+    },
+    [
+      "Reidemeister 移动",
+      "K\\sim K'\\Longleftrightarrow\\text{Reidemeister moves}",
+      "Reidemeister theorem"
+    ],
+    [
+      "Alexander 多项式",
+      "\\Delta_K(t)",
+      "Alexander polynomial"
+    ],
+    [
+      "Jones 多项式",
+      "V_K(t)",
+      "Jones polynomial"
+    ],
+    [
+      "HOMFLY 多项式",
+      "P_L(a,z)",
+      "HOMFLY polynomial"
+    ],
+    [
+      "纽结签名",
+      "\\sigma(K)",
+      "Knot signature"
+    ],
+    [
+      "纽结 Floer",
+      "\\widehat{HFK}(K)",
+      "Knot Floer homology"
+    ],
+    [
+      "Khovanov 同调",
+      "\\operatorname{Kh}(K)",
+      "Khovanov homology"
+    ],
+    [
+      "JSJ 分解",
+      "M=\\bigcup\\text{Seifert and atoroidal pieces}",
+      "JSJ decomposition"
+    ],
+    [
+      "Geometrization",
+      "M^3\\text{ decomposes into Thurston geometries}",
+      "Geometrization theorem"
+    ],
+    [
+      "Dehn surgery 定理",
+      "M_{p/q}(K)\\text{ changes topology by slope }p/q",
+      "Dehn surgery theorem"
+    ],
+    {
+      "section": "配边 / TQFT / 几何群论 - 概念 / 性质",
+      "sectionEn": "Cobordism / TQFT / Geometric Group Theory - Concepts / Properties"
+    },
+    [
+      "TQFT",
+      "Z:\\operatorname{Cob}_d\\to\\operatorname{Vect}",
+      "Topological quantum field theory"
+    ],
+    [
+      "Floer 同调",
+      "HF(Y,\\mathfrak s)",
+      "Floer homology"
+    ],
+    [
+      "Gromov 双曲群",
+      "G\\text{ is }\\delta\\text{-hyperbolic}",
+      "Gromov hyperbolic group"
+    ],
+    [
+      "拟等距",
+      "d_Y(fx,fx')\\simeq d_X(x,x')",
+      "Quasi-isometry"
+    ],
+    [
+      "粗几何",
+      "\\text{large scale geometry of metric spaces}",
+      "Coarse geometry"
+    ],
+    [
+      "双曲群边界",
+      "\\partial G",
+      "Boundary of hyperbolic group"
+    ],
+    {
+      "section": "配边 / TQFT / 几何群论 - 定理 / 公式",
+      "sectionEn": "Cobordism / TQFT / Geometric Group Theory - Theorems / Formulas"
+    },
+    [
+      "Pontryagin-Thom",
+      "\\Omega_n^{fr}\\cong\\pi_n^S",
+      "Pontryagin-Thom theorem"
+    ],
+    [
+      "Rohlin 定理",
+      "\\sigma(M^4)\\equiv0\\pmod{16}",
+      "Rohlin theorem"
+    ],
+    [
+      "Atiyah-Segal 公理",
+      "Z(M\\sqcup N)=Z(M)\\otimes Z(N)",
+      "Atiyah-Segal axioms"
+    ],
+    [
+      "Gromov 紧性",
+      "\\mathcal M(J,A)\\text{ compact up to bubbling}",
+      "Gromov compactness"
+    ],
+    [
+      "Baum-Connes",
+      "K_*^G(\\underline EG)\\cong K_*(C_r^*(G))",
+      "Baum-Connes conjecture"
+    ],
+    [
+      "Novikov 猜想",
+      "\\text{higher signatures are homotopy invariant}",
+      "Novikov conjecture"
+    ]
+  ]
+}

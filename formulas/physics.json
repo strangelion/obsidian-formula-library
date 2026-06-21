@@ -1,0 +1,1305 @@
+{
+  "id": "physics",
+  "structures": true,
+  "items": [
+    {
+      "section": "经典力学 / 分析力学",
+      "sectionEn": "Classical / Analytical Mechanics"
+    },
+    [
+      "牛顿第二定律",
+      "\\mathbf{F} = m\\mathbf{a}",
+      "Newton 2nd"
+    ],
+    [
+      "动能",
+      "E_k = \\frac{1}{2}mv^2",
+      "Kinetic energy"
+    ],
+    [
+      "动量",
+      "\\mathbf{p} = m\\mathbf{v}",
+      "Momentum"
+    ],
+    [
+      "角动量",
+      "\\mathbf{L} = \\mathbf{r}\\times\\mathbf{p}",
+      "Angular momentum"
+    ],
+    [
+      "扭矩",
+      "\\boldsymbol{\\tau} = \\mathbf{r}\\times\\mathbf{F}",
+      "Torque"
+    ],
+    [
+      "转动惯量",
+      "I = \\int r^2\\,dm",
+      "Moment of inertia"
+    ],
+    [
+      "角速度",
+      "\\omega = \\frac{d\\theta}{dt}",
+      "Angular velocity"
+    ],
+    [
+      "向心加速度",
+      "a_c = \\frac{v^2}{r}",
+      "Centripetal acceleration"
+    ],
+    [
+      "功",
+      "W = \\int \\mathbf{F}\\cdot d\\mathbf{r}",
+      "Work"
+    ],
+    [
+      "功率",
+      "P = \\frac{dW}{dt} = \\mathbf{F}\\cdot\\mathbf{v}",
+      "Power"
+    ],
+    [
+      "冲量",
+      "\\mathbf J=\\int_{t_1}^{t_2}\\mathbf F\\,dt=\\Delta\\mathbf p",
+      "Impulse"
+    ],
+    [
+      "动量守恒",
+      "\\sum_i \\mathbf p_i=\\mathrm{const}",
+      "Momentum conservation"
+    ],
+    [
+      "质心",
+      "\\mathbf R=\\frac{1}{M}\\sum_i m_i\\mathbf r_i",
+      "Center of mass"
+    ],
+    [
+      "约化质量",
+      "\\mu=\\frac{m_1m_2}{m_1+m_2}",
+      "Reduced mass"
+    ],
+    [
+      "万有引力",
+      "F = G\\frac{m_1 m_2}{r^2}",
+      "Gravity"
+    ],
+    [
+      "引力势能",
+      "U = -\\frac{GMm}{r}",
+      "Gravitational potential"
+    ],
+    [
+      "逃逸速度",
+      "v_e=\\sqrt{\\frac{2GM}{r}}",
+      "Escape velocity"
+    ],
+    [
+      "开普勒第三定律",
+      "\\frac{T^2}{a^3}=\\frac{4\\pi^2}{G(M+m)}",
+      "Kepler third law"
+    ],
+    [
+      "胡克定律",
+      "F = -k x",
+      "Hooke law"
+    ],
+    [
+      "弹簧势能",
+      "U = \\frac{1}{2}kx^2",
+      "Spring potential"
+    ],
+    [
+      "简谐运动",
+      "x(t) = A\\cos(\\omega t + \\phi)",
+      "SHM"
+    ],
+    [
+      "简谐周期",
+      "T = 2\\pi\\sqrt{\\frac{m}{k}}",
+      "SHM period"
+    ],
+    [
+      "单摆周期",
+      "T = 2\\pi\\sqrt{\\frac{L}{g}}",
+      "Pendulum period"
+    ],
+    [
+      "阻尼振子",
+      "m\\ddot x+b\\dot x+kx=0",
+      "Damped oscillator"
+    ],
+    [
+      "受迫振子",
+      "m\\ddot x+b\\dot x+kx=F_0\\cos\\omega t",
+      "Driven oscillator"
+    ],
+    [
+      "刚体转动能",
+      "T=\\frac12 I\\omega^2",
+      "Rotational kinetic energy"
+    ],
+    [
+      "Euler 刚体方程",
+      "I_1\\dot\\omega_1=(I_2-I_3)\\omega_2\\omega_3",
+      "Euler rigid body equation"
+    ],
+    [
+      "维里定理",
+      "2\\langle T\\rangle=\\left\\langle\\sum_i \\mathbf r_i\\cdot\\nabla_i V\\right\\rangle",
+      "Virial theorem"
+    ],
+    [
+      "拉格朗日量",
+      "L = T - V",
+      "Lagrangian"
+    ],
+    [
+      "欧拉-拉格朗日",
+      "\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot q_i}-\\frac{\\partial L}{\\partial q_i}=0",
+      "Euler-Lagrange"
+    ],
+    [
+      "哈密顿量",
+      "H = \\sum_i p_i\\dot q_i - L",
+      "Hamiltonian"
+    ],
+    [
+      "哈密顿方程",
+      "\\dot q_i=\\frac{\\partial H}{\\partial p_i},\\quad \\dot p_i=-\\frac{\\partial H}{\\partial q_i}",
+      "Hamilton equations"
+    ],
+    [
+      "作用量",
+      "S = \\int L\\,dt",
+      "Action"
+    ],
+    [
+      "最小作用量",
+      "\\delta S=0",
+      "Least action"
+    ],
+    [
+      "泊松括号",
+      "\\{f,g\\}=\\sum_i\\left(\\frac{\\partial f}{\\partial q_i}\\frac{\\partial g}{\\partial p_i}-\\frac{\\partial f}{\\partial p_i}\\frac{\\partial g}{\\partial q_i}\\right)",
+      "Poisson bracket"
+    ],
+    [
+      "哈密顿-雅可比",
+      "\\frac{\\partial S}{\\partial t}+H\\left(q_i,\\frac{\\partial S}{\\partial q_i},t\\right)=0",
+      "Hamilton-Jacobi"
+    ],
+    [
+      "Liouville 定理",
+      "\\frac{d\\rho}{dt}=\\frac{\\partial\\rho}{\\partial t}+\\{\\rho,H\\}=0",
+      "Liouville theorem"
+    ],
+    [
+      "诺特定理",
+      "\\partial_\\mu j^\\mu = 0",
+      "Noether theorem"
+    ],
+    {
+      "section": "连续介质 / 流体 / 声学",
+      "sectionEn": "Continuum / Fluids / Acoustics"
+    },
+    [
+      "连续性",
+      "\\frac{\\partial \\rho}{\\partial t}+\\nabla\\cdot(\\rho\\mathbf v)=0",
+      "Continuity equation"
+    ],
+    [
+      "Euler 方程",
+      "\\rho\\left(\\frac{\\partial\\mathbf v}{\\partial t}+\\mathbf v\\cdot\\nabla\\mathbf v\\right)=-\\nabla p+\\rho\\mathbf f",
+      "Euler equation"
+    ],
+    [
+      "Navier-Stokes",
+      "\\rho\\left(\\frac{\\partial\\mathbf v}{\\partial t}+\\mathbf v\\cdot\\nabla\\mathbf v\\right)=-\\nabla p+\\mu\\nabla^2\\mathbf v+\\rho\\mathbf f",
+      "Navier-Stokes"
+    ],
+    [
+      "不可压缩",
+      "\\nabla\\cdot\\mathbf v=0",
+      "Incompressible flow"
+    ],
+    [
+      "伯努利",
+      "p+\\frac12\\rho v^2+\\rho gh=\\text{const}",
+      "Bernoulli equation"
+    ],
+    [
+      "雷诺数",
+      "\\mathrm{Re}=\\frac{\\rho vL}{\\mu}",
+      "Reynolds number"
+    ],
+    [
+      "马赫数",
+      "\\mathrm{Ma}=\\frac{v}{c_s}",
+      "Mach number"
+    ],
+    [
+      "泊肃叶定律",
+      "Q=\\frac{\\pi R^4}{8\\mu L}\\Delta p",
+      "Poiseuille law"
+    ],
+    [
+      "Stokes 阻力",
+      "\\mathbf F_d=-6\\pi\\mu R\\mathbf v",
+      "Stokes drag"
+    ],
+    [
+      "粘性剪应力",
+      "\\tau=\\mu\\frac{du}{dy}",
+      "Viscous shear stress"
+    ],
+    [
+      "应力张量",
+      "\\sigma_{ij}=C_{ijkl}\\varepsilon_{kl}",
+      "Stress tensor"
+    ],
+    [
+      "应变张量",
+      "\\varepsilon_{ij}=\\frac12(\\partial_i u_j+\\partial_j u_i)",
+      "Strain tensor"
+    ],
+    [
+      "Hooke 张量",
+      "\\sigma_{ij}=\\lambda\\delta_{ij}\\varepsilon_{kk}+2\\mu\\varepsilon_{ij}",
+      "Isotropic elasticity"
+    ],
+    [
+      "弦波速",
+      "v=\\sqrt{\\frac{T}{\\mu}}",
+      "String wave speed"
+    ],
+    [
+      "波动方程",
+      "\\nabla^2 u-\\frac1{c^2}\\frac{\\partial^2u}{\\partial t^2}=0",
+      "Wave equation"
+    ],
+    [
+      "多普勒",
+      "f' = f\\frac{c \\pm v_r}{c \\mp v_s}",
+      "Doppler effect"
+    ],
+    [
+      "声强",
+      "I=\\frac{P}{A}=\\frac{p_{\\mathrm{rms}}^2}{\\rho c}",
+      "Sound intensity"
+    ],
+    [
+      "分贝",
+      "\\beta=10\\log_{10}\\frac{I}{I_0}",
+      "Decibel level"
+    ],
+    {
+      "section": "电路 / 电磁学",
+      "sectionEn": "Circuits / Electromagnetism"
+    },
+    [
+      "欧姆定律",
+      "V = IR",
+      "Ohm law"
+    ],
+    [
+      "功率电学",
+      "P = I^2 R = IV",
+      "Electric power"
+    ],
+    [
+      "焦耳定律",
+      "P = I^2 R",
+      "Joule heating"
+    ],
+    [
+      "电容",
+      "C = \\frac{Q}{V}",
+      "Capacitance"
+    ],
+    [
+      "平行板电容",
+      "C=\\varepsilon\\frac{A}{d}",
+      "Parallel-plate capacitor"
+    ],
+    [
+      "RC 充电",
+      "V(t) = V_0(1-e^{-t/RC})",
+      "RC charging"
+    ],
+    [
+      "RC 放电",
+      "V(t) = V_0e^{-t/RC}",
+      "RC discharging"
+    ],
+    [
+      "电感",
+      "\\mathcal{E} = -L\\frac{dI}{dt}",
+      "Inductance"
+    ],
+    [
+      "RL 时间常数",
+      "\\tau=\\frac{L}{R}",
+      "RL time constant"
+    ],
+    [
+      "RLC 谐振",
+      "\\omega_0=\\frac{1}{\\sqrt{LC}}",
+      "RLC resonance"
+    ],
+    [
+      "基尔霍夫电流",
+      "\\sum_k I_k=0",
+      "Kirchhoff current law"
+    ],
+    [
+      "基尔霍夫电压",
+      "\\sum_k V_k=0",
+      "Kirchhoff voltage law"
+    ],
+    [
+      "库仑定律",
+      "F = k_e\\frac{q_1 q_2}{r^2}",
+      "Coulomb law"
+    ],
+    [
+      "电场",
+      "\\mathbf{E} = \\frac{\\mathbf{F}}{q}",
+      "Electric field"
+    ],
+    [
+      "电势",
+      "V = -\\int \\mathbf{E}\\cdot d\\mathbf{l}",
+      "Electric potential"
+    ],
+    [
+      "电偶极矩",
+      "\\mathbf{p} = q\\mathbf{d}",
+      "Dipole moment"
+    ],
+    [
+      "电位移",
+      "\\mathbf D=\\varepsilon_0\\mathbf E+\\mathbf P",
+      "Electric displacement"
+    ],
+    [
+      "磁场强度",
+      "\\mathbf H=\\frac{1}{\\mu_0}\\mathbf B-\\mathbf M",
+      "Magnetic field strength"
+    ],
+    [
+      "高斯定律",
+      "\\oint \\mathbf{E}\\cdot d\\mathbf{A} = \\frac{Q}{\\varepsilon_0}",
+      "Gauss law"
+    ],
+    [
+      "法拉第定律",
+      "\\mathcal{E} = -\\frac{d\\Phi_B}{dt}",
+      "Faraday law"
+    ],
+    [
+      "安培定律",
+      "\\oint \\mathbf{B}\\cdot d\\mathbf{l} = \\mu_0 I",
+      "Ampere law"
+    ],
+    [
+      "毕奥-萨伐尔",
+      "d\\mathbf{B} = \\frac{\\mu_0}{4\\pi}\\frac{I\\,d\\mathbf{l}\\times\\hat{r}}{r^2}",
+      "Biot-Savart law"
+    ],
+    [
+      "洛伦兹力",
+      "\\mathbf{F} = q(\\mathbf{E} + \\mathbf{v}\\times\\mathbf{B})",
+      "Lorentz force"
+    ],
+    [
+      "磁矢势",
+      "\\mathbf{B} = \\nabla\\times\\mathbf{A}",
+      "Magnetic vector potential"
+    ],
+    [
+      "麦克斯韦",
+      "\\nabla\\cdot\\mathbf{E}=\\frac{\\rho}{\\varepsilon_0},\\; \\nabla\\cdot\\mathbf{B}=0,\\; \\nabla\\times\\mathbf{E}=-\\frac{\\partial\\mathbf{B}}{\\partial t},\\; \\nabla\\times\\mathbf{B}=\\mu_0\\mathbf{J}+\\mu_0\\varepsilon_0\\frac{\\partial\\mathbf{E}}{\\partial t}",
+      "Maxwell eqns"
+    ],
+    [
+      "位移电流",
+      "\\mathbf J_D=\\varepsilon_0\\frac{\\partial\\mathbf E}{\\partial t}",
+      "Displacement current"
+    ],
+    [
+      "电磁波",
+      "\\nabla^2\\mathbf E-\\mu_0\\varepsilon_0\\frac{\\partial^2\\mathbf E}{\\partial t^2}=0",
+      "EM wave equation"
+    ],
+    [
+      "坡印廷矢量",
+      "\\mathbf S=\\frac1{\\mu_0}\\mathbf E\\times\\mathbf B",
+      "Poynting vector"
+    ],
+    [
+      "电场能量密度",
+      "u_E=\\frac12\\varepsilon E^2",
+      "Electric energy density"
+    ],
+    [
+      "磁场能量密度",
+      "u_B=\\frac{B^2}{2\\mu}",
+      "Magnetic energy density"
+    ],
+    [
+      "规范变换",
+      "\\mathbf A\\mapsto\\mathbf A+\\nabla\\chi,\\quad \\phi\\mapsto\\phi-\\partial_t\\chi",
+      "Gauge transform"
+    ],
+    [
+      "Lorenz 规范",
+      "\\partial_\\mu A^\\mu=0",
+      "Lorenz gauge"
+    ],
+    {
+      "section": "光学 / 波动",
+      "sectionEn": "Optics / Waves"
+    },
+    [
+      "折射定律",
+      "n_1\\sin\\theta_1 = n_2\\sin\\theta_2",
+      "Snell law"
+    ],
+    [
+      "透镜方程",
+      "\\frac{1}{f} = \\frac{1}{u} + \\frac{1}{v}",
+      "Lens equation"
+    ],
+    [
+      "放大率",
+      "M=-\\frac{v}{u}",
+      "Magnification"
+    ],
+    [
+      "杨氏双缝",
+      "d\\sin\\theta = m\\lambda",
+      "Young double-slit"
+    ],
+    [
+      "薄膜干涉",
+      "2nt\\cos\\theta=m\\lambda",
+      "Thin-film interference"
+    ],
+    [
+      "单缝衍射",
+      "a\\sin\\theta=m\\lambda",
+      "Single-slit diffraction"
+    ],
+    [
+      "光栅方程",
+      "d\\sin\\theta=m\\lambda",
+      "Diffraction grating"
+    ],
+    [
+      "瑞利判据",
+      "\\theta = 1.22\\frac{\\lambda}{D}",
+      "Rayleigh criterion"
+    ],
+    [
+      "相速度",
+      "v_p=\\frac{\\omega}{k}",
+      "Phase velocity"
+    ],
+    [
+      "群速度",
+      "v_g=\\frac{d\\omega}{dk}",
+      "Group velocity"
+    ],
+    [
+      "Fresnel 系数",
+      "r=\\frac{n_1-n_2}{n_1+n_2}",
+      "Fresnel coefficient"
+    ],
+    [
+      "Malus 定律",
+      "I=I_0\\cos^2\\theta",
+      "Malus law"
+    ],
+    [
+      "布儒斯特角",
+      "\\tan\\theta_B=\\frac{n_2}{n_1}",
+      "Brewster angle"
+    ],
+    [
+      "高斯光束腰",
+      "w(z)=w_0\\sqrt{1+\\left(\\frac{z}{z_R}\\right)^2}",
+      "Gaussian beam waist"
+    ],
+    [
+      "Bragg 衍射",
+      "2d\\sin\\theta=n\\lambda",
+      "Bragg law"
+    ],
+    {
+      "section": "热学 / 热力学 / 统计物理",
+      "sectionEn": "Thermal / Thermodynamics / Statistical Physics"
+    },
+    [
+      "理想气体",
+      "PV = nRT",
+      "Ideal gas law"
+    ],
+    [
+      "热力学第一定律",
+      "\\Delta U = Q - W",
+      "1st law thermo"
+    ],
+    [
+      "热力学第二定律",
+      "dS\\ge \\frac{\\delta Q}{T}",
+      "2nd law thermo"
+    ],
+    [
+      "热力学第三定律",
+      "\\lim_{T\\to0}S=S_0",
+      "3rd law thermo"
+    ],
+    [
+      "熵",
+      "dS = \\frac{dQ_{\\text{rev}}}{T}",
+      "Entropy"
+    ],
+    [
+      "玻尔兹曼",
+      "S = k_B \\ln W",
+      "Boltzmann entropy"
+    ],
+    [
+      "热容",
+      "Q = mc\\Delta T",
+      "Heat capacity"
+    ],
+    [
+      "比热容",
+      "c=\\frac{Q}{m\\Delta T}",
+      "Specific heat capacity"
+    ],
+    [
+      "摩尔热容",
+      "C_m=\\frac{Q}{n\\Delta T}",
+      "Molar heat capacity"
+    ],
+    [
+      "定容热容",
+      "C_V=\\left(\\frac{\\partial U}{\\partial T}\\right)_V",
+      "Heat capacity at constant volume"
+    ],
+    [
+      "定压热容",
+      "C_p=\\left(\\frac{\\partial H}{\\partial T}\\right)_p",
+      "Heat capacity at constant pressure"
+    ],
+    [
+      "热容差",
+      "C_p-C_V=nR",
+      "Heat capacity difference"
+    ],
+    [
+      "热容比",
+      "\\gamma=\\frac{C_p}{C_V}",
+      "Heat capacity ratio"
+    ],
+    [
+      "潜热",
+      "Q = mL",
+      "Latent heat"
+    ],
+    [
+      "热膨胀",
+      "\\Delta L=\\alpha L_0\\Delta T",
+      "Thermal expansion"
+    ],
+    [
+      "绝热方程",
+      "PV^\\gamma=\\mathrm{const}",
+      "Adiabatic equation"
+    ],
+    [
+      "等温功",
+      "W=nRT\\ln\\frac{V_2}{V_1}",
+      "Isothermal work"
+    ],
+    [
+      "卡诺效率",
+      "\\eta_C = 1 - \\frac{T_c}{T_h}",
+      "Carnot efficiency"
+    ],
+    [
+      "自由能",
+      "F = U - TS",
+      "Helmholtz free energy"
+    ],
+    [
+      "吉布斯自由能",
+      "G = H - TS",
+      "Gibbs free energy"
+    ],
+    [
+      "焓",
+      "H = U + PV",
+      "Enthalpy"
+    ],
+    [
+      "化学势",
+      "\\mu=\\left(\\frac{\\partial G}{\\partial N}\\right)_{T,p}",
+      "Chemical potential"
+    ],
+    [
+      "巨势",
+      "\\Omega=U-TS-\\mu N",
+      "Grand potential"
+    ],
+    [
+      "Gibbs-Duhem",
+      "S\\,dT-V\\,dp+N\\,d\\mu=0",
+      "Gibbs-Duhem relation"
+    ],
+    [
+      "Maxwell 关系",
+      "\\left(\\frac{\\partial T}{\\partial V}\\right)_S=-\\left(\\frac{\\partial p}{\\partial S}\\right)_V",
+      "Maxwell relation"
+    ],
+    [
+      "热传导",
+      "\\frac{dQ}{dt} = -kA\\frac{dT}{dx}",
+      "Heat conduction"
+    ],
+    [
+      "热扩散方程",
+      "\\frac{\\partial T}{\\partial t}=\\alpha\\nabla^2T",
+      "Heat equation"
+    ],
+    [
+      "斯特藩-玻尔兹曼",
+      "j = \\sigma T^4",
+      "Stefan-Boltzmann law"
+    ],
+    [
+      "维恩位移",
+      "\\lambda_{\\max}T=b",
+      "Wien displacement law"
+    ],
+    [
+      "普朗克谱",
+      "B_\\nu(T)=\\frac{2h\\nu^3}{c^2}\\frac{1}{e^{h\\nu/k_BT}-1}",
+      "Planck spectrum"
+    ],
+    [
+      "配分函数",
+      "Z=\\sum_i e^{-\\beta E_i}",
+      "Partition function"
+    ],
+    [
+      "Helmholtz 与 Z",
+      "F=-k_BT\\ln Z",
+      "Free energy partition function"
+    ],
+    [
+      "内能与 Z",
+      "U=-\\frac{\\partial}{\\partial\\beta}\\ln Z",
+      "Internal energy from partition function"
+    ],
+    [
+      "涨落热容",
+      "C_V=\\frac{\\langle E^2\\rangle-\\langle E\\rangle^2}{k_BT^2}",
+      "Heat capacity fluctuation"
+    ],
+    [
+      "Boltzmann 分布",
+      "p_i=\\frac{e^{-\\beta E_i}}{Z}",
+      "Boltzmann distribution"
+    ],
+    [
+      "Maxwell-Boltzmann",
+      "f(v)\\propto e^{-mv^2/(2k_BT)}",
+      "Maxwell-Boltzmann"
+    ],
+    [
+      "费米-狄拉克",
+      "f(E) = \\frac{1}{e^{(E-\\mu)/kT}+1}",
+      "Fermi-Dirac"
+    ],
+    [
+      "玻色-爱因斯坦",
+      "f(E) = \\frac{1}{e^{(E-\\mu)/kT}-1}",
+      "Bose-Einstein"
+    ],
+    [
+      "涨落耗散",
+      "S_{xx}(\\omega)=\\frac{2k_BT}{\\omega}\\operatorname{Im}\\chi(\\omega)",
+      "Fluctuation-dissipation"
+    ],
+    {
+      "section": "量子力学 / 原子物理",
+      "sectionEn": "Quantum Mechanics / Atomic Physics"
+    },
+    [
+      "薛定谔方程",
+      "i\\hbar\\frac{\\partial}{\\partial t}\\Psi = \\hat{H}\\Psi",
+      "Schrodinger eqn"
+    ],
+    [
+      "定态薛定谔",
+      "\\hat H\\psi_n=E_n\\psi_n",
+      "Time-independent Schrodinger"
+    ],
+    [
+      "概率密度",
+      "\\rho(\\mathbf r,t)=|\\Psi(\\mathbf r,t)|^2",
+      "Probability density"
+    ],
+    [
+      "概率流",
+      "\\mathbf j=\\frac{\\hbar}{2mi}(\\psi^*\\nabla\\psi-\\psi\\nabla\\psi^*)",
+      "Probability current"
+    ],
+    [
+      "期望值",
+      "\\langle A\\rangle=\\langle\\psi|\\hat A|\\psi\\rangle",
+      "Expectation value"
+    ],
+    [
+      "对易子",
+      "[\\hat A,\\hat B]=\\hat A\\hat B-\\hat B\\hat A",
+      "Commutator"
+    ],
+    [
+      "不确定性",
+      "\\Delta x\\,\\Delta p \\geq \\frac{\\hbar}{2}",
+      "Uncertainty"
+    ],
+    [
+      "Ehrenfest 定理",
+      "\\frac{d}{dt}\\langle\\hat A\\rangle=\\frac{i}{\\hbar}\\langle[\\hat H,\\hat A]\\rangle+\\left\\langle\\frac{\\partial\\hat A}{\\partial t}\\right\\rangle",
+      "Ehrenfest theorem"
+    ],
+    [
+      "粒子盒能级",
+      "E_n=\\frac{n^2\\pi^2\\hbar^2}{2mL^2}",
+      "Particle in a box"
+    ],
+    [
+      "谐振子能级",
+      "E_n=\\hbar\\omega\\left(n+\\frac12\\right)",
+      "Quantum harmonic oscillator"
+    ],
+    [
+      "升降算符",
+      "[\\hat a,\\hat a^\\dagger]=1",
+      "Ladder operators"
+    ],
+    [
+      "角动量代数",
+      "[L_i,L_j]=i\\hbar\\epsilon_{ijk}L_k",
+      "Angular momentum algebra"
+    ],
+    [
+      "光电效应",
+      "E_{\\text{max}} = h\\nu - \\phi",
+      "Photoelectric"
+    ],
+    [
+      "德布罗意",
+      "\\lambda = \\frac{h}{p}",
+      "de Broglie"
+    ],
+    [
+      "黑体辐射",
+      "I(\\nu,T) = \\frac{2h\\nu^3}{c^2}\\frac{1}{e^{h\\nu/k_B T}-1}",
+      "Planck law"
+    ],
+    [
+      "衰变定律",
+      "N(t) = N_0e^{-\\lambda t}",
+      "Decay law"
+    ],
+    [
+      "半衰期",
+      "T_{1/2} = \\frac{\\ln 2}{\\lambda}",
+      "Half-life"
+    ],
+    [
+      "Pauli 矩阵",
+      "\\sigma_1 = \\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}",
+      "Pauli matrix"
+    ],
+    [
+      "自旋代数",
+      "[S_i,S_j]=i\\hbar\\epsilon_{ijk}S_k",
+      "Spin algebra"
+    ],
+    [
+      "玻尔半径",
+      "a_0 = \\frac{4\\pi\\varepsilon_0\\hbar^2}{m_e e^2}",
+      "Bohr radius"
+    ],
+    [
+      "里德伯公式",
+      "\\frac{1}{\\lambda} = R\\!\\left(\\frac{1}{n_1^2}-\\frac{1}{n_2^2}\\right)",
+      "Rydberg formula"
+    ],
+    [
+      "玻尔模型",
+      "E_n = -\\frac{13.6\\,\\mathrm{eV}}{n^2}",
+      "Bohr model"
+    ],
+    [
+      "Zeeman 能量",
+      "\\Delta E=m_j g_J\\mu_B B",
+      "Zeeman energy"
+    ],
+    [
+      "隧穿概率",
+      "T\\approx e^{-2\\int_{x_1}^{x_2}\\sqrt{2m(V-E)}\\,dx/\\hbar}",
+      "Tunneling probability"
+    ],
+    [
+      "康普顿",
+      "\\lambda' - \\lambda = \\frac{h}{mc}(1-\\cos\\theta)",
+      "Compton scattering"
+    ],
+    {
+      "section": "狭义相对论 / 广义相对论 / 宇宙学",
+      "sectionEn": "Special / General Relativity / Cosmology"
+    },
+    [
+      "质能方程",
+      "E = mc^2",
+      "Mass-energy"
+    ],
+    [
+      "相对论动量",
+      "E^2 = (pc)^2 + (mc^2)^2",
+      "Energy-momentum"
+    ],
+    [
+      "Lorentz 因子",
+      "\\gamma = \\frac{1}{\\sqrt{1-v^2/c^2}}",
+      "Lorentz factor"
+    ],
+    [
+      "四维间隔",
+      "ds^2 = -c^2dt^2 + dx^2 + dy^2 + dz^2",
+      "Spacetime interval"
+    ],
+    [
+      "四动量",
+      "p^\\mu=mu^\\mu",
+      "Four-momentum"
+    ],
+    [
+      "Lorentz 变换",
+      "x'^\\mu=\\Lambda^\\mu{}_{\\nu}x^\\nu",
+      "Lorentz transform"
+    ],
+    [
+      "时间膨胀",
+      "\\Delta t=\\gamma\\Delta t_0",
+      "Time dilation"
+    ],
+    [
+      "长度收缩",
+      "L=\\frac{L_0}{\\gamma}",
+      "Length contraction"
+    ],
+    [
+      "速度合成",
+      "u' = \\frac{u-v}{1-uv/c^2}",
+      "Relativistic velocity addition"
+    ],
+    [
+      "固有时",
+      "d\\tau=dt\\sqrt{1-v^2/c^2}",
+      "Proper time"
+    ],
+    [
+      "测地线方程",
+      "\\frac{d^2x^\\mu}{d\\tau^2}+\\Gamma^\\mu_{\\nu\\rho}\\frac{dx^\\nu}{d\\tau}\\frac{dx^\\rho}{d\\tau}=0",
+      "Geodesic equation"
+    ],
+    [
+      "黎曼曲率",
+      "R^\\rho{}_{\\sigma\\mu\\nu}=\\partial_\\mu\\Gamma^\\rho_{\\nu\\sigma}-\\partial_\\nu\\Gamma^\\rho_{\\mu\\sigma}+\\Gamma^\\rho_{\\mu\\lambda}\\Gamma^\\lambda_{\\nu\\sigma}-\\Gamma^\\rho_{\\nu\\lambda}\\Gamma^\\lambda_{\\mu\\sigma}",
+      "Riemann curvature"
+    ],
+    [
+      "Einstein 方程",
+      "G_{\\mu\\nu}+\\Lambda g_{\\mu\\nu}=\\frac{8\\pi G}{c^4}T_{\\mu\\nu}",
+      "Einstein field equation"
+    ],
+    [
+      "Schwarzschild 半径",
+      "r_s=\\frac{2GM}{c^2}",
+      "Schwarzschild radius"
+    ],
+    [
+      "Schwarzschild 度规",
+      "ds^2=-\\left(1-\\frac{r_s}{r}\\right)c^2dt^2+\\left(1-\\frac{r_s}{r}\\right)^{-1}dr^2+r^2d\\Omega^2",
+      "Schwarzschild metric"
+    ],
+    [
+      "引力红移",
+      "\\frac{\\nu_\\infty}{\\nu_r}=\\sqrt{1-\\frac{2GM}{rc^2}}",
+      "Gravitational redshift"
+    ],
+    [
+      "Friedmann 方程",
+      "H^2=\\left(\\frac{\\dot a}{a}\\right)^2=\\frac{8\\pi G}{3}\\rho-\\frac{kc^2}{a^2}+\\frac{\\Lambda c^2}{3}",
+      "Friedmann equation"
+    ],
+    [
+      "加速度方程",
+      "\\frac{\\ddot a}{a}=-\\frac{4\\pi G}{3}\\left(\\rho+\\frac{3p}{c^2}\\right)+\\frac{\\Lambda c^2}{3}",
+      "Acceleration equation"
+    ],
+    [
+      "哈勃定律",
+      "v=H_0d",
+      "Hubble law"
+    ],
+    [
+      "红移",
+      "1+z=\\frac{a_0}{a}",
+      "Cosmological redshift"
+    ],
+    {
+      "section": "量子场论 / 粒子物理 / 规范理论",
+      "sectionEn": "QFT / Particle Physics / Gauge Theory"
+    },
+    [
+      "达朗贝尔",
+      "\\square = \\partial_\\mu\\partial^\\mu",
+      "d'Alembertian"
+    ],
+    [
+      "Klein-Gordon",
+      "(\\square + m^2)\\phi = 0",
+      "Klein-Gordon eqn"
+    ],
+    [
+      "Dirac 方程",
+      "(i\\gamma^\\mu\\partial_\\mu - m)\\psi = 0",
+      "Dirac equation"
+    ],
+    [
+      "Gamma 矩阵",
+      "\\{\\gamma^\\mu,\\gamma^\\nu\\} = 2\\eta^{\\mu\\nu}",
+      "Gamma matrices"
+    ],
+    [
+      "Dirac 拉氏量",
+      "\\mathcal L=\\bar\\psi(i\\gamma^\\mu\\partial_\\mu-m)\\psi",
+      "Dirac Lagrangian"
+    ],
+    [
+      "Yang-Mills",
+      "\\mathcal L=-\\frac14F^a_{\\mu\\nu}F^{a\\mu\\nu}",
+      "Yang-Mills Lagrangian"
+    ],
+    [
+      "场强张量",
+      "F_{\\mu\\nu}=\\partial_\\mu A_\\nu-\\partial_\\nu A_\\mu",
+      "Field strength tensor"
+    ],
+    [
+      "协变导数",
+      "D_\\mu=\\partial_\\mu+igA_\\mu",
+      "Covariant derivative"
+    ],
+    [
+      "Noether 流",
+      "j^\\mu=\\frac{\\partial\\mathcal L}{\\partial(\\partial_\\mu\\phi)}\\delta\\phi-K^\\mu",
+      "Noether current"
+    ],
+    [
+      "Euler-Lagrange 场",
+      "\\partial_\\mu\\frac{\\partial\\mathcal L}{\\partial(\\partial_\\mu\\phi)}-\\frac{\\partial\\mathcal L}{\\partial\\phi}=0",
+      "Field Euler-Lagrange"
+    ],
+    [
+      "路径积分",
+      "Z=\\int\\mathcal D\\phi\\,e^{iS[\\phi]/\\hbar}",
+      "Path integral"
+    ],
+    [
+      "传播子",
+      "\\Delta_F(p)=\\frac{i}{p^2-m^2+i\\epsilon}",
+      "Propagator"
+    ],
+    [
+      "QED 拉氏量",
+      "\\mathcal L_{\\mathrm{QED}}=-\\frac14F_{\\mu\\nu}F^{\\mu\\nu}+\\bar\\psi(i\\gamma^\\mu D_\\mu-m)\\psi",
+      "QED Lagrangian"
+    ],
+    [
+      "QCD 场强",
+      "G^a_{\\mu\\nu}=\\partial_\\mu A^a_\\nu-\\partial_\\nu A^a_\\mu+gf^{abc}A^b_\\mu A^c_\\nu",
+      "QCD field strength"
+    ],
+    [
+      "重整化群",
+      "\\beta(g)=\\mu\\frac{dg}{d\\mu}",
+      "Renormalization group"
+    ],
+    [
+      "精细结构",
+      "\\alpha = \\frac{e^2}{4\\pi\\varepsilon_0\\hbar c}",
+      "Fine structure"
+    ],
+    [
+      "标准模型",
+      "\\mathrm{SU}(3)_C\\times\\mathrm{SU}(2)_L\\times\\mathrm{U}(1)_Y",
+      "Standard model"
+    ],
+    [
+      "Higgs 势",
+      "V(\\phi)=\\mu^2\\phi^\\dagger\\phi+\\lambda(\\phi^\\dagger\\phi)^2",
+      "Higgs potential"
+    ],
+    [
+      "散射截面",
+      "d\\sigma=\\frac{1}{\\Phi}|\\mathcal M|^2d\\Pi_f",
+      "Scattering cross section"
+    ],
+    [
+      "衰变宽度",
+      "\\Gamma=\\frac{1}{2M}\\int |\\mathcal M|^2d\\Pi_f",
+      "Decay width"
+    ],
+    {
+      "section": "凝聚态 / 固体物理 / 材料",
+      "sectionEn": "Condensed Matter / Solid State / Materials"
+    },
+    [
+      "Bloch 定理",
+      "\\psi_{n\\mathbf k}(\\mathbf r)=e^{i\\mathbf k\\cdot\\mathbf r}u_{n\\mathbf k}(\\mathbf r)",
+      "Bloch theorem"
+    ],
+    [
+      "Drude 电导",
+      "\\sigma=\\frac{ne^2\\tau}{m}",
+      "Drude conductivity"
+    ],
+    [
+      "Hall 系数",
+      "R_H=\\frac{1}{nq}",
+      "Hall coefficient"
+    ],
+    [
+      "Hall 电压",
+      "V_H=\\frac{IB}{nqt}",
+      "Hall voltage"
+    ],
+    [
+      "能带",
+      "E_n(\\mathbf k)",
+      "Band structure"
+    ],
+    [
+      "态密度",
+      "D(E)=\\sum_n\\int\\frac{d^dk}{(2\\pi)^d}\\delta(E-E_n(\\mathbf k))",
+      "Density of states"
+    ],
+    [
+      "费米能",
+      "E_F=\\frac{\\hbar^2}{2m}(3\\pi^2n)^{2/3}",
+      "Fermi energy"
+    ],
+    [
+      "费米波矢",
+      "k_F=(3\\pi^2n)^{1/3}",
+      "Fermi wave vector"
+    ],
+    [
+      "Brillouin 区",
+      "\\mathbf k\\sim\\mathbf k+\\mathbf G",
+      "Brillouin zone"
+    ],
+    [
+      "声子色散",
+      "\\omega(k)=2\\sqrt{\\frac{K}{m}}\\left|\\sin\\frac{ka}{2}\\right|",
+      "Phonon dispersion"
+    ],
+    [
+      "Debye 热容",
+      "C_V\\propto T^3",
+      "Debye heat capacity"
+    ],
+    [
+      "Debye 温度",
+      "\\Theta_D=\\frac{\\hbar\\omega_D}{k_B}",
+      "Debye temperature"
+    ],
+    [
+      "BCS 能隙",
+      "\\Delta\\sim\\hbar\\omega_D e^{-1/N(0)V}",
+      "BCS gap"
+    ],
+    [
+      "London 方程",
+      "\\nabla^2\\mathbf B=\\frac{1}{\\lambda_L^2}\\mathbf B",
+      "London equation"
+    ],
+    [
+      "Josephson",
+      "I=I_c\\sin\\phi",
+      "Josephson effect"
+    ],
+    [
+      "Josephson 电压",
+      "\\frac{d\\phi}{dt}=\\frac{2eV}{\\hbar}",
+      "Josephson voltage relation"
+    ],
+    [
+      "Landau-Ginzburg",
+      "F=\\alpha|\\psi|^2+\\frac\\beta2|\\psi|^4+\\frac1{2m}|(-i\\hbar\\nabla-q\\mathbf A)\\psi|^2",
+      "Landau-Ginzburg"
+    ],
+    [
+      "Berry 曲率",
+      "\\Omega_n(\\mathbf k)=i\\left\\langle\\nabla_{\\mathbf k}u_n\\middle|\\times\\middle|\\nabla_{\\mathbf k}u_n\\right\\rangle",
+      "Berry curvature"
+    ],
+    [
+      "Chern 数",
+      "C=\\frac1{2\\pi}\\int_{BZ}\\Omega(\\mathbf k)\\,d^2k",
+      "Chern number"
+    ],
+    {
+      "section": "核物理 / 等离子体 / 天体物理",
+      "sectionEn": "Nuclear / Plasma / Astrophysics"
+    },
+    [
+      "质量亏损",
+      "\\Delta E = \\Delta m\\,c^2",
+      "Mass defect"
+    ],
+    [
+      "结合能",
+      "B=\\left(Zm_p+Nm_n-M\\right)c^2",
+      "Binding energy"
+    ],
+    [
+      "Bethe-Weizsacker",
+      "B=a_vA-a_sA^{2/3}-a_c\\frac{Z(Z-1)}{A^{1/3}}-a_a\\frac{(A-2Z)^2}{A}+\\delta",
+      "Semi-empirical mass formula"
+    ],
+    [
+      "反应截面",
+      "\\sigma=\\frac{\\text{rate}}{\\Phi N}",
+      "Cross section"
+    ],
+    [
+      "放射性活度",
+      "A=\\lambda N",
+      "Radioactivity"
+    ],
+    [
+      "衰变链",
+      "N_2(t)=\\frac{\\lambda_1N_{10}}{\\lambda_2-\\lambda_1}\\left(e^{-\\lambda_1t}-e^{-\\lambda_2t}\\right)",
+      "Decay chain"
+    ],
+    [
+      "核反应 Q 值",
+      "Q=(m_i-m_f)c^2",
+      "Nuclear reaction Q value"
+    ],
+    [
+      "Saha 方程",
+      "\\frac{n_{i+1}n_e}{n_i}=\\frac{2}{\\lambda_e^3}\\frac{g_{i+1}}{g_i}e^{-\\chi_i/k_BT}",
+      "Saha equation"
+    ],
+    [
+      "等离子体频率",
+      "\\omega_p=\\sqrt{\\frac{ne^2}{\\varepsilon_0m_e}}",
+      "Plasma frequency"
+    ],
+    [
+      "Debye 长度",
+      "\\lambda_D=\\sqrt{\\frac{\\varepsilon_0k_BT}{ne^2}}",
+      "Debye length"
+    ],
+    [
+      "Alfven 速度",
+      "v_A=\\frac{B}{\\sqrt{\\mu_0\\rho}}",
+      "Alfven speed"
+    ],
+    [
+      "Larmor 半径",
+      "r_L=\\frac{mv_\\perp}{|q|B}",
+      "Larmor radius"
+    ],
+    [
+      "MHD 诱导",
+      "\\frac{\\partial\\mathbf B}{\\partial t}=\\nabla\\times(\\mathbf v\\times\\mathbf B)+\\eta\\nabla^2\\mathbf B",
+      "MHD induction"
+    ],
+    [
+      "Jeans 长度",
+      "\\lambda_J=c_s\\sqrt{\\frac{\\pi}{G\\rho}}",
+      "Jeans length"
+    ],
+    [
+      "Eddington 光度",
+      "L_E=\\frac{4\\pi GMm_pc}{\\sigma_T}",
+      "Eddington luminosity"
+    ],
+    [
+      "恒星维里",
+      "2K+U=0",
+      "Stellar virial theorem"
+    ],
+    [
+      "Lane-Emden",
+      "\\frac1{\\xi^2}\\frac{d}{d\\xi}\\left(\\xi^2\\frac{d\\theta}{d\\xi}\\right)=-\\theta^n",
+      "Lane-Emden equation"
+    ],
+    {
+      "section": "弦论 / 量子引力",
+      "sectionEn": "String Theory / Quantum Gravity"
+    },
+    [
+      "Polyakov 作用量",
+      "S=-\\frac{T}{2}\\int d^2\\sigma\\sqrt{-h}h^{ab}\\partial_aX^\\mu\\partial_bX_\\mu",
+      "Polyakov action"
+    ],
+    [
+      "Nambu-Goto",
+      "S=-T\\int d^2\\sigma\\sqrt{-\\det\\partial_aX^\\mu\\partial_bX_\\mu}",
+      "Nambu-Goto action"
+    ],
+    [
+      "Virasoro 代数",
+      "[L_m,L_n]=(m-n)L_{m+n}+\\frac{c}{12}m(m^2-1)\\delta_{m+n,0}",
+      "Virasoro algebra"
+    ],
+    [
+      "世界面 CFT",
+      "T(z)T(w)\\sim\\frac{c/2}{(z-w)^4}+\\frac{2T(w)}{(z-w)^2}+\\frac{\\partial T(w)}{z-w}",
+      "Worldsheet CFT"
+    ],
+    [
+      "T 对偶",
+      "R\\leftrightarrow\\frac{\\alpha'}{R}",
+      "T-duality"
+    ],
+    [
+      "D 膜",
+      "X^i|_{\\partial\\Sigma}=x^i_0",
+      "D-brane"
+    ],
+    [
+      "AdS/CFT",
+      "Z_{\\mathrm{string}}[\\phi_0]=\\left\\langle e^{\\int \\phi_0\\mathcal O}\\right\\rangle_{\\mathrm{CFT}}",
+      "AdS/CFT"
+    ],
+    [
+      "Einstein-Hilbert",
+      "S=\\frac{1}{16\\pi G}\\int d^4x\\sqrt{-g}\\,R",
+      "Einstein-Hilbert action"
+    ]
+  ]
+}

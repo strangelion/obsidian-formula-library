@@ -1,0 +1,60 @@
+{
+  "en": {
+    "acceptInsert": "Insert",
+    "acceptUpdate": "Update",
+    "cancel": "Cancel",
+    "ready": "Ready",
+    "latexRequired": "Enter a LaTeX formula first.",
+    "rows": "Rows",
+    "columns": "Columns",
+    "tabs": {
+      "greek": "Greek",
+      "structures": "Structures",
+      "delimiters": "Delimiters",
+      "analysis": "Analysis",
+      "algebra": "Algebra",
+      "geometry": "Geometry",
+      "topology": "Topology",
+      "numberTheory": "Number Theory",
+      "relations": "Relations",
+      "operators": "Operators",
+      "bigops": "Big Ops",
+      "arrows": "Arrows",
+      "sets": "Sets",
+      "functions": "Functions",
+      "probability": "Probability",
+      "chemistry": "Chemistry",
+      "physics": "Physics",
+      "misc": "Misc"
+    }
+  },
+  "zh": {
+    "acceptInsert": "插入",
+    "acceptUpdate": "更新",
+    "cancel": "取消",
+    "ready": "就绪",
+    "latexRequired": "请先输入 LaTeX 公式。",
+    "rows": "行数",
+    "columns": "列数",
+    "tabs": {
+      "greek": "希腊",
+      "structures": "结构",
+      "delimiters": "分隔符",
+      "analysis": "分析",
+      "algebra": "代数",
+      "geometry": "几何",
+      "topology": "拓扑",
+      "numberTheory": "数论",
+      "relations": "关系",
+      "operators": "运算",
+      "bigops": "大型",
+      "arrows": "箭头",
+      "sets": "集合",
+      "functions": "函数",
+      "probability": "概率",
+      "chemistry": "化学",
+      "physics": "物理",
+      "misc": "其他"
+    }
+  }
+}

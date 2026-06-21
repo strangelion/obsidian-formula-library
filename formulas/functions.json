@@ -1,0 +1,642 @@
+{
+  "id": "functions",
+  "structures": true,
+  "items": [
+    {
+      "section": "初等函数",
+      "sectionEn": "Elementary Functions"
+    },
+    [
+      "sin",
+      "\\sin"
+    ],
+    [
+      "cos",
+      "\\cos"
+    ],
+    [
+      "tan",
+      "\\tan"
+    ],
+    [
+      "log",
+      "\\log"
+    ],
+    [
+      "ln",
+      "\\ln"
+    ],
+    [
+      "lg",
+      "\\lg"
+    ],
+    [
+      "exp",
+      "\\exp"
+    ],
+    [
+      "sin⁻¹",
+      "\\sin^{-1}"
+    ],
+    [
+      "cos⁻¹",
+      "\\cos^{-1}"
+    ],
+    [
+      "tan⁻¹",
+      "\\tan^{-1}"
+    ],
+    [
+      "sec",
+      "\\sec"
+    ],
+    [
+      "csc",
+      "\\csc"
+    ],
+    [
+      "cot",
+      "\\cot"
+    ],
+    [
+      "arcsin",
+      "\\arcsin"
+    ],
+    [
+      "arccos",
+      "\\arccos"
+    ],
+    [
+      "arctan",
+      "\\arctan"
+    ],
+    [
+      "sinh",
+      "\\sinh"
+    ],
+    [
+      "cosh",
+      "\\cosh"
+    ],
+    [
+      "tanh",
+      "\\tanh"
+    ],
+    [
+      "coth",
+      "\\coth"
+    ],
+    [
+      "sech",
+      "\\operatorname{sech}"
+    ],
+    [
+      "csch",
+      "\\operatorname{csch}"
+    ],
+    [
+      "arsinh",
+      "\\operatorname{arsinh}"
+    ],
+    [
+      "arcosh",
+      "\\operatorname{arcosh}"
+    ],
+    [
+      "artanh",
+      "\\operatorname{artanh}"
+    ],
+    [
+      "√x",
+      "\\sqrt{#?}",
+      "Square root"
+    ],
+    [
+      "xⁿ",
+      "#?^{#?}",
+      "Power function"
+    ],
+    [
+      "|x|",
+      "\\left|#?\\right|",
+      "Absolute value"
+    ],
+    [
+      "⌊x⌋",
+      "\\lfloor #? \\rfloor",
+      "Floor"
+    ],
+    [
+      "⌈x⌉",
+      "\\lceil #? \\rceil",
+      "Ceiling"
+    ],
+    {
+      "section": "极限 / 优化 / 代数算子",
+      "sectionEn": "Limits / Optimization / Algebraic Operators"
+    },
+    [
+      "lim",
+      "\\lim"
+    ],
+    [
+      "max",
+      "\\max"
+    ],
+    [
+      "min",
+      "\\min"
+    ],
+    [
+      "sup",
+      "\\sup"
+    ],
+    [
+      "inf",
+      "\\inf"
+    ],
+    [
+      "argmax",
+      "\\arg\\max"
+    ],
+    [
+      "argmin",
+      "\\arg\\min"
+    ],
+    [
+      "det",
+      "\\det"
+    ],
+    [
+      "dim",
+      "\\dim"
+    ],
+    [
+      "gcd",
+      "\\gcd"
+    ],
+    [
+      "lcm",
+      "\\operatorname{lcm}"
+    ],
+    [
+      "arg",
+      "\\arg"
+    ],
+    [
+      "deg",
+      "\\deg"
+    ],
+    [
+      "ker",
+      "\\ker"
+    ],
+    [
+      "hom",
+      "\\hom"
+    ],
+    [
+      "Pr",
+      "\\Pr"
+    ],
+    [
+      "sgn",
+      "\\operatorname{sgn}"
+    ],
+    [
+      "mod",
+      "\\bmod"
+    ],
+    [
+      "pmod",
+      "\\pmod{#?}"
+    ],
+    [
+      "Re",
+      "\\operatorname{Re}(#?)",
+      "Real part"
+    ],
+    [
+      "Im",
+      "\\operatorname{Im}(#?)",
+      "Imaginary part"
+    ],
+    [
+      "cis",
+      "\\operatorname{cis}(#?)",
+      "cis"
+    ],
+    [
+      "sinc",
+      "\\operatorname{sinc}(#?)",
+      "Sinc"
+    ],
+    [
+      "rank",
+      "\\operatorname{rank}"
+    ],
+    [
+      "span",
+      "\\operatorname{span}"
+    ],
+    [
+      "tr",
+      "\\operatorname{tr}"
+    ],
+    [
+      "Spec",
+      "\\operatorname{Spec}(#?)",
+      "Spectrum"
+    ],
+    [
+      "supp",
+      "\\operatorname{supp}(#?)",
+      "Support"
+    ],
+    [
+      "ess sup",
+      "\\operatorname*{ess\\,sup} #?",
+      "Essential supremum"
+    ],
+    [
+      "prox",
+      "\\operatorname{prox}_{#?}(#?)",
+      "Proximal map"
+    ],
+    [
+      "conv",
+      "\\operatorname{conv}(#?)",
+      "Convex hull"
+    ],
+    [
+      "cl",
+      "\\operatorname{cl}(#?)",
+      "Closure"
+    ],
+    [
+      "int",
+      "\\operatorname{int}(#?)",
+      "Interior"
+    ],
+    {
+      "section": "Gamma / Beta / Zeta / 数论函数",
+      "sectionEn": "Gamma / Beta / Zeta / Number-Theoretic Functions"
+    },
+    [
+      "Γ",
+      "\\Gamma(z)=\\int_0^\\infty t^{z-1}e^{-t}\\,dt",
+      "Gamma function"
+    ],
+    [
+      "γ",
+      "\\gamma(s,x)=\\int_0^x t^{s-1}e^{-t}\\,dt",
+      "Lower incomplete gamma"
+    ],
+    [
+      "Γ(s,x)",
+      "\\Gamma(s,x)=\\int_x^\\infty t^{s-1}e^{-t}\\,dt",
+      "Upper incomplete gamma"
+    ],
+    [
+      "B",
+      "B(x,y)=\\int_0^1 t^{x-1}(1-t)^{y-1}\\,dt=\\frac{\\Gamma(x)\\Gamma(y)}{\\Gamma(x+y)}",
+      "Beta function"
+    ],
+    [
+      "ζ",
+      "\\zeta(s)=\\sum_{n=1}^\\infty n^{-s}=\\prod_p(1-p^{-s})^{-1}",
+      "Riemann zeta"
+    ],
+    [
+      "η",
+      "\\eta(s)=\\sum_{n=1}^\\infty\\frac{(-1)^{n-1}}{n^s}=(1-2^{1-s})\\zeta(s)",
+      "Dirichlet eta"
+    ],
+    [
+      "L",
+      "L(s,\\chi)=\\sum_{n=1}^\\infty\\frac{\\chi(n)}{n^s}=\\prod_p(1-\\chi(p)p^{-s})^{-1}",
+      "L-function"
+    ],
+    [
+      "Λ",
+      "\\Lambda(n)=\\begin{cases}\\log p,&n=p^k\\\\0,&\\text{otherwise}\\end{cases}",
+      "Von Mangoldt"
+    ],
+    [
+      "μ",
+      "\\mu(n)=\\begin{cases}1,&n=1\\\\(-1)^k,&n=p_1\\cdots p_k\\\\0,&p^2\\mid n\\end{cases}",
+      "Mobius function"
+    ],
+    [
+      "φ",
+      "\\varphi(n)=n\\prod_{p\\mid n}\\left(1-\\frac1p\\right)",
+      "Euler totient"
+    ],
+    [
+      "τ",
+      "\\tau(n)=\\sum_{d\\mid n}1",
+      "Divisor count"
+    ],
+    [
+      "σₖ",
+      "\\sigma_k(n)=\\sum_{d\\mid n}d^k",
+      "Divisor sum"
+    ],
+    [
+      "Liₛ",
+      "\\operatorname{Li}_s(z)=\\sum_{n=1}^\\infty\\frac{z^n}{n^s}",
+      "Polylogarithm"
+    ],
+    [
+      "Li",
+      "\\operatorname{li}(x)=\\int_0^x\\frac{dt}{\\log t}",
+      "Logarithmic integral"
+    ],
+    {
+      "section": "误差 / 积分 / 椭圆函数",
+      "sectionEn": "Error / Integral / Elliptic Functions"
+    },
+    [
+      "erf",
+      "\\operatorname{erf}(x)=\\frac2{\\sqrt\\pi}\\int_0^x e^{-t^2}\\,dt",
+      "Error function"
+    ],
+    [
+      "erfc",
+      "\\operatorname{erfc}(x)=1-\\operatorname{erf}(x)=\\frac2{\\sqrt\\pi}\\int_x^\\infty e^{-t^2}\\,dt",
+      "Complementary error function"
+    ],
+    [
+      "erfi",
+      "\\operatorname{erfi}(x)=\\frac2{\\sqrt\\pi}\\int_0^x e^{t^2}\\,dt",
+      "Imaginary error function"
+    ],
+    [
+      "Si",
+      "\\operatorname{Si}(x)=\\int_0^x\\frac{\\sin t}{t}\\,dt",
+      "Sine integral"
+    ],
+    [
+      "Ci",
+      "\\operatorname{Ci}(x)=-\\int_x^\\infty\\frac{\\cos t}{t}\\,dt",
+      "Cosine integral"
+    ],
+    [
+      "Ei",
+      "\\operatorname{Ei}(x)=\\operatorname{PV}\\int_{-\\infty}^x\\frac{e^t}{t}\\,dt",
+      "Exponential integral"
+    ],
+    [
+      "Eₙ",
+      "E_n(x)=\\int_1^\\infty\\frac{e^{-xt}}{t^n}\\,dt",
+      "Exponential integral En"
+    ],
+    [
+      "F(φ,k)",
+      "F(\\phi,k)=\\int_0^\\phi\\frac{d\\theta}{\\sqrt{1-k^2\\sin^2\\theta}}",
+      "Incomplete elliptic integral"
+    ],
+    [
+      "K(k)",
+      "K(k)=\\int_0^{\\pi/2}\\frac{d\\theta}{\\sqrt{1-k^2\\sin^2\\theta}}",
+      "Complete elliptic integral"
+    ],
+    [
+      "E(k)",
+      "E(k)=\\int_0^{\\pi/2}\\sqrt{1-k^2\\sin^2\\theta}\\,d\\theta",
+      "Elliptic integral E"
+    ],
+    [
+      "Π(n,k)",
+      "\\Pi(n,k)=\\int_0^{\\pi/2}\\frac{d\\theta}{(1-n\\sin^2\\theta)\\sqrt{1-k^2\\sin^2\\theta}}",
+      "Elliptic integral Pi"
+    ],
+    [
+      "sn",
+      "u=\\int_0^{\\operatorname{sn}(u,k)}\\frac{dt}{\\sqrt{(1-t^2)(1-k^2t^2)}}",
+      "Jacobi sn"
+    ],
+    [
+      "cn",
+      "\\operatorname{cn}^2(u,k)+\\operatorname{sn}^2(u,k)=1",
+      "Jacobi cn"
+    ],
+    [
+      "dn",
+      "\\operatorname{dn}^2(u,k)+k^2\\operatorname{sn}^2(u,k)=1",
+      "Jacobi dn"
+    ],
+    [
+      "℘",
+      "\\wp(z;\\Lambda)=\\frac1{z^2}+\\sum_{\\omega\\in\\Lambda\\setminus\\{0\\}}\\left(\\frac1{(z-omega)^2}-\\frac1{\\omega^2}\\right)",
+      "Weierstrass elliptic function"
+    ],
+    {
+      "section": "Bessel / Airy / 正交多项式",
+      "sectionEn": "Bessel / Airy / Orthogonal Polynomials"
+    },
+    [
+      "Jν",
+      "J_\\nu(x)=\\sum_{m=0}^\\infty\\frac{(-1)^m}{m!\\Gamma(m+\\nu+1)}\\left(\\frac{x}{2}\\right)^{2m+\\nu}",
+      "Bessel J"
+    ],
+    [
+      "Yν",
+      "Y_\\nu(x)=\\frac{J_\\nu(x)\\cos\\nu\\pi-J_{-\\nu}(x)}{\\sin\\nu\\pi}",
+      "Bessel Y"
+    ],
+    [
+      "Iν",
+      "I_\\nu(x)=\\sum_{m=0}^\\infty\\frac1{m!\\Gamma(m+\\nu+1)}\\left(\\frac{x}{2}\\right)^{2m+\\nu}",
+      "Modified Bessel I"
+    ],
+    [
+      "Kν",
+      "K_\\nu(x)=\\frac\\pi2\\frac{I_{-\\nu}(x)-I_\\nu(x)}{\\sin\\nu\\pi}",
+      "Modified Bessel K"
+    ],
+    [
+      "Hν¹",
+      "H_\\nu^{(1)}(x)=J_\\nu(x)+iY_\\nu(x)",
+      "Hankel function first kind"
+    ],
+    [
+      "Hν²",
+      "H_\\nu^{(2)}(x)=J_\\nu(x)-iY_\\nu(x)",
+      "Hankel function second kind"
+    ],
+    [
+      "Ai",
+      "\\operatorname{Ai}''(x)-x\\operatorname{Ai}(x)=0",
+      "Airy Ai"
+    ],
+    [
+      "Bi",
+      "\\operatorname{Bi}''(x)-x\\operatorname{Bi}(x)=0",
+      "Airy Bi"
+    ],
+    [
+      "Pₙ",
+      "P_n(x)=\\frac1{2^nn!}\\frac{d^n}{dx^n}(x^2-1)^n",
+      "Legendre polynomial"
+    ],
+    [
+      "Yₗᵐ",
+      "Y_l^m(\\theta,\\phi)=N_{lm}P_l^m(\\cos\\theta)e^{im\\phi}",
+      "Spherical harmonic"
+    ],
+    [
+      "Lₙᵅ",
+      "L_n^{(\\alpha)}(x)=\\frac{x^{-\\alpha}e^x}{n!}\\frac{d^n}{dx^n}(e^{-x}x^{n+\\alpha})",
+      "Laguerre polynomial"
+    ],
+    [
+      "Hₙ",
+      "H_n(x)=(-1)^ne^{x^2}\\frac{d^n}{dx^n}e^{-x^2}",
+      "Hermite polynomial"
+    ],
+    [
+      "Tₙ",
+      "T_n(x)=\\cos(n\\arccos x)",
+      "Chebyshev T"
+    ],
+    [
+      "Uₙ",
+      "U_n(x)=\\frac{\\sin((n+1)\\arccos x)}{\\sqrt{1-x^2}}",
+      "Chebyshev U"
+    ],
+    {
+      "section": "超几何 / q-函数 / 模函数",
+      "sectionEn": "Hypergeometric / q-Functions / Modular Functions"
+    },
+    [
+      "₂F₁",
+      "{}_2F_1(a,b;c;z)=\\sum_{n=0}^\\infty\\frac{(a)_n(b)_n}{(c)_n}\\frac{z^n}{n!}",
+      "Gauss hypergeometric"
+    ],
+    [
+      "₁F₁",
+      "{}_1F_1(a;c;z)=\\sum_{n=0}^\\infty\\frac{(a)_n}{(c)_n}\\frac{z^n}{n!}",
+      "Confluent hypergeometric"
+    ],
+    [
+      "₀F₁",
+      "{}_0F_1(;c;z)=\\sum_{n=0}^\\infty\\frac{z^n}{(c)_nn!}",
+      "Hypergeometric 0F1"
+    ],
+    [
+      "pFq",
+      "{}_pF_q(a;b;z)=\\sum_{n=0}^\\infty\\frac{(a_1)_n\\cdots(a_p)_n}{(b_1)_n\\cdots(b_q)_n}\\frac{z^n}{n!}",
+      "Generalized hypergeometric"
+    ],
+    [
+      "U(a,b,z)",
+      "U(a,b,z)=\\frac1{\\Gamma(a)}\\int_0^\\infty e^{-zt}t^{a-1}(1+t)^{b-a-1}\\,dt",
+      "Tricomi function"
+    ],
+    [
+      "M(a,b,z)",
+      "M(a,b,z)={}_1F_1(a;b;z)",
+      "Kummer function"
+    ],
+    [
+      "θ₁",
+      "\\vartheta_1(z,q)=2\\sum_{n=0}^\\infty(-1)^nq^{(n+1/2)^2}\\sin((2n+1)z)",
+      "Jacobi theta 1"
+    ],
+    [
+      "θ₂",
+      "\\vartheta_2(z,q)=2\\sum_{n=0}^\\infty q^{(n+1/2)^2}\\cos((2n+1)z)",
+      "Jacobi theta 2"
+    ],
+    [
+      "θ₃",
+      "\\vartheta_3(z,q)=1+2\\sum_{n=1}^\\infty q^{n^2}\\cos(2nz)",
+      "Jacobi theta 3"
+    ],
+    [
+      "θ₄",
+      "\\vartheta_4(z,q)=1+2\\sum_{n=1}^\\infty(-1)^nq^{n^2}\\cos(2nz)",
+      "Jacobi theta 4"
+    ],
+    [
+      "η(τ)",
+      "\\eta(\\tau)=q^{1/24}\\prod_{n=1}^\\infty(1-q^n),\\quad q=e^{2\\pi i\\tau}",
+      "Dedekind eta"
+    ],
+    [
+      "j(τ)",
+      "j(\\tau)=\\frac{E_4(\\tau)^3}{\\Delta(\\tau)}",
+      "Modular j-invariant"
+    ],
+    [
+      "q-Poch",
+      "(a;q)_n=\\prod_{k=0}^{n-1}(1-aq^k)",
+      "q-Pochhammer"
+    ],
+    {
+      "section": "阶跃 / 分布 / 病态函数",
+      "sectionEn": "Step / Distributions / Pathological Functions"
+    },
+    [
+      "H",
+      "H(x)=\\begin{cases}0,&x<0\\\\1,&x\\ge0\\end{cases}",
+      "Heaviside step function"
+    ],
+    [
+      "δ",
+      "\\int_{-\\infty}^{\\infty}f(x)\\delta(x-a)\\,dx=f(a)",
+      "Dirac delta"
+    ],
+    [
+      "χ_A",
+      "\\chi_A(x)=\\begin{cases}1,&x\\in A\\\\0,&x\\notin A\\end{cases}",
+      "Characteristic function"
+    ],
+    [
+      "𝟙_A",
+      "\\mathbf{1}_A(x)=\\begin{cases}1,&x\\in A\\\\0,&x\\notin A\\end{cases}",
+      "Indicator function"
+    ],
+    [
+      "sgn",
+      "\\operatorname{sgn}(x)=\\begin{cases}-1,&x<0\\\\0,&x=0\\\\1,&x>0\\end{cases}",
+      "Sign function"
+    ],
+    [
+      "frac",
+      "\\operatorname{frac}(x)=x-\\lfloor x\\rfloor",
+      "Fractional part"
+    ],
+    [
+      "W(x)",
+      "W(x)=\\sum_{n=0}^{\\infty}a^n\\cos(b^n\\pi x),\\quad 0<a<1,\\;ab>1+\\frac{3\\pi}{2}",
+      "Weierstrass function"
+    ],
+    [
+      "R(x)",
+      "R(x)=\\sum_{n=1}^{\\infty}\\frac{\\sin(\\pi n^2x)}{n^2}",
+      "Riemann function"
+    ],
+    [
+      "D(x)",
+      "D(x)=\\begin{cases}1,&x\\in\\mathbb Q\\\\0,&x\\notin\\mathbb Q\\end{cases}",
+      "Dirichlet function"
+    ],
+    [
+      "C(x)",
+      "C(x)=\\sum_{n=1}^{\\infty}\\frac{2a_n}{3^n}\\quad(x=0.a_1a_2\\ldots\\text{ in base }3)",
+      "Cantor function"
+    ],
+    [
+      "T(x)",
+      "T(x)=\\sum_{n=0}^{\\infty}\\frac{\\operatorname{dist}(2^nx,\\mathbb Z)}{2^n}",
+      "Takagi function"
+    ],
+    [
+      "Th(x)",
+      "\\operatorname{Th}(x)=\\begin{cases}1/q,&x=p/q\\in\\mathbb Q,\\;(p,q)=1\\\\0,&x\\notin\\mathbb Q\\end{cases}",
+      "Thomae function"
+    ]
+  ]
+}

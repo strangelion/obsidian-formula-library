@@ -1,0 +1,1179 @@
+{
+  "id": "chemistry",
+  "structures": true,
+  "items": [
+    {
+      "section": "常用书写 / 反应模板",
+      "sectionEn": "Common Writing / Reaction Templates"
+    },
+    [
+      "化学式",
+      "\\mathrm{#?}",
+      "Formula"
+    ],
+    [
+      "反应式",
+      "\\mathrm{#?}\\rightarrow\\mathrm{#?}",
+      "Reaction"
+    ],
+    [
+      "可逆",
+      "\\mathrm{#?}\\rightleftharpoons\\mathrm{#?}",
+      "Reversible"
+    ],
+    [
+      "共振",
+      "\\mathrm{#?}\\leftrightarrow\\mathrm{#?}",
+      "Resonance"
+    ],
+    [
+      "上下箭头",
+      "\\mathrm{#?}\\xrightarrow[#?]{#?}\\mathrm{#?}",
+      "Arrow with text"
+    ],
+    [
+      "离子方程",
+      "\\mathrm{#?}^{+}+\\mathrm{#?}^{-}\\rightarrow\\mathrm{#?}\\downarrow",
+      "Ionic equation"
+    ],
+    [
+      "净离子",
+      "\\mathrm{#?}_{(aq)}+\\mathrm{#?}_{(aq)}\\rightarrow\\mathrm{#?}_{(s)}",
+      "Net ionic equation"
+    ],
+    [
+      "酸碱反应",
+      "\\ce{HA + OH- -> A- + H2O}",
+      "Acid-base reaction"
+    ],
+    [
+      "氧化还原",
+      "\\ce{Ox + ne- -> Red}",
+      "Redox reaction"
+    ],
+    [
+      "燃烧反应",
+      "\\ce{C_xH_y + O2 -> CO2 + H2O}",
+      "Combustion reaction"
+    ],
+    [
+      "沉淀反应",
+      "\\ce{Ag+ + Cl- -> AgCl v}",
+      "Precipitation reaction"
+    ],
+    [
+      "络合反应",
+      "\\ce{M^{n+} + xL <=> [ML_x]^{n+}}",
+      "Complexation reaction"
+    ],
+    [
+      "水合物",
+      "\\mathrm{#?}\\cdot#?\\mathrm{H_2O}",
+      "Hydrate"
+    ],
+    [
+      "同位素",
+      "{}^{#?}_{#?}\\mathrm{#?}",
+      "Isotope notation"
+    ],
+    [
+      "电子",
+      "\\ce{e-}",
+      "Electron"
+    ],
+    [
+      "催化剂",
+      "\\mathrm{#?}\\xrightarrow{\\mathrm{cat.}}\\mathrm{#?}",
+      "Catalyst arrow"
+    ],
+    [
+      "加热",
+      "\\mathrm{#?}\\xrightarrow{\\Delta}\\mathrm{#?}",
+      "Heat arrow"
+    ],
+    [
+      "→",
+      "\\rightarrow"
+    ],
+    [
+      "⇌",
+      "\\rightleftharpoons"
+    ],
+    [
+      "↑",
+      "\\uparrow"
+    ],
+    [
+      "↓",
+      "\\downarrow"
+    ],
+    [
+      "aq",
+      "\\mathrm{(aq)}"
+    ],
+    [
+      "s",
+      "\\mathrm{(s)}"
+    ],
+    [
+      "l",
+      "\\mathrm{(l)}"
+    ],
+    [
+      "g",
+      "\\mathrm{(g)}"
+    ],
+    {
+      "section": "常见分子 / 无机物",
+      "sectionEn": "Common Molecules / Inorganic Compounds"
+    },
+    [
+      "H₂O",
+      "\\ce{H2O}",
+      "Water"
+    ],
+    [
+      "H₂",
+      "\\ce{H2}",
+      "Hydrogen"
+    ],
+    [
+      "O₂",
+      "\\ce{O2}",
+      "Oxygen"
+    ],
+    [
+      "N₂",
+      "\\ce{N2}",
+      "Nitrogen"
+    ],
+    [
+      "Cl₂",
+      "\\ce{Cl2}",
+      "Chlorine"
+    ],
+    [
+      "CO₂",
+      "\\ce{CO2}",
+      "Carbon dioxide"
+    ],
+    [
+      "CO",
+      "\\ce{CO}",
+      "Carbon monoxide"
+    ],
+    [
+      "NO",
+      "\\ce{NO}",
+      "Nitric oxide"
+    ],
+    [
+      "NO₂",
+      "\\ce{NO2}",
+      "Nitrogen dioxide"
+    ],
+    [
+      "SO₂",
+      "\\ce{SO2}",
+      "Sulfur dioxide"
+    ],
+    [
+      "SO₃",
+      "\\ce{SO3}",
+      "Sulfur trioxide"
+    ],
+    [
+      "H₂S",
+      "\\ce{H2S}",
+      "Hydrogen sulfide"
+    ],
+    [
+      "NaCl",
+      "\\ce{NaCl}",
+      "Sodium chloride"
+    ],
+    [
+      "HCl",
+      "\\ce{HCl}",
+      "Hydrochloric acid"
+    ],
+    [
+      "HF",
+      "\\ce{HF}",
+      "Hydrofluoric acid"
+    ],
+    [
+      "HBr",
+      "\\ce{HBr}",
+      "Hydrobromic acid"
+    ],
+    [
+      "HI",
+      "\\ce{HI}",
+      "Hydroiodic acid"
+    ],
+    [
+      "H₂SO₄",
+      "\\ce{H2SO4}",
+      "Sulfuric acid"
+    ],
+    [
+      "HNO₃",
+      "\\ce{HNO3}",
+      "Nitric acid"
+    ],
+    [
+      "H₃PO₄",
+      "\\ce{H3PO4}",
+      "Phosphoric acid"
+    ],
+    [
+      "H₂CO₃",
+      "\\ce{H2CO3}",
+      "Carbonic acid"
+    ],
+    [
+      "NH₃",
+      "\\ce{NH3}",
+      "Ammonia"
+    ],
+    [
+      "NaOH",
+      "\\ce{NaOH}",
+      "Sodium hydroxide"
+    ],
+    [
+      "KOH",
+      "\\ce{KOH}",
+      "Potassium hydroxide"
+    ],
+    [
+      "CaO",
+      "\\ce{CaO}",
+      "Calcium oxide"
+    ],
+    [
+      "MgO",
+      "\\ce{MgO}",
+      "Magnesium oxide"
+    ],
+    [
+      "NH₄Cl",
+      "\\ce{NH4Cl}",
+      "Ammonium chloride"
+    ],
+    [
+      "Na₂CO₃",
+      "\\ce{Na2CO3}",
+      "Sodium carbonate"
+    ],
+    [
+      "NaHCO₃",
+      "\\ce{NaHCO3}",
+      "Sodium bicarbonate"
+    ],
+    [
+      "KCl",
+      "\\ce{KCl}",
+      "Potassium chloride"
+    ],
+    [
+      "KNO₃",
+      "\\ce{KNO3}",
+      "Potassium nitrate"
+    ],
+    [
+      "AgNO₃",
+      "\\ce{AgNO3}",
+      "Silver nitrate"
+    ],
+    [
+      "H₂O₂",
+      "\\ce{H2O2}",
+      "Hydrogen peroxide"
+    ],
+    [
+      "KMnO₄",
+      "\\ce{KMnO4}",
+      "Potassium permanganate"
+    ],
+    [
+      "K₂Cr₂O₇",
+      "\\ce{K2Cr2O7}",
+      "Potassium dichromate"
+    ],
+    [
+      "CaCO₃",
+      "\\ce{CaCO3}",
+      "Calcium carbonate"
+    ],
+    [
+      "CuSO₄",
+      "\\ce{CuSO4}",
+      "Copper sulfate"
+    ],
+    [
+      "Ca(OH)₂",
+      "\\ce{Ca(OH)2}",
+      "Calcium hydroxide"
+    ],
+    [
+      "Fe₂O₃",
+      "\\ce{Fe2O3}",
+      "Iron(III) oxide"
+    ],
+    [
+      "AgCl",
+      "\\ce{AgCl}",
+      "Silver chloride"
+    ],
+    [
+      "BaSO₄",
+      "\\ce{BaSO4}",
+      "Barium sulfate"
+    ],
+    [
+      "SiO₂",
+      "\\ce{SiO2}",
+      "Silicon dioxide"
+    ],
+    [
+      "Al₂O₃",
+      "\\ce{Al2O3}",
+      "Aluminium oxide"
+    ],
+    [
+      "CuO",
+      "\\ce{CuO}",
+      "Copper oxide"
+    ],
+    [
+      "MnO₂",
+      "\\ce{MnO2}",
+      "Manganese dioxide"
+    ],
+    [
+      "PbI₂",
+      "\\ce{PbI2}",
+      "Lead iodide"
+    ],
+    [
+      "FeCl₃",
+      "\\ce{FeCl3}",
+      "Iron(III) chloride"
+    ],
+    [
+      "Na₂S₂O₃",
+      "\\ce{Na2S2O3}",
+      "Sodium thiosulfate"
+    ],
+    {
+      "section": "离子 / 水溶液",
+      "sectionEn": "Ions / Aqueous Chemistry"
+    },
+    [
+      "H⁺",
+      "\\ce{H+}",
+      "Proton"
+    ],
+    [
+      "OH⁻",
+      "\\ce{OH-}",
+      "Hydroxide"
+    ],
+    [
+      "Na⁺",
+      "\\ce{Na+}",
+      "Sodium ion"
+    ],
+    [
+      "K⁺",
+      "\\ce{K+}",
+      "Potassium ion"
+    ],
+    [
+      "Ag⁺",
+      "\\ce{Ag+}",
+      "Silver ion"
+    ],
+    [
+      "Ca²⁺",
+      "\\ce{Ca^2+}",
+      "Calcium ion"
+    ],
+    [
+      "Mg²⁺",
+      "\\ce{Mg^2+}",
+      "Magnesium ion"
+    ],
+    [
+      "Ba²⁺",
+      "\\ce{Ba^2+}",
+      "Barium ion"
+    ],
+    [
+      "Cu²⁺",
+      "\\ce{Cu^2+}",
+      "Copper(II)"
+    ],
+    [
+      "Zn²⁺",
+      "\\ce{Zn^2+}",
+      "Zinc ion"
+    ],
+    [
+      "Al³⁺",
+      "\\ce{Al^3+}",
+      "Aluminium ion"
+    ],
+    [
+      "SO₄²⁻",
+      "\\ce{SO4^2-}",
+      "Sulfate"
+    ],
+    [
+      "NO₃⁻",
+      "\\ce{NO3-}",
+      "Nitrate"
+    ],
+    [
+      "CO₃²⁻",
+      "\\ce{CO3^2-}",
+      "Carbonate"
+    ],
+    [
+      "HCO₃⁻",
+      "\\ce{HCO3-}",
+      "Bicarbonate"
+    ],
+    [
+      "PO₄³⁻",
+      "\\ce{PO4^3-}",
+      "Phosphate"
+    ],
+    [
+      "Cl⁻",
+      "\\ce{Cl-}",
+      "Chloride"
+    ],
+    [
+      "Br⁻",
+      "\\ce{Br-}",
+      "Bromide"
+    ],
+    [
+      "I⁻",
+      "\\ce{I-}",
+      "Iodide"
+    ],
+    [
+      "F⁻",
+      "\\ce{F-}",
+      "Fluoride"
+    ],
+    [
+      "MnO₄⁻",
+      "\\ce{MnO4-}",
+      "Permanganate"
+    ],
+    [
+      "Cr₂O₇²⁻",
+      "\\ce{Cr2O7^2-}",
+      "Dichromate"
+    ],
+    [
+      "S₂O₃²⁻",
+      "\\ce{S2O3^2-}",
+      "Thiosulfate"
+    ],
+    [
+      "CH₃COO⁻",
+      "\\ce{CH3COO-}",
+      "Acetate"
+    ],
+    [
+      "NH₄⁺",
+      "\\ce{NH4+}",
+      "Ammonium"
+    ],
+    [
+      "Fe²⁺",
+      "\\ce{Fe^2+}",
+      "Iron(II)"
+    ],
+    [
+      "Fe³⁺",
+      "\\ce{Fe^3+}",
+      "Iron(III)"
+    ],
+    [
+      "络离子",
+      "\\ce{[Cu(NH3)4]^2+}",
+      "Complex ion"
+    ],
+    [
+      "六氨合钴",
+      "\\ce{[Co(NH3)6]^3+}",
+      "Hexaamminecobalt(III)"
+    ],
+    [
+      "氰合银",
+      "\\ce{[Ag(CN)2]-}",
+      "Dicyanoargentate"
+    ],
+    {
+      "section": "酸碱 / 平衡 / 滴定",
+      "sectionEn": "Acid-Base / Equilibrium / Titration"
+    },
+    [
+      "pH",
+      "\\mathrm{pH} = -\\log[\\ce{H+}]",
+      "pH"
+    ],
+    [
+      "pOH",
+      "\\mathrm{pOH} = -\\log[\\ce{OH-}]",
+      "pOH"
+    ],
+    [
+      "Kw",
+      "K_w = [\\ce{H+}][\\ce{OH-}] = 10^{-14}",
+      "Kw"
+    ],
+    [
+      "Ka",
+      "K_a = \\frac{[\\ce{H+}][\\ce{A-}]}{[\\ce{HA}]}",
+      "Ka"
+    ],
+    [
+      "Henderson-Hasselbalch",
+      "\\mathrm{pH} = \\mathrm{p}K_a + \\log\\frac{[\\ce{A-}]}{[\\ce{HA}]}",
+      "Henderson-Hasselbalch"
+    ],
+    [
+      "平衡常数",
+      "K_c = \\frac{[\\ce{C}]^c[\\ce{D}]^d}{[\\ce{A}]^a[\\ce{B}]^b}",
+      "Equilibrium constant"
+    ],
+    [
+      "反应商",
+      "Q = \\frac{[\\ce{C}]^c[\\ce{D}]^d}{[\\ce{A}]^a[\\ce{B}]^b}",
+      "Reaction quotient"
+    ],
+    [
+      "Kp-Kc",
+      "K_p=K_c(RT)^{\\Delta n}",
+      "Kp and Kc relation"
+    ],
+    [
+      "溶度积",
+      "K_{sp}=[\\ce{M^{n+}}]^a[\\ce{X^{m-}}]^b",
+      "Solubility product"
+    ],
+    [
+      "络合常数",
+      "K_f=\\frac{[\\ce{ML_x}]}{[\\ce{M}][\\ce{L}]^x}",
+      "Formation constant"
+    ],
+    [
+      "电离度",
+      "\\alpha=\\frac{x}{c_0}",
+      "Degree of dissociation"
+    ],
+    [
+      "缓冲容量",
+      "\\beta=\\frac{dn}{d\\mathrm{pH}}",
+      "Buffer capacity"
+    ],
+    [
+      "分布系数",
+      "D=\\frac{c_{\\mathrm{org}}}{c_{\\mathrm{aq}}}",
+      "Distribution coefficient"
+    ],
+    [
+      "Henry 定律",
+      "c=k_HP",
+      "Henry law"
+    ],
+    [
+      "Raoult 定律",
+      "p_i=x_ip_i^*",
+      "Raoult law"
+    ],
+    [
+      "依数性",
+      "\\Delta T_b=iK_bm",
+      "Boiling point elevation"
+    ],
+    [
+      "凝固点降低",
+      "\\Delta T_f=iK_fm",
+      "Freezing point depression"
+    ],
+    [
+      "渗透压",
+      "\\Pi=iMRT",
+      "Osmotic pressure"
+    ],
+    [
+      "滴定当量点",
+      "n_a = n_b",
+      "Titration equivalence"
+    ],
+    [
+      "酸碱滴定",
+      "C_aV_a=C_bV_b",
+      "Acid-base titration"
+    ],
+    [
+      "EDTA 络合",
+      "\\ce{M^{n+} + Y^{4-} -> MY^{(n-4)-}}",
+      "EDTA complexometric titration"
+    ],
+    [
+      "指示剂",
+      "\\ce{Phth}",
+      "Indicator"
+    ],
+    {
+      "section": "热力学 / 电化学 / 动力学",
+      "sectionEn": "Thermodynamics / Electrochemistry / Kinetics"
+    },
+    [
+      "理想气体",
+      "PV=nRT",
+      "Ideal gas law"
+    ],
+    [
+      "化学势",
+      "\\mu_i=\\mu_i^\\circ+RT\\ln a_i",
+      "Chemical potential"
+    ],
+    [
+      "活度",
+      "a_i=\\gamma_i\\frac{c_i}{c^\\circ}",
+      "Activity"
+    ],
+    [
+      "逸度",
+      "\\mu=\\mu^\\circ+RT\\ln\\frac{f}{f^\\circ}",
+      "Fugacity"
+    ],
+    [
+      "ΔH",
+      "\\Delta H",
+      "Enthalpy change"
+    ],
+    [
+      "ΔS",
+      "\\Delta S",
+      "Entropy change"
+    ],
+    [
+      "ΔG",
+      "\\Delta G = \\Delta H - T\\Delta S",
+      "Gibbs free energy"
+    ],
+    [
+      "ΔG°",
+      "\\Delta G^\\circ = -RT\\ln K",
+      "Standard Gibbs"
+    ],
+    [
+      "Hess 定律",
+      "\\Delta H=\\sum_i\\nu_i\\Delta H_{f,i}^\\circ",
+      "Hess law"
+    ],
+    [
+      "热容",
+      "q=mc\\Delta T",
+      "Heat capacity"
+    ],
+    [
+      "Gibbs-Helmholtz",
+      "\\left(\\frac{\\partial(G/T)}{\\partial T}\\right)_p=-\\frac{H}{T^2}",
+      "Gibbs-Helmholtz"
+    ],
+    [
+      "van't Hoff",
+      "\\ln\\frac{K_2}{K_1} = -\\frac{\\Delta H^\\circ}{R}\\left(\\frac1{T_2}-\\frac1{T_1}\\right)",
+      "van't Hoff eqn"
+    ],
+    [
+      "Clapeyron",
+      "\\frac{dP}{dT} = \\frac{\\Delta S}{\\Delta V}",
+      "Clapeyron eqn"
+    ],
+    [
+      "Clausius-Clapeyron",
+      "\\ln\\frac{P_2}{P_1}=-\\frac{\\Delta H_{vap}}{R}\\left(\\frac1{T_2}-\\frac1{T_1}\\right)",
+      "Clausius-Clapeyron"
+    ],
+    [
+      "Boltzmann 分布",
+      "\\frac{N_i}{N}=\\frac{g_ie^{-E_i/kT}}{Z}",
+      "Boltzmann distribution"
+    ],
+    [
+      "配分函数",
+      "Z=\\sum_i g_i e^{-E_i/kT}",
+      "Partition function"
+    ],
+    [
+      "能斯特",
+      "E = E^\\circ - \\frac{RT}{nF}\\ln Q",
+      "Nernst equation"
+    ],
+    [
+      "电池电动势",
+      "E_{cell}=E_{cathode}-E_{anode}",
+      "Cell potential"
+    ],
+    [
+      "Faraday 定律",
+      "m=\\frac{Q M}{nF}",
+      "Faraday electrolysis law"
+    ],
+    [
+      "电池符号",
+      "\\ce{Zn | Zn^2+ || Cu^2+ | Cu}",
+      "Cell notation"
+    ],
+    [
+      "Butler-Volmer",
+      "j=j_0\\left(e^{\\alpha_aF\\eta/RT}-e^{-\\alpha_cF\\eta/RT}\\right)",
+      "Butler-Volmer equation"
+    ],
+    [
+      "Tafel",
+      "\\eta=a+b\\log j",
+      "Tafel equation"
+    ],
+    [
+      "Debye-Hückel",
+      "\\log\\gamma_i=-Az_i^2\\sqrt I",
+      "Debye-Huckel limiting law"
+    ],
+    [
+      "离子强度",
+      "I=\\frac12\\sum_i c_i z_i^2",
+      "Ionic strength"
+    ],
+    [
+      "电导率",
+      "\\kappa=\\sum_i \\lambda_i c_i",
+      "Conductivity"
+    ],
+    [
+      "半反应",
+      "\\ce{oxid + ne- -> red}",
+      "Half-reaction"
+    ],
+    [
+      "法拉第常数",
+      "F = 96485\\,\\mathrm{C\\,mol^{-1}}",
+      "Faraday constant"
+    ],
+    [
+      "Arrhenius",
+      "k = Ae^{-E_a/RT}",
+      "Arrhenius eqn"
+    ],
+    [
+      "Eyring",
+      "k=\\frac{k_BT}{h}e^{-\\Delta G^\\ddagger/RT}",
+      "Eyring equation"
+    ],
+    [
+      "速率方程",
+      "\\text{rate} = k[\\ce{A}]^m[\\ce{B}]^n",
+      "Rate law"
+    ],
+    [
+      "零级反应",
+      "[A]=[A]_0-kt",
+      "Zero-order reaction"
+    ],
+    [
+      "一级反应",
+      "\\ln[A]=\\ln[A]_0-kt",
+      "First-order reaction"
+    ],
+    [
+      "二级反应",
+      "\\frac1{[A]}=\\frac1{[A]_0}+kt",
+      "Second-order reaction"
+    ],
+    [
+      "半衰期",
+      "t_{1/2}=\\frac{\\ln2}{k}",
+      "Half-life"
+    ],
+    [
+      "Michaelis-Menten",
+      "v=\\frac{V_{max}[S]}{K_M+[S]}",
+      "Michaelis-Menten"
+    ],
+    [
+      "Langmuir",
+      "\\theta = \\frac{KP}{1+KP}",
+      "Langmuir isotherm"
+    ],
+    [
+      "键离解能",
+      "D_{298} = 436\\,\\mathrm{kJ\\,mol^{-1}}",
+      "Bond dissociation energy"
+    ],
+    {
+      "section": "有机 / 官能团 / 杂化",
+      "sectionEn": "Organic / Functional Groups / Hybridization"
+    },
+    [
+      "CH₄",
+      "\\ce{CH4}",
+      "Methane"
+    ],
+    [
+      "乙烯",
+      "\\ce{CH2=CH2}",
+      "Ethene"
+    ],
+    [
+      "乙炔",
+      "\\ce{HC#CH}",
+      "Ethyne"
+    ],
+    [
+      "C₂H₅OH",
+      "\\ce{C2H5OH}",
+      "Ethanol"
+    ],
+    [
+      "C₆H₆",
+      "\\ce{C6H6}",
+      "Benzene"
+    ],
+    [
+      "CH₃COOH",
+      "\\ce{CH3COOH}",
+      "Acetic acid"
+    ],
+    [
+      "葡萄糖",
+      "\\ce{C6H12O6}",
+      "Glucose"
+    ],
+    [
+      "丙酮",
+      "\\ce{(CH3)2CO}",
+      "Acetone"
+    ],
+    [
+      "甲苯",
+      "\\ce{C6H5CH3}",
+      "Toluene"
+    ],
+    [
+      "羟基",
+      "\\ce{-OH}",
+      "Hydroxyl group"
+    ],
+    [
+      "羧基",
+      "\\ce{-COOH}",
+      "Carboxyl group"
+    ],
+    [
+      "羰基",
+      "\\ce{C=O}",
+      "Carbonyl group"
+    ],
+    [
+      "氨基",
+      "\\ce{-NH2}",
+      "Amino group"
+    ],
+    [
+      "醛基",
+      "\\ce{-CHO}",
+      "Aldehyde group"
+    ],
+    [
+      "酯基",
+      "\\ce{-COOR}",
+      "Ester group"
+    ],
+    [
+      "醚键",
+      "\\ce{R-O-R'}",
+      "Ether group"
+    ],
+    [
+      "酰胺",
+      "\\ce{-CONH2}",
+      "Amide group"
+    ],
+    [
+      "腈基",
+      "\\ce{-CN}",
+      "Nitrile group"
+    ],
+    [
+      "硝基",
+      "\\ce{-NO2}",
+      "Nitro group"
+    ],
+    [
+      "苯基",
+      "\\ce{-C6H5}",
+      "Phenyl group"
+    ],
+    [
+      "sp³ 杂化",
+      "\\ce{CH4} \\text{ sp}^3",
+      "sp3 hybridization"
+    ],
+    [
+      "sp² 杂化",
+      "\\ce{C2H4} \\text{ sp}^2",
+      "sp2 hybridization"
+    ],
+    [
+      "sp 杂化",
+      "\\ce{C2H2} \\text{ sp}",
+      "sp hybridization"
+    ],
+    [
+      "SN1",
+      "\\ce{R-X -> R+ + X- -> R-Nu}",
+      "SN1 mechanism"
+    ],
+    [
+      "SN2",
+      "\\ce{Nu- + R-X -> R-Nu + X-}",
+      "SN2 mechanism"
+    ],
+    [
+      "E1",
+      "\\ce{R-X -> R+ -> alkene}",
+      "E1 elimination"
+    ],
+    [
+      "E2",
+      "\\ce{Base + R-CH2-CH2-X -> alkene + HB + X-}",
+      "E2 elimination"
+    ],
+    [
+      "亲电加成",
+      "\\ce{C=C + E+ -> C-C+}",
+      "Electrophilic addition"
+    ],
+    [
+      "芳香取代",
+      "\\ce{Ar-H + E+ -> Ar-E + H+}",
+      "Electrophilic aromatic substitution"
+    ],
+    [
+      "Grignard",
+      "\\ce{R-MgX + R'CHO -> R'CH(OH)R}",
+      "Grignard reaction"
+    ],
+    [
+      "Diels-Alder",
+      "\\ce{diene + dienophile -> cyclohexene}",
+      "Diels-Alder reaction"
+    ],
+    [
+      "聚合",
+      "n\\ce{CH2=CH2} \\to \\ce{-(CH2CH2)-}_n",
+      "Polymerization"
+    ],
+    [
+      "酯化",
+      "\\ce{RCOOH + R'OH <=> RCOOR' + H2O}",
+      "Esterification"
+    ],
+    {
+      "section": "生物化学 / 高分子",
+      "sectionEn": "Biochemistry / Polymer Chemistry"
+    },
+    [
+      "氨基酸",
+      "\\ce{H2N-CHR-COOH}",
+      "Amino acid"
+    ],
+    [
+      "肽键",
+      "\\ce{R-COOH + H2N-R' -> R-CONH-R' + H2O}",
+      "Peptide bond"
+    ],
+    [
+      "ATP 水解",
+      "\\ce{ATP + H2O -> ADP + Pi + H+}",
+      "ATP hydrolysis"
+    ],
+    [
+      "NADH 氧化",
+      "\\ce{NADH -> NAD+ + H+ + 2e-}",
+      "NADH oxidation"
+    ],
+    [
+      "葡萄糖氧化",
+      "\\ce{C6H12O6 + 6O2 -> 6CO2 + 6H2O}",
+      "Glucose oxidation"
+    ],
+    [
+      "聚合度",
+      "X_n=\\frac{M_n}{M_0}",
+      "Degree of polymerization"
+    ],
+    [
+      "数均分子量",
+      "M_n=\\frac{\\sum_i N_iM_i}{\\sum_i N_i}",
+      "Number-average molar mass"
+    ],
+    [
+      "重均分子量",
+      "M_w=\\frac{\\sum_i N_iM_i^2}{\\sum_i N_iM_i}",
+      "Weight-average molar mass"
+    ],
+    [
+      "分散系数",
+      "\\mathrm{PDI}=\\frac{M_w}{M_n}",
+      "Dispersity"
+    ],
+    [
+      "Flory-Huggins",
+      "\\frac{\\Delta G_{mix}}{RT}=\\frac{\\phi_1}{N_1}\\ln\\phi_1+\\frac{\\phi_2}{N_2}\\ln\\phi_2+\\chi\\phi_1\\phi_2",
+      "Flory-Huggins"
+    ],
+    {
+      "section": "量子 / 固体 / 材料",
+      "sectionEn": "Quantum / Solid-State / Materials"
+    },
+    [
+      "Schrödinger",
+      "\\hat H\\psi=E\\psi",
+      "Schrodinger equation"
+    ],
+    [
+      "Hartree-Fock",
+      "\\hat F\\phi_i=\\epsilon_i\\phi_i",
+      "Hartree-Fock equation"
+    ],
+    [
+      "DFT",
+      "E[\\rho]=T_s[\\rho]+E_{xc}[\\rho]+\\int v\\rho\\,dr",
+      "Density functional theory"
+    ],
+    [
+      "HOMO-LUMO",
+      "\\Delta E=E_{LUMO}-E_{HOMO}",
+      "HOMO-LUMO gap"
+    ],
+    [
+      "Bragg 定律",
+      "n\\lambda=2d\\sin\\theta",
+      "Bragg law"
+    ],
+    [
+      "晶面间距",
+      "d_{hkl}=\\frac{a}{\\sqrt{h^2+k^2+l^2}}",
+      "Cubic lattice spacing"
+    ],
+    [
+      "缺陷浓度",
+      "n=N\\exp\\left(-\\frac{E_f}{k_BT}\\right)",
+      "Defect concentration"
+    ],
+    [
+      "能带隙",
+      "E_g=E_c-E_v",
+      "Band gap"
+    ],
+    {
+      "section": "结构 / 光谱 / 分析",
+      "sectionEn": "Structure / Spectroscopy / Analysis"
+    },
+    [
+      "电子组态",
+      "1s^2\\,2s^2\\,2p^6\\,3s^2\\,3p^6",
+      "Electron config"
+    ],
+    [
+      "Beer-Lambert",
+      "A = \\varepsilon cl",
+      "Beer-Lambert law"
+    ],
+    [
+      "校准曲线",
+      "A=kc+b",
+      "Calibration curve"
+    ],
+    [
+      "检出限",
+      "\\mathrm{LOD}=\\frac{3\\sigma}{S}",
+      "Limit of detection"
+    ],
+    [
+      "定量限",
+      "\\mathrm{LOQ}=\\frac{10\\sigma}{S}",
+      "Limit of quantification"
+    ],
+    [
+      "保留因子",
+      "k' = \\frac{t_R-t_M}{t_M}",
+      "Chromatographic capacity factor"
+    ],
+    [
+      "分离度",
+      "R_s=\\frac{2(t_{R,2}-t_{R,1})}{w_1+w_2}",
+      "Chromatographic resolution"
+    ],
+    [
+      "Rf",
+      "R_f=\\frac{d_{spot}}{d_{solvent}}",
+      "Retention factor"
+    ],
+    [
+      "量子产率",
+      "\\Phi = \\frac{k_r}{k_r + k_{nr}}",
+      "Quantum yield"
+    ],
+    [
+      "化学位移",
+      "\\delta = \\frac{\\nu - \\nu_{\\mathrm{TMS}}}{\\nu_0}",
+      "NMR chemical shift"
+    ],
+    [
+      "NMR 裂分",
+      "n\\text{ neighbors}\\implies n+1\\text{ peaks}",
+      "NMR splitting rule"
+    ],
+    [
+      "J 耦合",
+      "\\Delta\\nu=J",
+      "J coupling"
+    ],
+    [
+      "质荷比",
+      "m/z",
+      "Mass-to-charge ratio"
+    ],
+    [
+      "红外吸收",
+      "\\tilde{\\nu} = \\frac{1}{2\\pi c}\\sqrt{\\frac{k}{\\mu}}",
+      "IR absorption"
+    ],
+    [
+      "紫外跃迁",
+      "E=h\\nu=\\frac{hc}{\\lambda}",
+      "UV transition"
+    ],
+    [
+      "Lambert-Beer",
+      "T=10^{-A}",
+      "Transmittance"
+    ]
+  ]
+}

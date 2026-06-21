@@ -1,0 +1,892 @@
+{
+  "id": "numberTheory",
+  "structures": true,
+  "items": [
+    {
+      "section": "初等数论 - 概念 / 性质",
+      "sectionEn": "Elementary Number Theory - Concepts / Properties"
+    },
+    [
+      "整除",
+      "a\\mid b",
+      "Divisibility"
+    ],
+    [
+      "最大公因数",
+      "\\gcd(a,b)",
+      "Greatest common divisor"
+    ],
+    [
+      "最小公倍数",
+      "\\operatorname{lcm}(a,b)",
+      "Least common multiple"
+    ],
+    [
+      "互素",
+      "\\gcd(a,b)=1",
+      "Coprime integers"
+    ],
+    [
+      "同余",
+      "a\\equiv b\\pmod m",
+      "Congruence"
+    ],
+    [
+      "剩余类",
+      "\\mathbb Z/n\\mathbb Z",
+      "Residue class"
+    ],
+    [
+      "Euler 函数",
+      "\\varphi(n)=n\\prod_{p\\mid n}\\left(1-\\frac1p\\right)",
+      "Euler phi function"
+    ],
+    [
+      "Mobius 函数",
+      "\\mu(n)=\\begin{cases}1,&n=1\\\\(-1)^k,&n=p_1\\cdots p_k\\\\0,&p^2\\mid n\\end{cases}",
+      "Mobius function"
+    ],
+    [
+      "Legendre 符号",
+      "\\left(\\frac{a}{p}\\right)\\equiv a^{(p-1)/2}\\pmod p",
+      "Legendre symbol"
+    ],
+    [
+      "Jacobi 符号",
+      "\\left(\\frac{a}{n}\\right)=\\prod_{p_i^{\\alpha_i}\\|n}\\left(\\frac{a}{p_i}\\right)^{\\alpha_i}",
+      "Jacobi symbol"
+    ],
+    [
+      "素数",
+      "p\\in\\mathbb P",
+      "Prime number"
+    ],
+    [
+      "合数",
+      "n=ab,\\quad 1<a,b<n",
+      "Composite number"
+    ],
+    [
+      "平方因子自由",
+      "\\mu(n)^2=1",
+      "Squarefree integer"
+    ],
+    [
+      "p 进赋值",
+      "v_p(n)=\\max\\{k:p^k\\mid n\\}",
+      "p-adic valuation"
+    ],
+    [
+      "约数个数",
+      "d(n)=\\sum_{d\\mid n}1",
+      "Divisor function"
+    ],
+    [
+      "约数和",
+      "\\sigma_k(n)=\\sum_{d\\mid n}d^k",
+      "Sum of divisors"
+    ],
+    [
+      "完全数",
+      "\\sigma(n)=2n",
+      "Perfect number"
+    ],
+    [
+      "Carmichael 函数",
+      "\\lambda(n)=\\operatorname{lcm}_{p^a\\|n}\\lambda(p^a)",
+      "Carmichael function"
+    ],
+    [
+      "阶",
+      "\\operatorname{ord}_n(a)=\\min\\{k:a^k\\equiv1\\pmod n\\}",
+      "Multiplicative order"
+    ],
+    [
+      "原根",
+      "\\operatorname{ord}_p(g)=p-1",
+      "Primitive root"
+    ],
+    [
+      "二次剩余",
+      "x^2\\equiv a\\pmod p",
+      "Quadratic residue"
+    ],
+    {
+      "section": "初等数论 - 定理 / 公式",
+      "sectionEn": "Elementary Number Theory - Theorems / Formulas"
+    },
+    [
+      "Euclid 算法",
+      "\\gcd(a,b)=\\gcd(b,a\\bmod b)",
+      "Euclidean algorithm"
+    ],
+    [
+      "Bezout 等式",
+      "\\exists x,y:\\;ax+by=\\gcd(a,b)",
+      "Bezout identity"
+    ],
+    [
+      "唯一分解",
+      "n=\\prod_i p_i^{\\alpha_i}",
+      "Fundamental theorem of arithmetic"
+    ],
+    [
+      "Euler 定理",
+      "a^{\\varphi(n)}\\equiv1\\pmod n",
+      "Euler theorem"
+    ],
+    [
+      "Fermat 小定理",
+      "a^{p-1}\\equiv1\\pmod p",
+      "Fermat little theorem"
+    ],
+    [
+      "Wilson 定理",
+      "(p-1)!\\equiv-1\\pmod p",
+      "Wilson theorem"
+    ],
+    [
+      "中国剩余定理",
+      "x\\equiv a_i\\pmod{m_i}\\implies x\\pmod{\\prod_i m_i}",
+      "Chinese remainder theorem"
+    ],
+    [
+      "二次互反律",
+      "\\left(\\frac pq\\right)\\left(\\frac qp\\right)=(-1)^{\\frac{p-1}{2}\\frac{q-1}{2}}",
+      "Quadratic reciprocity"
+    ],
+    [
+      "Euler 判别准则",
+      "\\left(\\frac ap\\right)\\equiv a^{(p-1)/2}\\pmod p",
+      "Euler criterion"
+    ],
+    [
+      "Hensel 引理",
+      "f(a)\\equiv0\\pmod p,\\;f'(a)\\not\\equiv0\\pmod p\\implies\\exists \\alpha\\in\\mathbb Z_p:f(\\alpha)=0",
+      "Hensel lemma"
+    ],
+    [
+      "LTE 引理",
+      "v_p(x^n-y^n)=v_p(x-y)+v_p(n)",
+      "Lifting the exponent"
+    ],
+    [
+      "Fermat 两平方",
+      "p=x^2+y^2\\Longleftrightarrow p=2\\text{ or }p\\equiv1\\pmod4",
+      "Fermat two-square theorem"
+    ],
+    [
+      "Lagrange 四平方",
+      "n=a^2+b^2+c^2+d^2",
+      "Lagrange four-square theorem"
+    ],
+    [
+      "Pell 方程",
+      "x^2-Dy^2=1",
+      "Pell equation"
+    ],
+    [
+      "勾股三元组",
+      "a=m^2-n^2,\\;b=2mn,\\;c=m^2+n^2",
+      "Pythagorean triples"
+    ],
+    [
+      "Frobenius 数",
+      "g(a,b)=ab-a-b",
+      "Frobenius number"
+    ],
+    {
+      "section": "解析数论 - 概念 / 性质",
+      "sectionEn": "Analytic Number Theory - Concepts / Properties"
+    },
+    [
+      "素数计数函数",
+      "\\pi(x)=\\#\\{p\\le x:p\\text{ prime}\\}",
+      "Prime counting function"
+    ],
+    [
+      "Riemann zeta",
+      "\\zeta(s)=\\sum_{n=1}^{\\infty}\\frac1{n^s}",
+      "Riemann zeta function"
+    ],
+    [
+      "Dirichlet 级数",
+      "\\sum_{n=1}^{\\infty}\\frac{a_n}{n^s}",
+      "Dirichlet series"
+    ],
+    [
+      "Dirichlet 特征",
+      "\\chi:\\mathbb Z\\to\\mathbb C",
+      "Dirichlet character"
+    ],
+    [
+      "L 函数",
+      "L(s,\\chi)=\\sum_{n=1}^{\\infty}\\frac{\\chi(n)}{n^s}",
+      "Dirichlet L-function"
+    ],
+    [
+      "von Mangoldt",
+      "\\Lambda(n)=\\begin{cases}\\log p,&n=p^k\\\\0,&\\text{otherwise}\\end{cases}",
+      "von Mangoldt function"
+    ],
+    [
+      "Chebyshev 函数",
+      "\\psi(x)=\\sum_{n\\le x}\\Lambda(n)",
+      "Chebyshev psi function"
+    ],
+    [
+      "算术函数卷积",
+      "(f*g)(n)=\\sum_{d\\mid n}f(d)g(n/d)",
+      "Dirichlet convolution"
+    ],
+    [
+      "乘法函数",
+      "\\gcd(m,n)=1\\implies f(mn)=f(m)f(n)",
+      "Multiplicative function"
+    ],
+    [
+      "完全乘法函数",
+      "f(mn)=f(m)f(n)",
+      "Completely multiplicative function"
+    ],
+    [
+      "Ramanujan 和",
+      "c_q(n)=\\sum_{\\substack{1\\le a\\le q\\\\(a,q)=1}}e^{2\\pi ian/q}",
+      "Ramanujan sum"
+    ],
+    [
+      "Hardy-Littlewood 圆法",
+      "\\int_0^1 S(\\alpha)^k e(-n\\alpha)\\,d\\alpha",
+      "Circle method"
+    ],
+    [
+      "筛函数",
+      "S(z)=\\#\\{n\\le x:(n,P(z))=1\\}",
+      "Sieve function"
+    ],
+    {
+      "section": "解析数论 - 定理 / 公式",
+      "sectionEn": "Analytic Number Theory - Theorems / Formulas"
+    },
+    [
+      "素数定理",
+      "\\pi(x)\\sim\\frac{x}{\\log x}",
+      "Prime number theorem"
+    ],
+    [
+      "Hadamard 乘积",
+      "\\xi(s)=\\xi(0)\\prod_\\rho\\left(1-\\frac{s}{\\rho}\\right)",
+      "Hadamard product"
+    ],
+    [
+      "zeta 函数方程",
+      "\\zeta(s)=2^s\\pi^{s-1}\\sin\\frac{\\pi s}{2}\\Gamma(1-s)\\zeta(1-s)",
+      "Zeta functional equation"
+    ],
+    [
+      "显式公式",
+      "\\psi(x)=x-\\sum_\\rho\\frac{x^\\rho}{\\rho}+\\cdots",
+      "Explicit formula"
+    ],
+    [
+      "Dirichlet 定理",
+      "\\gcd(a,q)=1\\implies\\#\\{p\\equiv a\\pmod q\\}=\\infty",
+      "Dirichlet theorem"
+    ],
+    [
+      "Mobius 反演",
+      "g(n)=\\sum_{d\\mid n}f(d)\\implies f(n)=\\sum_{d\\mid n}\\mu(d)g(n/d)",
+      "Mobius inversion"
+    ],
+    [
+      "Euler 乘积",
+      "\\zeta(s)=\\prod_p\\left(1-p^{-s}\\right)^{-1}",
+      "Euler product"
+    ],
+    [
+      "Selberg 筛",
+      "S(z)\\le X\\prod_{p<z}\\left(1-\\frac{\\omega(p)}p\\right)",
+      "Selberg sieve"
+    ],
+    [
+      "Brun 定理",
+      "\\sum_{p,\\,p+2\\text{ prime}}\\left(\\frac1p+\\frac1{p+2}\\right)<\\infty",
+      "Brun theorem"
+    ],
+    [
+      "Waring 问题",
+      "n=x_1^k+\\cdots+x_s^k",
+      "Waring problem"
+    ],
+    [
+      "Vinogradov 三素数",
+      "N=p_1+p_2+p_3",
+      "Vinogradov theorem"
+    ],
+    [
+      "Riemann 假设",
+      "\\zeta(s)=0,\\;0<\\operatorname{Re}s<1\\implies\\operatorname{Re}s=\\frac12",
+      "Riemann hypothesis"
+    ],
+    {
+      "section": "加性 / 组合数论 - 概念 / 性质",
+      "sectionEn": "Additive / Combinatorial Number Theory - Concepts / Properties"
+    },
+    [
+      "和集",
+      "A+B=\\{a+b:a\\in A,b\\in B\\}",
+      "Sumset"
+    ],
+    [
+      "差集",
+      "A-A=\\{a-a':a,a'\\in A\\}",
+      "Difference set"
+    ],
+    [
+      "加性能量",
+      "E(A)=\\#\\{a+b=c+d:a,b,c,d\\in A\\}",
+      "Additive energy"
+    ],
+    [
+      "Freiman 同态",
+      "\\sum_{i=1}^k a_i=\\sum_{i=1}^k b_i\\implies\\sum_{i=1}^k\\phi(a_i)=\\sum_{i=1}^k\\phi(b_i)",
+      "Freiman homomorphism"
+    ],
+    [
+      "密度",
+      "\\overline d(A)=\\limsup_{N\\to\\infty}\\frac{|A\\cap[1,N]|}{N}",
+      "Upper density"
+    ],
+    [
+      "指数和",
+      "S(\\alpha)=\\sum_{n\\le N}e^{2\\pi i\\alpha n}",
+      "Exponential sum"
+    ],
+    {
+      "section": "加性 / 组合数论 - 定理 / 公式",
+      "sectionEn": "Additive / Combinatorial Number Theory - Theorems / Formulas"
+    },
+    [
+      "Cauchy-Davenport",
+      "|A+B|\\ge\\min(p,|A|+|B|-1)",
+      "Cauchy-Davenport theorem"
+    ],
+    [
+      "Plunnecke 不等式",
+      "|A+kB|\\le K^k|A|",
+      "Plunnecke inequality"
+    ],
+    [
+      "Freiman 定理",
+      "|A+A|\\le K|A|\\implies A\\subset P",
+      "Freiman theorem"
+    ],
+    [
+      "Szemeredi 定理",
+      "\\overline d(A)>0\\implies A\\text{ contains arbitrarily long APs}",
+      "Szemeredi theorem"
+    ],
+    [
+      "van der Waerden",
+      "N\\to(r,k)\\implies\\text{monochromatic }k\\text{-AP}",
+      "van der Waerden theorem"
+    ],
+    [
+      "Erdos-Ginzburg-Ziv",
+      "a_1,\\ldots,a_{2n-1}\\in\\mathbb Z/n\\mathbb Z\\implies\\exists n\\text{ terms summing }0",
+      "Erdos-Ginzburg-Ziv theorem"
+    ],
+    [
+      "Green-Tao",
+      "\\mathbb P\\text{ contains arbitrarily long APs}",
+      "Green-Tao theorem"
+    ],
+    {
+      "section": "代数数论 / 算术几何 - 概念 / 性质",
+      "sectionEn": "Algebraic Number Theory / Arithmetic Geometry - Concepts / Properties"
+    },
+    [
+      "数域",
+      "K/\\mathbb Q",
+      "Number field"
+    ],
+    [
+      "整数环",
+      "\\mathcal O_K",
+      "Ring of integers"
+    ],
+    [
+      "理想类群",
+      "\\operatorname{Cl}(K)",
+      "Ideal class group"
+    ],
+    [
+      "单位群",
+      "\\mathcal O_K^\\times",
+      "Unit group"
+    ],
+    [
+      "赋值",
+      "v_p(x)",
+      "Valuation"
+    ],
+    [
+      "局部域",
+      "K_v",
+      "Local field"
+    ],
+    [
+      "判别式",
+      "d_K=\\det\\left(\\operatorname{Tr}_{K/\\mathbb Q}(\\alpha_i\\alpha_j)\\right)",
+      "Discriminant"
+    ],
+    [
+      "范数",
+      "N_{K/\\mathbb Q}(\\alpha)=\\prod_{\\sigma:K\\hookrightarrow\\mathbb C}\\sigma(\\alpha)",
+      "Field norm"
+    ],
+    [
+      "迹",
+      "\\operatorname{Tr}_{K/\\mathbb Q}(\\alpha)=\\sum_{\\sigma:K\\hookrightarrow\\mathbb C}\\sigma(\\alpha)",
+      "Field trace"
+    ],
+    [
+      "理想范数",
+      "N\\mathfrak a=[\\mathcal O_K:\\mathfrak a]",
+      "Ideal norm"
+    ],
+    [
+      "分歧指数",
+      "e(\\mathfrak p|p)",
+      "Ramification index"
+    ],
+    [
+      "惯性次数",
+      "f(\\mathfrak p|p)=[\\mathcal O_K/\\mathfrak p:\\mathbb F_p]",
+      "Inertia degree"
+    ],
+    [
+      "不同理想",
+      "\\mathfrak D_{K/\\mathbb Q}^{-1}=\\{x:\\operatorname{Tr}(x\\mathcal O_K)\\subset\\mathbb Z\\}",
+      "Different ideal"
+    ],
+    [
+      "Artin 符号",
+      "\\left[\\frac{L/K}{\\mathfrak p}\\right]\\in\\operatorname{Gal}(L/K)",
+      "Artin symbol"
+    ],
+    [
+      "p 进绝对值",
+      "|x|_p=p^{-v_p(x)}",
+      "p-adic absolute value"
+    ],
+    [
+      "Haar 测度",
+      "\\mu(a+p^n\\mathbb Z_p)=p^{-n}",
+      "p-adic Haar measure"
+    ],
+    [
+      "椭圆曲线",
+      "E:y^2=x^3+ax+b",
+      "Elliptic curve"
+    ],
+    [
+      "椭圆判别式",
+      "\\Delta=-16(4a^3+27b^2)",
+      "Elliptic discriminant"
+    ],
+    [
+      "j 不变量",
+      "j(E)=1728\\frac{4a^3}{4a^3+27b^2}",
+      "j-invariant"
+    ],
+    [
+      "Tate 模",
+      "T_\\ell(E)=\\varprojlim_n E[\\ell^n]",
+      "Tate module"
+    ],
+    [
+      "Selmer 群",
+      "\\operatorname{Sel}^{(n)}(E/K)\\subset H^1(K,E[n])",
+      "Selmer group"
+    ],
+    [
+      "Tate-Shafarevich",
+      "\\Sha(E/K)=\\ker\\left(H^1(K,E)\\to\\prod_vH^1(K_v,E)\\right)",
+      "Tate-Shafarevich group"
+    ],
+    {
+      "section": "代数数论 / 算术几何 - 定理 / 公式",
+      "sectionEn": "Algebraic Number Theory / Arithmetic Geometry - Theorems / Formulas"
+    },
+    [
+      "Dedekind 分解",
+      "p\\mathcal O_K=\\prod_i\\mathfrak p_i^{e_i}",
+      "Prime ideal factorization"
+    ],
+    [
+      "分解恒等式",
+      "[K:\\mathbb Q]=\\sum_i e_if_i",
+      "Decomposition identity"
+    ],
+    [
+      "Minkowski 界",
+      "\\forall[\\mathfrak a]\\in\\operatorname{Cl}(K)\\;\\exists\\mathfrak b:\\;N\\mathfrak b\\le\\frac{4^{r_2}}{\\pi^{r_2}}\\frac{n!}{n^n}\\sqrt{|d_K|}",
+      "Minkowski bound"
+    ],
+    [
+      "Dirichlet 单位",
+      "\\mathcal O_K^\\times\\cong\\mu_K\\times\\mathbb Z^{r_1+r_2-1}",
+      "Dirichlet unit theorem"
+    ],
+    [
+      "类数公式",
+      "\\operatorname*{Res}_{s=1}\\zeta_K(s)=\\frac{2^{r_1}(2\\pi)^{r_2}h_KR_K}{w_K\\sqrt{|d_K|}}",
+      "Class number formula"
+    ],
+    [
+      "局部类域论",
+      "K^\\times\\xrightarrow{\\operatorname{rec}_K}G_K^{\\mathrm{ab}}",
+      "Local class field theory"
+    ],
+    [
+      "全局类域论",
+      "\\mathbb A_K^\\times/K^\\times\\xrightarrow{\\operatorname{rec}_K}G_K^{\\mathrm{ab}}",
+      "Global class field theory"
+    ],
+    [
+      "乘积公式",
+      "\\prod_v|x|_v=1",
+      "Product formula"
+    ],
+    [
+      "Riemann-Roch 曲线",
+      "\\ell(D)-\\ell(K-D)=\\deg D+1-g",
+      "Riemann-Roch for curves"
+    ],
+    [
+      "Hasse 界",
+      "|\\#E(\\mathbb F_q)-(q+1)|\\le2\\sqrt q",
+      "Hasse bound"
+    ],
+    [
+      "Weil 猜想",
+      "Z(X,t)=\\exp\\left(\\sum_{r\\ge1}\\#X(\\mathbb F_{q^r})\\frac{t^r}{r}\\right)",
+      "Weil conjectures"
+    ],
+    [
+      "Mordell-Weil",
+      "E(K)\\cong\\mathbb Z^r\\oplus E(K)_{\\mathrm{tors}}",
+      "Mordell-Weil theorem"
+    ],
+    [
+      "Nagell-Lutz",
+      "P\\in E(\\mathbb Q)_{\\mathrm{tors}}\\implies x(P),y(P)\\in\\mathbb Z,\\; y(P)^2\\mid\\Delta",
+      "Nagell-Lutz theorem"
+    ],
+    [
+      "Faltings 定理",
+      "g(C)>1\\implies |C(K)|<\\infty",
+      "Faltings theorem"
+    ],
+    [
+      "BSD 猜想",
+      "\\operatorname{ord}_{s=1}L(E,s)=\\operatorname{rank}E(\\mathbb Q)",
+      "Birch-Swinnerton-Dyer conjecture"
+    ],
+    {
+      "section": "p-adic / Iwasawa 理论 - 概念 / 性质",
+      "sectionEn": "p-adic / Iwasawa Theory - Concepts / Properties"
+    },
+    [
+      "p 进数",
+      "\\mathbb Q_p=\\operatorname{Frac}(\\mathbb Z_p)",
+      "p-adic numbers"
+    ],
+    [
+      "p 进整数",
+      "\\mathbb Z_p=\\varprojlim_n\\mathbb Z/p^n\\mathbb Z",
+      "p-adic integers"
+    ],
+    [
+      "p 进展开",
+      "x=\\sum_{n=N}^{\\infty}a_np^n",
+      "p-adic expansion"
+    ],
+    [
+      "Teichmuller 提升",
+      "\\omega(a)^{p}=\\omega(a)",
+      "Teichmuller lift"
+    ],
+    [
+      "Iwasawa 代数",
+      "\\Lambda=\\mathbb Z_p[[\\Gamma]]",
+      "Iwasawa algebra"
+    ],
+    [
+      "圆分 Zp 扩张",
+      "\\operatorname{Gal}(K_\\infty/K)\\cong\\mathbb Z_p",
+      "Cyclotomic Zp-extension"
+    ],
+    [
+      "Selmer 对偶",
+      "X(E/K_\\infty)=\\operatorname{Hom}(\\operatorname{Sel}(E/K_\\infty),\\mathbb Q_p/\\mathbb Z_p)",
+      "Dual Selmer group"
+    ],
+    [
+      "p 进 L 函数",
+      "L_p(\\chi,1-n)=\\left(1-\\chi\\omega^{-n}(p)p^{n-1}\\right)L(\\chi\\omega^{-n},1-n)",
+      "p-adic L-function"
+    ],
+    {
+      "section": "p-adic / Iwasawa 理论 - 定理 / 公式",
+      "sectionEn": "p-adic / Iwasawa Theory - Theorems / Formulas"
+    },
+    [
+      "Mahler 展开",
+      "f(x)=\\sum_{n=0}^{\\infty}a_n\\binom{x}{n}",
+      "Mahler expansion"
+    ],
+    [
+      "Iwasawa 类数",
+      "v_p(h_n)=\\lambda n+\\mu p^n+\\nu",
+      "Iwasawa class number formula"
+    ],
+    [
+      "主猜想",
+      "\\operatorname{char}_\\Lambda X=(L_p)",
+      "Iwasawa main conjecture"
+    ],
+    [
+      "Kummer 同构",
+      "K^\\times/(K^\\times)^n\\cong H^1(K,\\mu_n)",
+      "Kummer isomorphism"
+    ],
+    [
+      "Tate 对偶",
+      "H^i(K,M)\\times H^{2-i}(K,M^\\vee)\\to\\mathbb Q/\\mathbb Z",
+      "Tate duality"
+    ],
+    {
+      "section": "模形式 / 表示 - 概念 / 性质",
+      "sectionEn": "Modular Forms / Representations - Concepts / Properties"
+    },
+    [
+      "模形式",
+      "f\\left(\\frac{az+b}{cz+d}\\right)=(cz+d)^k f(z)",
+      "Modular form"
+    ],
+    [
+      "尖点形式",
+      "f\\in S_k(\\Gamma)",
+      "Cusp form"
+    ],
+    [
+      "Eisenstein 级数",
+      "E_k(z)=\\frac12\\sum_{(c,d)=1}(cz+d)^{-k}",
+      "Eisenstein series"
+    ],
+    [
+      "Dedekind eta",
+      "\\eta(z)=q^{1/24}\\prod_{n=1}^\\infty(1-q^n)",
+      "Dedekind eta function"
+    ],
+    [
+      "判别式模形式",
+      "\\Delta(z)=q\\prod_{n=1}^\\infty(1-q^n)^{24}",
+      "Modular discriminant"
+    ],
+    [
+      "Hecke 算子",
+      "(T_nf)(z)=n^{k-1}\\sum_{ad=n}d^{-k}\\sum_{b\\bmod d}f\\left(\\frac{az+b}{d}\\right)",
+      "Hecke operator"
+    ],
+    [
+      "q 展开",
+      "f(q)=\\sum_{n=0}^{\\infty}a_nq^n",
+      "q-expansion"
+    ],
+    [
+      "Petersson 内积",
+      "\\langle f,g\\rangle=\\int_{\\Gamma\\backslash\\mathbb H}f(z)\\overline{g(z)}y^k\\frac{dx\\,dy}{y^2}",
+      "Petersson inner product"
+    ],
+    [
+      "Mellin 变换",
+      "L(f,s)=\\sum_{n\\ge1}\\frac{a_n}{n^s}",
+      "Modular L-function"
+    ],
+    [
+      "Hecke 递推",
+      "a_{mn}=a_ma_n\\;(m,n)=1,\\quad a_{p^{r+1}}=a_pa_{p^r}-p^{k-1}a_{p^{r-1}}",
+      "Hecke recurrence"
+    ],
+    [
+      "Galois 表示",
+      "\\rho:G_K\\to GL_n(E)",
+      "Galois representation"
+    ],
+    [
+      "Frobenius 迹",
+      "a_p=p+1-\\#E(\\mathbb F_p)",
+      "Frobenius trace"
+    ],
+    [
+      "Artin L 函数",
+      "L(s,\\rho)=\\prod_p\\det\\left(1-\\rho(\\operatorname{Frob}_p)p^{-s}\\right)^{-1}",
+      "Artin L-function"
+    ],
+    {
+      "section": "模形式 / 表示 - 定理 / 公式",
+      "sectionEn": "Modular Forms / Representations - Theorems / Formulas"
+    },
+    [
+      "模性定理",
+      "E/\\mathbb Q\\implies L(E,s)=L(f,s)",
+      "Modularity theorem"
+    ],
+    [
+      "Valence 公式",
+      "\\sum_{p\\in\\Gamma\\backslash\\mathbb H}\\frac{v_p(f)}{e_p}+\\sum_{c}v_c(f)=\\frac{k}{12}[SL_2(\\mathbb Z):\\Gamma]",
+      "Valence formula"
+    ],
+    [
+      "Sturm 界",
+      "a_n(f)=a_n(g)\\;(n\\le B)\\implies f=g",
+      "Sturm bound"
+    ],
+    [
+      "Eichler-Shimura",
+      "T_p=p+1-\\operatorname{Frob}_p-\\operatorname{Ver}_p",
+      "Eichler-Shimura relation"
+    ],
+    [
+      "Sato-Tate",
+      "\\frac{a_p}{2\\sqrt p}\\text{ equidistributes by }\\frac2\\pi\\sqrt{1-t^2}dt",
+      "Sato-Tate theorem"
+    ],
+    [
+      "Langlands 对应",
+      "\\text{automorphic representations}\\leftrightarrow\\text{Galois representations}",
+      "Langlands correspondence"
+    ],
+    {
+      "section": "计算数论 / 密码学 - 概念 / 性质",
+      "sectionEn": "Computational Number Theory / Cryptography - Concepts / Properties"
+    },
+    [
+      "模逆元",
+      "a^{-1}\\pmod n",
+      "Modular inverse"
+    ],
+    [
+      "离散对数",
+      "g^x\\equiv h\\pmod p",
+      "Discrete logarithm"
+    ],
+    [
+      "原根群",
+      "(\\mathbb Z/p\\mathbb Z)^\\times=\\langle g\\rangle",
+      "Cyclic unit group"
+    ],
+    [
+      "有限域",
+      "\\mathbb F_q",
+      "Finite field"
+    ],
+    [
+      "有限域乘法群",
+      "\\mathbb F_q^\\times\\cong C_{q-1}",
+      "Finite field unit group"
+    ],
+    [
+      "椭圆曲线群律",
+      "P+Q=R",
+      "Elliptic curve group law"
+    ],
+    [
+      "ECDLP",
+      "Q=kP",
+      "Elliptic curve discrete log"
+    ],
+    [
+      "RSA 模数",
+      "N=pq",
+      "RSA modulus"
+    ],
+    [
+      "公私钥关系",
+      "ed\\equiv1\\pmod{\\varphi(N)}",
+      "RSA key relation"
+    ],
+    [
+      "Diffie-Hellman",
+      "K=g^{ab}\\pmod p",
+      "Diffie-Hellman key"
+    ],
+    {
+      "section": "计算数论 / 密码学 - 算法 / 公式",
+      "sectionEn": "Computational Number Theory / Cryptography - Algorithms / Formulas"
+    },
+    [
+      "扩展 Euclid",
+      "ax+by=\\gcd(a,b)",
+      "Extended Euclidean algorithm"
+    ],
+    [
+      "快速幂",
+      "a^n\\bmod m",
+      "Fast modular exponentiation"
+    ],
+    [
+      "Miller-Rabin",
+      "a^d\\equiv1\\pmod n\\;\\text{or}\\;a^{2^rd}\\equiv-1\\pmod n",
+      "Miller-Rabin test"
+    ],
+    [
+      "AKS 判定",
+      "(x+a)^n\\equiv x^n+a\\pmod{(n,x^r-1)}",
+      "AKS primality test"
+    ],
+    [
+      "Pollard rho",
+      "x_{i+1}=f(x_i)\\pmod n",
+      "Pollard rho"
+    ],
+    [
+      "二次筛",
+      "x^2\\equiv y^2\\pmod N",
+      "Quadratic sieve"
+    ],
+    [
+      "数域筛",
+      "\\prod_i(a_i-b_i\\alpha)\\text{ smooth}",
+      "Number field sieve"
+    ],
+    [
+      "RSA 加密",
+      "c\\equiv m^e\\pmod N",
+      "RSA encryption"
+    ],
+    [
+      "RSA 解密",
+      "m\\equiv c^d\\pmod N",
+      "RSA decryption"
+    ],
+    [
+      "ElGamal",
+      "c_1=g^k,\\quad c_2=mh^k",
+      "ElGamal encryption"
+    ],
+    [
+      "ECDSA 签名",
+      "s\\equiv k^{-1}(H(m)+rd)\\pmod n",
+      "ECDSA signature"
+    ],
+    [
+      "Shor 阶查找",
+      "a^r\\equiv1\\pmod N",
+      "Shor order finding"
+    ]
+  ]
+}
