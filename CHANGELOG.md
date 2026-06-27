@@ -2,6 +2,27 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.2.5] - 2026-06-27
+
+### Added
+- **Usage Frequency Tracking**: Every formula insertion is automatically recorded. Search results and category lists are sorted by usage count (most-used first).
+- **Favorites System**: Star/unstar any formula with ☆/★. Favorites filter button in both sidebar and editor modal. Favorites persist across sessions.
+- **Favorites-First Sorting**: Favorited formulas always appear at the top of lists and search results, ahead of usage-sorted items.
+- **Enhanced English Search**: Word-based matching (e.g., "less equal" matches "less than or equal"), abbreviation matching (e.g., "lt" matches "less than"), and subsequence matching on English labels.
+- **Expanded SEARCH_ALIASES**: 200+ new English aliases covering LaTeX commands (relations, operators, arrows, accents, delimiters, set theory, etc.).
+- **Usage Badge**: Small badge showing insertion count on each formula item.
+- **Favorite Star Button**: Inline ☆/★ toggle on every formula item in sidebar list and editor grid.
+
+### Changed
+- **Group Selector → Dropdown**: Category tabs replaced with `<select>` dropdown in both sidebar and editor modal for better space efficiency.
+- **Sidebar List Layout**: Two-line layout (symbol + LaTeX command) with improved padding and spacing.
+- **Smart Search Enhanced**: `smartMatch` now supports word-based English matching, cross-word alias matching, abbreviation matching, and English subsequence matching.
+
+### Fixed
+- English users unable to search by description (e.g., "less than or equal" for `\leq`)
+- Simple items without English labels (e.g., `\cap`, `\in`) unsearchable by English terms
+- Search aliases missing English descriptions for many LaTeX commands
+
 ## [1.2.3] - 2026-06-21
 
 ### Removed

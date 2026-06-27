@@ -26,11 +26,14 @@ const DEFAULT_SETTINGS = {
     subscript: "",
     subSuper: "",
   },
+  usageCounts: {},
+  favorites: [],
 };
 const LOG_PREFIX = "[FormulaLib]";
 const UI_STRINGS = {
   en: {
     title: "Formula Editor", visual: "Visual", source: "Source", search: "Search all formulas ...", preview: "Type LaTeX below", noEditor: "No active editor", openEditor: "Open Editor", editMode: "Edit mode", cancel: "Cancel", acceptInsert: "Insert", acceptUpdate: "Update", ready: "Ready",
+    favorites: "Favorites", allFormulas: "All", favHint: "Click \u2605 to favorite", favOnly: "Show favorites only", clearFavs: "Clear all favorites",
     settingsTitle: "Formula Library Settings",
     language: "Language", languageDesc: "UI language. 'auto' follows Obsidian setting.",
     insertFormat: "Insert format", insertFormatDesc: "How formulas are wrapped when inserted.",
@@ -48,6 +51,7 @@ const UI_STRINGS = {
   },
   zh: {
     title: "公式编辑器", visual: "可视化", source: "源码", search: "搜索所有公式 ...", preview: "在下方输入 LaTeX", noEditor: "没有活动的编辑器", openEditor: "打开编辑器", editMode: "编辑模式", cancel: "取消", acceptInsert: "插入", acceptUpdate: "更新", ready: "就绪",
+    favorites: "收藏", allFormulas: "全部", favHint: "点击 \u2605 收藏公式", favOnly: "仅显示收藏", clearFavs: "清除所有收藏",
     settingsTitle: "Formula Library 设置",
     language: "语言", languageDesc: "界面语言，auto 跟随 Obsidian 设置。",
     insertFormat: "插入格式", insertFormatDesc: "公式插入时的包裹方式。",
@@ -169,19 +173,67 @@ function itemLabel(plugin, i) {
   return loc(plugin) === "zh" ? i[0] : (i[2] || i[0]);
 }
 
+function trackUsage(plugin, latex) {
+  if (!latex) return;
+  const counts = plugin.settings.usageCounts || {};
+  counts[latex] = (counts[latex] || 0) + 1;
+  plugin.settings.usageCounts = counts;
+  plugin.saveSettings();
+}
+
+function getUsageCount(plugin, latex) {
+  return (plugin.settings.usageCounts || {})[latex] || 0;
+}
+
+function isFavorite(plugin, latex) {
+  return (plugin.settings.favorites || []).indexOf(latex) >= 0;
+}
+
+function toggleFavorite(plugin, latex) {
+  const favs = plugin.settings.favorites || [];
+  const idx = favs.indexOf(latex);
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+  } else {
+    favs.push(latex);
+  }
+  plugin.settings.favorites = favs;
+  plugin.saveSettings();
+}
+
+function sortByUsage(plugin, items) {
+  const counts = plugin.settings.usageCounts || {};
+  const favs = plugin.settings.favorites || [];
+  return items.slice().sort(function(a, b) {
+    const fa = favs.indexOf(a[1]) >= 0 ? 1 : 0;
+    const fb = favs.indexOf(b[1]) >= 0 ? 1 : 0;
+    if (fa !== fb) return fb - fa;
+    const ca = counts[b[1]] || 0;
+    const cb = counts[a[1]] || 0;
+    return ca - cb;
+  });
+}
+
+function filterByFavorites(plugin, items) {
+  const favs = plugin.settings.favorites || [];
+  return items.filter(function(i) { return favs.indexOf(i[1]) >= 0; });
+}
+
 const SEARCH_ALIASES = {
   frac: ["分数", "fraction"], sqrt: ["根号", "平方根", "square root"],
   lim: ["极限", "limit"], int: ["积分", "integral"], sum: ["求和", "summation"],
   prod: ["求积", "product"], vec: ["向量", "vector"], dot: ["点乘", "dot"],
   cross: ["叉乘", "cross"], hat: ["帽", "hat"], bar: ["划线", "bar"],
-  overline: ["上划线"], underline: ["下划线"], tilde: ["波浪", "tilde"],
+  overline: ["上划线", "overline"], underline: ["下划线", "underline"], tilde: ["波浪", "tilde"],
   sin: ["正弦", "sine"], cos: ["余弦", "cosine"], tan: ["正切", "tangent"],
   cot: ["余切", "cotangent"], sec: ["正割", "secant"], csc: ["余割", "cosecant"],
-  arcsin: ["反正弦"], arccos: ["反余弦"], arctan: ["反正切"],
-  sinh: ["双曲正弦"], cosh: ["双曲余弦"], tanh: ["双曲正切"],
-  log: ["对数", "logarithm"], ln: ["自然对数"], exp: ["指数", "exponential"],
+  arcsin: ["反正弦", "arcsine"], arccos: ["反余弦", "arccosine"], arctan: ["反正切", "arctangent"],
+  sinh: ["双曲正弦", "hyperbolic sine"], cosh: ["双曲余弦", "hyperbolic cosine"],
+  tanh: ["双曲正切", "hyperbolic tangent"],
+  log: ["对数", "logarithm"], ln: ["自然对数", "natural log", "natural logarithm"],
+  exp: ["指数", "exponential"],
   max: ["最大值", "maximum"], min: ["最小值", "minimum"],
-  sup: ["上确界"], inf: ["下确界"],
+  sup: ["上确界", "supremum"], inf: ["下确界", "infimum"],
   alpha: ["阿尔法"], beta: ["贝塔"], gamma: ["伽马"], delta: ["德尔塔"],
   epsilon: ["艾普西隆"], theta: ["西塔"], lambda: ["拉姆达"],
   mu: ["缪"], pi: ["派"], sigma: ["西格玛"], phi: ["斐"],
@@ -190,32 +242,375 @@ const SEARCH_ALIASES = {
   Gamma: ["大伽马"], Delta: ["大德尔塔"], Theta: ["大西塔"],
   Lambda: ["大拉姆达"], Pi: ["大派"], Sigma: ["大西格玛"],
   Phi: ["大斐"], Psi: ["大普西"], Omega: ["大欧米伽"],
-  matrix: ["矩阵", "matrix"], bmatrix: ["方括号矩阵"],
-  pmatrix: ["圆括号矩阵"], cases: ["分段", "cases"],
+  matrix: ["矩阵", "matrix"], bmatrix: ["方括号矩阵", "bracket matrix"],
+  pmatrix: ["圆括号矩阵", "parenthesis matrix"], cases: ["分段", "cases", "piecewise"],
   det: ["行列式", "determinant"], trace: ["迹", "trace"],
   rank: ["秩", "rank"], inverse: ["逆", "inverse"],
   eigen: ["特征", "eigen"], diagonal: ["对角", "diagonal"],
   transpose: ["转置", "transpose"], conjugate: ["共轭", "conjugate"],
   gradient: ["梯度", "gradient"], divergence: ["散度", "divergence"],
   curl: ["旋度", "curl"], laplacian: ["拉普拉斯", "laplacian"],
-  nabla: ["纳布拉", "nabla"], partial: ["偏导", "partial"],
-  infty: ["无穷", "infinity"], emptyset: ["空集", "empty set"],
-  forall: ["任意", "for all"], exists: ["存在", "exists"],
-  land: ["逻辑与", "and"], lor: ["逻辑或", "or"], neg: ["非", "not"],
-  leq: ["小于等于"], geq: ["大于等于"], neq: ["不等于"],
-  approx: ["约等于", "approximately"], equiv: ["恒等于"],
+  nabla: ["纳布拉", "nabla", "del"], partial: ["偏导", "partial", "partial derivative"],
+  infty: ["无穷", "infinity"], emptyset: ["空集", "empty set", "empty"],
+  forall: ["任意", "for all", "universal"], exists: ["存在", "exists", "existential"],
+  land: ["逻辑与", "and", "logical and"], lor: ["逻辑或", "or", "logical or"],
+  neg: ["非", "not", "negation"],
+  leq: ["小于等于", "less than or equal", "leq", "leqslant"],
+  geq: ["大于等于", "greater than or equal", "geq", "geqslant"],
+  neq: ["不等于", "not equal", "neq"],
+  approx: ["约等于", "approximately", "approximate"],
+  equiv: ["恒等于", "equivalent", "congruent"],
+  sim: ["相似", "similar", "tilde"],
+  simeq: ["相似于", "approximately equal"],
+  cong: ["全等", "congruent"],
   subset: ["子集", "subset"], supset: ["超集", "superset"],
   cup: ["并集", "union"], cap: ["交集", "intersection"],
-  in: ["属于", "element of"], ni: ["包含"],
-  leftarrow: ["左箭头"], rightarrow: ["右箭头"],
- Rightarrow: ["推出", "implies"], Leftrightarrow: ["等价", "iff"],
-  pm: ["正负", "plus minus"], mp: ["负正"],
-  cdot: ["点乘"], times: ["叉乘", "times"], div: ["除", "divide"],
-  binom: ["组合数", "binomial"], choose: ["组合"],
-  text: ["文本", "text"], mathbf: ["粗体", "bold"],
-  mathbb: ["黑板粗体", "blackboard"], mathcal: ["书法体", "caligraphic"],
-  mathfrak: ["哥特体", "fraktur"], mathit: ["斜体", "italic"],
-  operatorname: ["运算符名"],
+  in: ["属于", "element of", "belongs to", "membership"],
+  ni: ["包含", "contains"],
+  notin: ["不属于", "not element of"],
+  leftarrow: ["左箭头", "left arrow", "left"],
+  rightarrow: ["右箭头", "right arrow", "right", "maps to"],
+  Rightarrow: ["推出", "implies", "implies", "double right arrow"],
+  Leftarrow: ["逆推", "implied by", "double left arrow"],
+  Leftrightarrow: ["等价", "iff", "if and only if", "equivalent", "double arrow"],
+  leftrightarrow: ["等价箭头", "bidirectional", "left right arrow"],
+  pm: ["正负", "plus minus", "plus-minus"],
+  mp: ["负正", "minus plus"],
+  cdot: ["点乘", "centered dot", "dot product"],
+  times: ["叉乘", "times", "cross product"],
+  div: ["除", "divide", "division", "obelus"],
+  binom: ["组合数", "binomial", "binomial coefficient"],
+  choose: ["组合", "choose"],
+  text: ["文本", "text"],
+  mathbf: ["粗体", "bold", "boldface"],
+  mathbb: ["黑板粗体", "blackboard", "blackboard bold", "double struck"],
+  mathcal: ["书法体", "caligraphic", "script"],
+  mathfrak: ["哥特体", "fraktur", "gothic"],
+  mathit: ["斜体", "italic"],
+  operatorname: ["运算符名", "operator name"],
+  frac: ["分数", "fraction"],
+  sqrt: ["根号", "平方根", "square root", "radical"],
+  sum: ["求和", "summation", "sigma notation"],
+  prod: ["求积", "product", "pi notation"],
+  coprod: ["余积", "coproduct"],
+  int: ["积分", "integral"],
+  iint: ["二重积分", "double integral"],
+  iiint: ["三重积分", "triple integral"],
+  oint: ["环路积分", "contour integral", "closed integral"],
+  d: ["微分", "differential", "d operator"],
+  partial: ["偏导", "partial", "partial derivative"],
+  nabla: ["梯度算子", "nabla", "del operator"],
+  vec: ["向量", "vector", "vector arrow"],
+  hat: ["帽", "hat", "circumflex"],
+  bar: ["划线", "bar", "overbar"],
+  dot: ["点", "dot", "time derivative"],
+  ddot: ["双点", "double dot", "second derivative"],
+  tilde: ["波浪", "tilde", "tilde accent"],
+  prime: ["导数", "prime", "derivative"],
+  ast: ["星号", "asterisk", "star"],
+  star: ["星号", "star"],
+  circ: ["圆", "circle", "composition"],
+  bullet: ["圆点", "bullet"],
+ Diamond: ["菱形", "diamond"],
+  club: ["梅花", "club suit"],
+  diamond: ["方块", "diamond suit"],
+  heart: ["红桃", "heart suit"],
+  spade: ["黑桃", "spade suit"],
+  flat: ["降号", "flat"],
+  natural: ["还原号", "natural"],
+  sharp: ["升号", "sharp"],
+  top: ["顶", "top", "top element"],
+  bot: ["底", "bottom", "bottom element"],
+  perp: ["垂直", "perpendicular"],
+  parallel: ["平行", "parallel"],
+  mid: ["整除", "divides", "mid"],
+  nmid: ["不整除", "does not divide"],
+ VDash: ["双垂直", "double vertical bar"],
+  vdash: ["推导", "derives", "proves"],
+  Vvdash: ["三重垂直", "triple vertical bar"],
+  vDash: ["双线推导", "double turnstile"],
+  models: ["满足", "models", "satisfies"],
+  colon: ["冒号", "colon"],
+  therefore: ["所以", "therefore"],
+  because: ["因为", "because"],
+  cdots: ["居中省略号", "centered dots"],
+  vdots: ["竖省略号", "vertical dots"],
+  ddots: ["对角省略号", "diagonal dots"],
+  ldots: ["省略号", "lower dots", "horizontal dots"],
+  qed: ["证毕", "QED", "halmos", "tombstone"],
+  angle: ["角", "angle"],
+  measuredangle: ["量角", "measured angle"],
+  triangle: ["三角形", "triangle"],
+  square: ["正方形", "square"],
+  lozenge: ["菱形", "lozenge"],
+  bigcirc: ["大圆", "big circle"],
+  large: ["大", "large"],
+  Large: ["特大", "Large"],
+  LARGE: ["超大", "LARGE"],
+  huge: ["巨大", "huge"],
+  Huge: ["超巨大", "Huge"],
+  displaystyle: ["显示模式", "display style"],
+  textstyle: ["文本模式", "text style"],
+  scriptstyle: ["脚本模式", "script style"],
+  scriptscriptstyle: ["脚本脚本模式", "scriptscript style"],
+  overset: ["上标注", "overset"],
+  underset: ["下标注", "underset"],
+  stackrel: ["堆叠", "stackrel"],
+  color: ["颜色", "color"],
+  bgcolor: ["背景色", "background color"],
+  boxed: ["框", "boxed"],
+  phantom: ["占位", "phantom"],
+  hug: ["紧凑", "hug"],
+  mathop: ["数学运算", "math operator"],
+  mathrel: ["数学关系", "math relation"],
+  mathbin: ["数学二元", "math binary"],
+  mathord: ["数学普通", "math ordinary"],
+  mathopen: ["数学开", "math open"],
+  mathclose: ["数学闭", "math close"],
+  mathpunct: ["数学标点", "math punctuation"],
+  stackbin: ["堆叠二元", "stack binary"],
+  stackrel: ["堆叠关系", "stack relation"],
+  xrightarrow: ["右长箭头", "extensible right arrow"],
+  xleftarrow: ["左长箭头", "extensible left arrow"],
+  xRightarrow: ["右双长箭头", "extensible right double arrow"],
+  xLeftarrow: ["左双长箭头", "extensible left double arrow"],
+  xLeftrightarrow: ["双向长箭头", "extensible double arrow"],
+  longmapsto: ["长映射", "long maps to"],
+  hookrightarrow: ["钩右箭头", "hook right arrow"],
+  hookleftarrow: ["钩左箭头", "hook left arrow"],
+  twoheadrightarrow: ["双头右箭头", "two headed right arrow"],
+  twoheadleftarrow: ["双头左箭头", "two headed left arrow"],
+  nearrow: ["右上箭头", "near row arrow"],
+  searrow: ["右下箭头", "searrow"],
+  swarrow: ["左下箭头", "swarrow"],
+  nwarrow: ["左上箭头", "nwarrow"],
+  mapsto: ["映射", "maps to"],
+  longmapsto: ["长映射", "long maps to"],
+  leftrightharpoon: ["双向鱼叉", "left right harpoon"],
+  rightleftharpoons: ["右左鱼叉", "right left harpoons"],
+  leftrightharpoons: ["左右鱼叉", "left right harpoons"],
+  upharpoon: ["上鱼叉", "up harpoon"],
+  downharpoon: ["下鱼叉", "down harpoon"],
+  lrceil: ["右上角", "right ceiling"],
+  lceil: ["左上角", "left ceiling"],
+  rceil: ["右上角", "right ceiling"],
+  lfloor: ["左下角", "left floor"],
+  rfloor: ["右下角", "right floor"],
+  llcorner: ["左下角", "lower left corner"],
+  lrcorner: ["右下角", "lower right corner"],
+  ulcorner: ["左上角", "upper left corner"],
+  urcorner: ["右上角", "upper right corner"],
+ Vert: ["双竖线", "double vertical bar"],
+  lvert: ["左竖线", "left vertical bar"],
+  rvert: ["右竖线", "right vertical bar"],
+  lVert: ["左双竖线", "left double vertical bar"],
+  rVert: ["右双竖线", "right double vertical bar"],
+  lmoustache: ["左大括号", "left moustache"],
+  rmoustache: ["右大括号", "right moustache"],
+  lgroup: ["左分组", "left group"],
+  rgroup: ["右分组", "right group"],
+  bracevert: ["大括号竖线", "brace vertical"],
+  uplus: ["不相交并", "multiset union"],
+  sqcap: ["方交", "square cap"],
+  sqcup: ["方并", "square cup"],
+  vee: ["逻辑或", "logical or", "vee"],
+  wedge: ["逻辑与", "logical and", "wedge"],
+  dagger: ["匕首", "dagger"],
+  ddagger: ["双匕首", "double dagger"],
+  maltese: ["马耳他十字", "maltese cross"],
+  clubuit: ["梅花", "club suit"],
+  diamonduit: ["方块", "diamond suit"],
+  heartuit: ["红桃", "heart suit"],
+  spadeuit: ["黑桃", "spade suit"],
+  rightthreetimes: ["右三乘", "right three times"],
+  leftthreetimes: ["左三乘", "left three times"],
+  ltimes: ["左乘", "left times"],
+  rtimes: ["右乘", "right times"],
+  bowl: ["碗", "bow"],
+  merge: ["合并", "merge"],
+  plusdot: ["加点", "plus dot"],
+  minusdot: ["减点", "minus dot"],
+  ast: ["星号", "asterisk"],
+  vert: ["竖线", "vertical bar"],
+ Vert: ["双竖线", "double vertical bar"],
+  bigcirc: ["大圆", "big circle"],
+  bigtriangleup: ["大上三角", "big triangle up"],
+  bigtriangledown: ["大下三角", "big triangle down"],
+  bigsqcap: ["大方交", "big square cap"],
+  lozenge: ["菱形", "lozenge"],
+  blacktriangle: ["实心上三角", "black triangle up"],
+  blacktriangledown: ["实心下三角", "black triangle down"],
+  blacktriangleleft: ["实心左三角", "black triangle left"],
+  blacktriangleright: ["实心右三角", "black triangle right"],
+  vartriangleright: ["变体右三角", "variant triangle right"],
+  vartriangleleft: ["变体左三角", "variant triangle left"],
+  triangleright: ["右三角", "triangle right"],
+  triangleleft: ["左三角", "triangle left"],
+  trianglerighteq: ["右三角等于", "triangle right eq"],
+  trianglelefteq: ["左三角等于", "triangle left eq"],
+  vartrianglelefteq: ["变体左三角等于", "variant triangle left eq"],
+  vartrianglerighteq: ["变体右三角等于", "variant triangle right eq"],
+  triangleq: ["三角等于", "triangle eq"],
+  eqcirc: ["等于圆", "equal circle"],
+  eqsim: ["等于相似", "equal similar"],
+  eqslantless: ["等于斜小于", "equal slant less"],
+  eqslantgtr: ["等于斜大于", "equal slant greater"],
+  leqq: ["小于等于等于", "less than or equal equal"],
+  geqq: ["大于等于等于", "greater than or equal equal"],
+  leqslant: ["小于等于", "less than or equal slant"],
+  geqslant: ["大于等于", "greater than or equal slant"],
+  lessgtr: ["小于或大于", "less or greater"],
+  gtrless: ["大于或小于", "greater or less"],
+  lesssim: ["小于约", "less similar"],
+  gtrsim: ["大于约", "greater similar"],
+  lessapprox: ["小于约等于", "less approximate"],
+  gtrapprox: ["大于约等于", "greater approximate"],
+  prec: ["前于", "precedes"],
+  succ: ["后于", "succeeds"],
+  preceq: ["前于等于", "precedes or equal"],
+  succeq: ["后于等于", "succeeds or equal"],
+  precsim: ["前于约", "precedes similar"],
+  succsim: ["后于约", "succeeds similar"],
+  precapprox: ["前于约等于", "precedes approximate"],
+  succapprox: ["后于约等于", "succeeds approximate"],
+  preccurlyeq: ["前于卷曲等于", "precedes curly equal"],
+  succcurlyeq: ["后于卷曲等于", "succeeds curly equal"],
+  curlypreceq: ["卷曲前于等于", "curly precedes equal"],
+  curlysucceq: ["卷曲后于等于", "curly succeeds equal"],
+  triangularneq: ["三角不等于", "triangular not equal"],
+  triangularmeq: ["三角约等于", "triangular approximate"],
+  backsim: ["反约", "back similar"],
+  backsimeq: ["反约等于", "back similar equal"],
+  between: ["介于", "between"],
+  nless: ["不小于", "not less"],
+  ngtr: ["不大于", "not greater"],
+  nleq: ["不小于等于", "not less or equal"],
+  ngeq: ["不大于等于", "not greater or equal"],
+  nprec: ["不前于", "not precedes"],
+  nsucc: ["不后于", "not succeeds"],
+  npreceq: ["不前于等于", "not precedes or equal"],
+  nsucceq: ["不后于等于", "not succeeds or equal"],
+  precnapprox: ["不前于约等于", "not precedes approximate"],
+  succnapprox: ["不后于约等于", "not succeeds approximate"],
+  varsubsetneqq: ["变体真子集", "variant proper subset"],
+  varsupsetneqq: ["变体真超集", "variant proper superset"],
+  nsubseteq: ["不子集等于", "not subset or equal"],
+  nsupseteq: ["不超集等于", "not superset or equal"],
+  nmid: ["不整除", "does not divide"],
+  nparallel: ["不平行", "not parallel"],
+  ntriangleleft: ["不左三角", "not triangle left"],
+  ntriangleright: ["不右三角", "not triangle right"],
+  ntrianglelefteq: ["不左三角等于", "not triangle left eq"],
+  ntrianglerighteq: ["不右三角等于", "not triangle right eq"],
+  nvdash: ["不推导", "not derives"],
+  nvDash: ["不双线推导", "not double turnstile"],
+  nVDash: ["不三重垂直", "not triple vertical"],
+  nVdash: ["不推导三重", "not derives triple"],
+  varsubsetneq: ["变体子集不等于", "variant subset not equal"],
+  varsupsetneq: ["变体超集不等于", "variant superset not equal"],
+  mid: ["整除", "divides", "mid"],
+  nmid: ["不整除", "does not divide"],
+  parallel: ["平行", "parallel"],
+  nparallel: ["不平行", "not parallel"],
+  shortmid: ["短整除", "short mid"],
+  shortparallel: ["短平行", "short parallel"],
+  smid: ["小整除", "small mid"],
+  sparrow: ["小平行", "small parallel"],
+  bowtie: ["蝴蝶结", "bowtie"],
+ Join: ["连接", "join"],
+  semidirect: ["半直积", "semi direct"],
+  circleast: ["圆星", "circle asterisk"],
+  circledast: ["圆星", "circled asterisk"],
+  circledcirc: ["圆圆", "circled circle"],
+  circleddash: ["圆破折号", "circled dash"],
+  odot: ["点圆", "dot circle"],
+  ominus: ["减圆", "minus circle"],
+  oplus: ["加圆", "plus circle"],
+  otimes: ["乘圆", "times circle"],
+  oslash: ["斜圆", "slash circle"],
+  osmall: ["小圆", "small circle"],
+  bigodot: ["大点圆", "big dot circle"],
+  bigoplus: ["大加圆", "big plus circle"],
+  bigotimes: ["大乘圆", "big times circle"],
+  Coprod: ["余积", "coproduct"],
+  int: ["积分", "integral"],
+  iint: ["二重积分", "double integral"],
+  iiint: ["三重积分", "triple integral"],
+  idotsint: ["省略积分", "dots integral"],
+  oiint: ["环路二重积分", "contour double integral"],
+  oiiint: ["环路三重积分", "contour triple integral"],
+  join: ["连接", "join"],
+  colesssim: ["余小于约", "coless similar"],
+  cvv: ["叉乘", "cross product", "cvv"],
+  xmark: ["叉号", "cross mark"],
+  checkmark: ["对号", "checkmark"],
+  ball: ["球", "ball"],
+  dagger: ["匕首", "dagger"],
+  ddagger: ["双匕首", "double dagger"],
+  maltese: ["马耳他十字", "maltese cross"],
+  Club: ["梅花", "club suit"],
+  Diamond: ["方块", "diamond suit"],
+  Heart: ["红桃", "heart suit"],
+  Spade: ["黑桃", "spade suit"],
+  clubsuit: ["梅花", "club suit"],
+  diamondsuit: ["方块", "diamond suit"],
+  heartsuit: ["红桃", "heart suit"],
+  spadesuit: ["黑桃", "spade suit"],
+  ltimes: ["左乘", "left times product"],
+  rtimes: ["右乘", "right times product"],
+  rightthreetimes: ["右三乘", "right three times product"],
+  leftthreetimes: ["左三乘", "left three times product"],
+  varpropto: ["变体正比", "variant proportional"],
+  propto: ["正比", "proportional"],
+  sqsubset: ["方子集", "square subset"],
+  sqsupset: ["方超集", "square superset"],
+  sqsubseteq: ["方子集等于", "square subset or equal"],
+  sqsupseteq: ["方超集等于", "square superset or equal"],
+  sqsubsetneq: ["方子集不等于", "square subset not equal"],
+  sqsupsetneq: ["方超集不等于", "square superset not equal"],
+  sqcap: ["方交", "square cap"],
+  sqcup: ["方并", "square cup"],
+  bbsqcap: ["大方交", "big square cap"],
+  bbsqcup: ["大方并", "big square cup"],
+  join: ["连接", "join"],
+  lhd: ["左半三角", "left half triangle"],
+  rhd: ["右半三角", "right half triangle"],
+  unhd: ["无半三角", "unhalf triangle"],
+  varlhd: ["变体左半三角", "variant left half triangle"],
+  varrhd: ["变体右半三角", "variant right half triangle"],
+  unrhd: ["变体无半三角", "variant unhalf triangle"],
+  trianglelefteq: ["左三角等于", "triangle left equal"],
+  trianglerighteq: ["右三角等于", "triangle right equal"],
+  vartrianglelefteq: ["变体左三角等于", "variant triangle left equal"],
+  vartrianglerighteq: ["变体右三角等于", "variant triangle right equal"],
+  ntrianglelefteq: ["不左三角等于", "not triangle left equal"],
+  ntrianglerighteq: ["不右三角等于", "not triangle right equal"],
+  lhd: ["左半三角", "left half triangle"],
+  rhd: ["右半三角", "right half triangle"],
+  unhd: ["无半三角", "unhalf triangle"],
+  vartriangleleft: ["变体左三角", "variant triangle left"],
+  vartriangleright: ["变体右三角", "variant triangle right"],
+  ntriangleleft: ["不左三角", "not triangle left"],
+  ntriangleright: ["不右三角", "not triangle right"],
+  trianglelefteq: ["左三角等于", "triangle left equal"],
+  trianglerighteq: ["右三角等于", "triangle right equal"],
+  vartrianglelefteq: ["变体左三角等于", "variant triangle left equal"],
+  vartrianglerighteq: ["变体右三角等于", "variant triangle right equal"],
+  ntrianglelefteq: ["不左三角等于", "not triangle left equal"],
+  ntrianglerighteq: ["不右三角等于", "not triangle right equal"],
+  lhd: ["左半三角", "left half triangle"],
+  rhd: ["右半三角", "right half triangle"],
+  unhd: ["无半三角", "unhalf triangle"],
+  vartriangleleft: ["变体左三角", "variant triangle left"],
+  vartriangleright: ["变体右三角", "variant triangle right"],
+  ntriangleleft: ["不左三角", "not triangle left"],
+  ntriangleright: ["不右三角", "not triangle right"],
+  trianglelefteq: ["左三角等于", "triangle left equal"],
+  trianglerighteq: ["右三角等于", "triangle right equal"],
+  vartrianglelefteq: ["变体左三角等于", "variant triangle left equal"],
+  vartrianglerighteq: ["变体右三角等于", "variant triangle right equal"],
+  ntrianglelefteq: ["不左三角等于", "not triangle left equal"],
+  ntrianglerighteq: ["不右三角等于", "not triangle right equal"],
 };
 
 function pinyinInitials(str) {
@@ -247,16 +642,19 @@ function pinyinInitials(str) {
 }
 
 function smartMatch(query, item, plugin) {
-  const q = query.toLowerCase();
+  const q = query.toLowerCase().trim();
   const label = itemLabel(plugin, item).toLowerCase();
   const latex = (item[1] || "").toLowerCase();
   const enLabel = (item[2] || "").toLowerCase();
 
+  // Direct substring match (label, latex, enLabel)
   if (label.includes(q) || latex.includes(q) || enLabel.includes(q)) return true;
 
+  // Pinyin initials (Chinese users)
   const py = pinyinInitials(query);
   if (py.length >= 2 && (label.includes(py) || enLabel.includes(py))) return true;
 
+  // Command alias matching: search command name or alias → match all aliases + LaTeX + labels
   for (const [cmd, aliases] of Object.entries(SEARCH_ALIASES)) {
     if (q.includes(cmd) || cmd.includes(q)) {
       for (const a of aliases) {
@@ -265,12 +663,56 @@ function smartMatch(query, item, plugin) {
     }
   }
 
+  // Word-based English matching: each query word must appear in enLabel or aliases
+  const qWords = q.split(/\s+/).filter(function(w) { return w.length >= 2; });
+  if (qWords.length >= 2 && enLabel) {
+    const allWords = enLabel.split(/\s+/);
+    const matchCount = qWords.filter(function(qw) {
+      return allWords.some(function(aw) { return aw.startsWith(qw) || qw.startsWith(aw); });
+    }).length;
+    if (matchCount === qWords.length) return true;
+  }
+
+  // Cross-word partial match: query words found across aliases
+  if (qWords.length >= 2) {
+    for (const aliases of Object.values(SEARCH_ALIASES)) {
+      const aliasText = aliases.join(" ").toLowerCase();
+      const allWords = aliasText.split(/\s+/);
+      const matchCount = qWords.filter(function(qw) {
+        return allWords.some(function(aw) { return aw.startsWith(qw) || qw.startsWith(aw); });
+      }).length;
+      if (matchCount === qWords.length) return true;
+    }
+  }
+
+  // Abbreviation matching: e.g., "lt" matches "less than", "gte" matches "greater than or equal"
+  if (q.length >= 3) {
+    const abbrev = q.replace(/[^a-z]/g, "");
+    if (abbrev.length >= 3) {
+      for (const aliases of Object.values(SEARCH_ALIASES)) {
+        const aliasText = aliases.join(" ").toLowerCase();
+        const words = aliasText.split(/\s+/);
+        const initials = words.map(function(w) { return w[0]; }).join("");
+        if (initials.includes(abbrev) || abbrev.includes(initials)) return true;
+      }
+    }
+  }
+
+  // Subsequence match on enLabel too (not just Chinese label)
   if (q.length >= 2) {
     let pi = 0;
     for (let i = 0; i < label.length && pi < q.length; i++) {
       if (label[i] === q[pi]) pi++;
     }
     if (pi === q.length) return true;
+
+    if (enLabel) {
+      pi = 0;
+      for (let i = 0; i < enLabel.length && pi < q.length; i++) {
+        if (enLabel[i] === q[pi]) pi++;
+      }
+      if (pi === q.length) return true;
+    }
   }
 
   return false;
@@ -3887,6 +4329,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   insertFormula(latex, display) {
     const ed = this.findMarkdownEditor();
     if (!ed) { logErr("insertFormula: no editor found"); new obsidian.Notice(ui(this, "noEditor")); return; }
+    trackUsage(this, latex);
     const fmt = this.settings.insertFormat || "display";
     const w = fmt === "inline" ? "$" : "$$";
     const cur = ed.getCursor(), t = w + latex + w;
@@ -3905,7 +4348,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
 
 // ======================== Sidebar (simplified) ========================
 class SidebarView extends obsidian.ItemView {
-  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.currentGroup = null; this.globalQ = ""; }
+  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.currentGroup = null; this.globalQ = ""; this.favOnly = false; }
   getViewType() { return "formula-library-sidebar"; }
   getDisplayText() { return "Formula Library"; }
   getIcon() { return "sigma"; }
@@ -3923,6 +4366,14 @@ class SidebarView extends obsidian.ItemView {
     const isZh = loc(this.plugin) === "zh";
     const hint = sc.createDiv({ cls: "fl-search-hint" });
     hint.createEl("span", { text: isZh ? "支持: 拼音首字母 · LaTeX命令( frac sqrt lim ) · 模糊匹配" : "Smart: pinyin initials · LaTeX commands (frac sqrt lim) · fuzzy match", cls: "fl-search-hint-text" });
+
+    const favBar = c.createDiv({ cls: "fl-fav-bar" });
+    this.favBtn = favBar.createEl("button", { cls: "fl-fav-toggle", text: "\u2605 " + ui(this.plugin, "favorites") });
+    this.favBtn.addEventListener("click", () => {
+      this.favOnly = !this.favOnly;
+      this.favBtn.toggleClass("active", this.favOnly);
+      this.renderList();
+    });
 
     this.tabsEl = c.createDiv({ cls: "fl-tabs" });
     this.listEl = c.createDiv({ cls: "fl-list" });
@@ -3942,39 +4393,94 @@ class SidebarView extends obsidian.ItemView {
       this.tabsEl.createEl("span", { text: loc(this.plugin) === "zh" ? "没有启用的分类" : "No enabled groups", cls: "fl-tab" });
       return;
     }
+    const sel = this.tabsEl.createEl("select", { cls: "fl-group-select" });
     for (const g of FORMULA_DATA.GROUPS) {
-      const b = this.tabsEl.createEl("button", { cls: "fl-tab", text: tabName(this.plugin, g) });
-      if (this.currentGroup && g.id === this.currentGroup.id) b.addClass("active");
-      b.addEventListener("click", () => { this.currentGroup = g; this.renderTabs(); this.renderList(); });
+      const opt = sel.createEl("option", { value: g.id, text: tabName(this.plugin, g) });
+      if (this.currentGroup && g.id === this.currentGroup.id) opt.selected = true;
     }
+    sel.addEventListener("change", () => {
+      const g = FORMULA_DATA.GROUPS.find(function(g) { return g.id === sel.value; });
+      if (g) { this.currentGroup = g; this.renderList(); }
+    });
   }
 
   renderList() {
     this.listEl.empty();
     const q = this.globalQ.trim();
     if (q) {
+      let allHits = [];
       for (const g of FORMULA_DATA.GROUPS) {
         const hits = g.items.filter(i => !i.section && smartMatch(q, i, this.plugin));
         if (!hits.length) continue;
+        allHits = allHits.concat(hits.map(h => ({ group: g, item: h })));
+      }
+      if (this.favOnly) allHits = allHits.filter(h => isFavorite(this.plugin, h.item[1]));
+      allHits.sort((a, b) => {
+        const fa = isFavorite(this.plugin, a.item[1]) ? 1 : 0;
+        const fb = isFavorite(this.plugin, b.item[1]) ? 1 : 0;
+        if (fa !== fb) return fb - fa;
+        return (getUsageCount(this.plugin, b.item[1]) || 0) - (getUsageCount(this.plugin, a.item[1]) || 0);
+      });
+      let lastG = null;
+      for (const h of allHits) {
+        if (h.group !== lastG) {
+          this.listEl.createDiv({ cls: "fl-section-label" }).textContent = tabName(this.plugin, h.group);
+          lastG = h.group;
+        }
+        this.listEl.appendChild(this.makeItem(h.item));
+      }
+    } else if (this.favOnly) {
+      for (const g of FORMULA_DATA.GROUPS) {
+        const hits = filterByFavorites(this.plugin, g.items.filter(i => !i.section));
+        if (!hits.length) continue;
+        const sorted = sortByUsage(this.plugin, hits);
         this.listEl.createDiv({ cls: "fl-section-label" }).textContent = tabName(this.plugin, g);
-        hits.forEach(i => this.listEl.appendChild(this.makeItem(i)));
+        sorted.forEach(i => this.listEl.appendChild(this.makeItem(i)));
       }
     } else if (this.currentGroup) {
-      for (const i of this.currentGroup.items) {
-        if (i.section) { this.listEl.createDiv({ cls: "fl-section-label" }).textContent = loc(this.plugin) === "zh" ? i.section : i.sectionEn; continue; }
-        this.listEl.appendChild(this.makeItem(i));
+      const items = this.currentGroup.items;
+      const nonSection = items.filter(i => !i.section);
+      const sorted = sortByUsage(this.plugin, nonSection);
+      const sortedSet = new Set(sorted);
+      for (const i of items) {
+        if (i.section) {
+          this.listEl.createDiv({ cls: "fl-section-label" }).textContent = loc(this.plugin) === "zh" ? i.section : i.sectionEn;
+        } else if (sortedSet.has(i)) {
+          this.listEl.appendChild(this.makeItem(i));
+        }
       }
     }
   }
 
   makeItem(i) {
     const label = itemLabel(this.plugin, i);
+    const cnt = getUsageCount(this.plugin, i[1]);
     const b = document.createElement("button");
     b.className = "fl-list-item";
+
+    const row = b.createDiv({ cls: "fl-list-item-row" });
+
+    const star = row.createEl("span", { cls: "fl-fav-star", text: isFavorite(this.plugin, i[1]) ? "\u2605" : "\u2606" });
+    star.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavorite(this.plugin, i[1]);
+      star.textContent = isFavorite(this.plugin, i[1]) ? "\u2605" : "\u2606";
+      star.toggleClass("active", isFavorite(this.plugin, i[1]));
+    });
+
+    const info = row.createDiv({ cls: "fl-list-item-info" });
+    info.createEl("span", { cls: "fl-list-item-symbol", text: label });
+    info.createEl("span", { cls: "fl-list-item-latex", text: i[1] });
+
+    if (cnt > 0) {
+      row.createEl("span", { cls: "fl-usage-badge", text: cnt >= 100 ? "99+" : String(cnt) });
+    }
+
     b.title = i[2] ? i[2] + "\n" + i[1] : i[1];
-    b.textContent = label + "  " + i[1];
     b.addEventListener("click", (e) => {
       e.preventDefault();
+      trackUsage(this.plugin, i[1]);
       let ed = this.plugin.findMarkdownEditor();
       if (!ed) { logErr("Sidebar: no editor"); new obsidian.Notice(ui(this.plugin, "noEditor")); return; }
       const fmt = this.plugin.settings.insertFormat || "display";
@@ -3989,6 +4495,7 @@ class SidebarView extends obsidian.ItemView {
         ed.setCursor({ line: cur.line, ch: cur.ch + t.length });
       }
       ed.focus();
+      this.renderList();
     });
     return b;
   }
@@ -4003,6 +4510,7 @@ class EditorModal extends obsidian.Modal {
     this.plugin = plugin;
     this.initMode = mode;
     this.initLatex = latex;
+    this.favOnly = false;
   }
 
   async onOpen() {
@@ -4069,6 +4577,15 @@ class EditorModal extends obsidian.Modal {
     this.libSI.addEventListener("input", () => this.renderLibGrid());
     const hintZh = loc(this.plugin) === "zh";
     lc.createDiv({ cls: "fl-search-hint" }).createEl("span", { text: hintZh ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy", cls: "fl-search-hint-text" });
+
+    const favBar = lp.createDiv({ cls: "fl-fav-bar" });
+    this.libFavBtn = favBar.createEl("button", { cls: "fl-fav-toggle", text: "\u2605 " + ui(this.plugin, "favorites") });
+    this.libFavBtn.addEventListener("click", () => {
+      this.favOnly = !this.favOnly;
+      this.libFavBtn.toggleClass("active", this.favOnly);
+      this.renderLibGrid();
+    });
+
     this.libTabs = lp.createDiv({ cls: "fl-tabs" });
     this.libGrid = lp.createDiv({ cls: "fl-grid-scroll" }).createDiv({ cls: "fl-grid" });
     this.libCurG = FORMULA_DATA.GROUPS[0];
@@ -4210,11 +4727,15 @@ class EditorModal extends obsidian.Modal {
 
   renderLibTabs() {
     this.libTabs.empty();
+    const sel = this.libTabs.createEl("select", { cls: "fl-group-select" });
     for (const g of FORMULA_DATA.GROUPS) {
-      const b = this.libTabs.createEl("button", { cls: "fl-tab", text: tabName(this.plugin, g) });
-      if (this.libCurG && g.id === this.libCurG.id) b.addClass("active");
-      b.addEventListener("click", () => { this.libCurG = g; this.renderLibTabs(); this.renderLibGrid(); });
+      const opt = sel.createEl("option", { value: g.id, text: tabName(this.plugin, g) });
+      if (this.libCurG && g.id === this.libCurG.id) opt.selected = true;
     }
+    sel.addEventListener("change", () => {
+      const g = FORMULA_DATA.GROUPS.find(function(g) { return g.id === sel.value; });
+      if (g) { this.libCurG = g; this.renderLibGrid(); }
+    });
   }
 
   renderLibGrid() {
@@ -4222,17 +4743,41 @@ class EditorModal extends obsidian.Modal {
     const q = this.libSI?.value?.trim() || "";
     if (q) {
       this.libGrid.className = "fl-grid structures";
+      let allHits = [];
       for (const g of FORMULA_DATA.GROUPS) {
         const hits = g.items.filter(i => !i.section && smartMatch(q, i, this.plugin));
         if (!hits.length) continue;
-        this.libGrid.createDiv({ cls: "fl-group-label" }).textContent = tabName(this.plugin, g);
-        hits.forEach(i => this.libGrid.appendChild(this.makeLibBtn(i)));
+        allHits = allHits.concat(hits.map(h => ({ group: g, item: h })));
+      }
+      if (this.favOnly) allHits = allHits.filter(h => isFavorite(this.plugin, h.item[1]));
+      allHits.sort((a, b) => {
+        const fa = isFavorite(this.plugin, a.item[1]) ? 1 : 0;
+        const fb = isFavorite(this.plugin, b.item[1]) ? 1 : 0;
+        if (fa !== fb) return fb - fa;
+        return (getUsageCount(this.plugin, b.item[1]) || 0) - (getUsageCount(this.plugin, a.item[1]) || 0);
+      });
+      let lastG = null;
+      for (const h of allHits) {
+        if (h.group !== lastG) {
+          this.libGrid.createDiv({ cls: "fl-group-label" }).textContent = tabName(this.plugin, h.group);
+          lastG = h.group;
+        }
+        this.libGrid.appendChild(this.makeLibBtn(h.item));
       }
     } else if (this.libCurG) {
       this.libGrid.className = this.libCurG.structures ? "fl-grid structures" : "fl-grid";
+      let nonSection = this.libCurG.items.filter(i => !i.section);
+      if (this.favOnly) nonSection = filterByFavorites(this.plugin, nonSection);
+      const sorted = sortByUsage(this.plugin, nonSection);
+      const sortedSet = new Set(sorted);
       for (const i of this.libCurG.items) {
-        if (i.section) { this.libGrid.createDiv({ cls: "fl-section-label" }).textContent = loc(this.plugin) === "zh" ? i.section : i.sectionEn; continue; }
-        this.libGrid.appendChild(this.makeLibBtn(i));
+        if (i.section) {
+          if (!this.favOnly) {
+            this.libGrid.createDiv({ cls: "fl-section-label" }).textContent = loc(this.plugin) === "zh" ? i.section : i.sectionEn;
+          }
+        } else if (sortedSet.has(i)) {
+          this.libGrid.appendChild(this.makeLibBtn(i));
+        }
       }
     }
   }
@@ -4240,16 +4785,31 @@ class EditorModal extends obsidian.Modal {
   makeLibBtn(i) {
     const label = itemLabel(this.plugin, i);
     const latex = i[1];
+    const cnt = getUsageCount(this.plugin, latex);
     const b = document.createElement("button");
     b.className = "fl-symbol-btn";
+
+    const star = b.createDiv({ cls: "fl-grid-fav-star", text: isFavorite(this.plugin, latex) ? "\u2605" : "\u2606" });
+    star.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavorite(this.plugin, latex);
+      star.textContent = isFavorite(this.plugin, latex) ? "\u2605" : "\u2606";
+      star.toggleClass("active", isFavorite(this.plugin, latex));
+    });
 
     b.createDiv({ cls: "fl-sym-label", text: label });
     b.createEl("code", { cls: "fl-sym-fallback", text: latex.length > 28 ? latex.slice(0, 26) + "..." : latex });
     b.title = i[2] ? i[2] + "\n" + latex : latex;
 
+    if (cnt > 0) {
+      b.createEl("span", { cls: "fl-grid-usage-badge", text: cnt >= 100 ? "99+" : String(cnt) });
+    }
+
     b.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      trackUsage(this.plugin, latex);
       this.insertIntoEditor(latex);
     });
 

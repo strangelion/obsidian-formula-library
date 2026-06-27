@@ -84,11 +84,11 @@
   flex-direction: column;
 }
 
-.fl-search-container { margin-bottom: 10px; }
+.fl-search-container { margin-bottom: 6px; }
 
 .fl-search-input {
   width: 100%;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--radius-s);
   background: var(--background-primary);
@@ -103,7 +103,7 @@
 }
 
 .fl-search-hint {
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .fl-search-hint-text {
@@ -115,12 +115,26 @@
 
 /* ---- Tabs ---- */
 .fl-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 10px;
-  max-height: 200px;
-  overflow-y: auto;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.fl-group-select {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+}
+
+.fl-group-select:focus {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
 }
 
 .fl-tab {
@@ -156,17 +170,13 @@
   display: block;
   width: 100%;
   text-align: left;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border: none;
   border-bottom: 1px solid var(--background-modifier-border);
   background: none;
   color: var(--text-normal);
   cursor: pointer;
-  font-size: var(--font-ui-small);
-  font-family: var(--font-monospace);
-  line-height: 1.5;
   transition: background 0.1s;
-  word-break: break-all;
 }
 
 .fl-list-item:hover {
@@ -277,6 +287,155 @@
   background: var(--interactive-accent);
   color: var(--text-on-accent);
   border-color: var(--interactive-accent);
+}
+
+/* ---- Favorites Bar ---- */
+.fl-fav-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.fl-fav-toggle {
+  padding: 3px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fl-fav-toggle:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.fl-fav-toggle.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ---- Favorite Star (list) ---- */
+.fl-fav-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  min-width: 16px;
+  font-size: 12px;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color 0.15s;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.fl-fav-star:hover {
+  opacity: 1;
+  color: #e8a838;
+}
+
+.fl-fav-star.active {
+  opacity: 1;
+  color: #e8a838;
+}
+
+/* ---- Favorite Star (grid) ---- */
+.fl-grid-fav-star {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 12px;
+  color: var(--text-faint);
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.fl-grid-fav-star:hover {
+  color: #e8a838;
+}
+
+.fl-grid-fav-star.active {
+  color: #e8a838;
+}
+
+.fl-symbol-btn {
+  position: relative;
+}
+
+/* ---- Usage Badge ---- */
+.fl-usage-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--background-modifier-border);
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 600;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.fl-grid-usage-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- List Item Row ---- */
+.fl-list-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.fl-list-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  gap: 2px;
+}
+
+.fl-list-item-symbol {
+  font-size: 14px;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fl-list-item-latex {
+  font-size: 10px;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.55;
 }
 
 /* ========================================
