@@ -23,6 +23,7 @@
       "sets": "Sets",
       "functions": "Functions",
       "probability": "Probability",
+      "computing": "Computing",
       "chemistry": "Chemistry",
       "physics": "Physics",
       "misc": "Misc"
@@ -52,6 +53,7 @@
       "sets": "集合",
       "functions": "函数",
       "probability": "概率",
+      "computing": "计算",
       "chemistry": "化学",
       "physics": "物理",
       "misc": "其他"

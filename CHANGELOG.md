@@ -2,6 +2,24 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.3.0] - 2026-08-28
+
+### Added
+- **95 Computing Formulas**: Algorithms, graph theory, information theory, machine learning, computer graphics, signals, and numerical computing. The built-in library now contains 2216 formulas in 19 categories.
+- **Formula Controls**: All, Favorites, Pinned, and Recent filters; per-formula pin, hide, copy, and favorite actions; configurable sorting, density, search result limit, and LaTeX labels.
+- **Mermaid Diagram Editor**: Flowchart, mind map, sequence, state, and class-diagram templates with source editing, live preview, and direct Markdown insertion.
+
+### Changed
+- Rebuilt the editor modal around stable dynamic viewport units and strict single-column mobile fallback.
+- Reduced portrait preview whitespace and gave the formula library more useful vertical space.
+- Replaced asymmetric formula-card padding with balanced icon slots so card content stays centered.
+- Search now correctly matches Latin pinyin initials such as `fs` for “分数”.
+
+### Fixed
+- Editing an existing formula now replaces the formula at the cursor instead of inserting a duplicate.
+- Mobile virtual-keyboard resizing no longer writes fragile inline `vh` dimensions to the modal container.
+- Formula and drawing modals no longer overflow or shift horizontally on narrow portrait viewports.
+
 ## [1.2.5] - 2026-06-27
 
 ### Added

@@ -2,22 +2,23 @@
 
 [中文文档](README-cn.md) | English Doc
 
-A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ categorized formulas**, **smart search** (pinyin, LaTeX commands, fuzzy matching), and **extensible formula folders** for user customization.
+A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editing**, **2216 categorized formulas**, **smart search** (pinyin, LaTeX commands, fuzzy matching), and **extensible formula folders** for user customization.
 
 ## Features
 
 - **MathLive Visual Editor**: WYSIWYG formula editing with real-time preview and virtual keyboard
-- **2100+ Formulas**: 18 categories (Greek, Structures, Delimiters, Analysis, Algebra, Geometry, Topology, Number Theory, Relations, Operators, Big Ops, Arrows, Sets, Functions, Probability, Physics, Chemistry, Misc)
+- **2216 Formulas**: 19 categories, including 95 formulas for algorithms, information theory, machine learning, graphics, signals, and numerical computing
 - **Smart Search**: Pinyin initials, LaTeX command aliases, word-based English matching, abbreviation matching (e.g., "lt" → less than), and fuzzy matching
 - **Usage Frequency Sorting**: Formulas you use most appear first — search results and category lists are sorted by insertion count
-- **Favorites**: Star any formula for quick access. Favorites filter in sidebar and editor modal, always sorted to the top
+- **Formula Controls**: Favorites, pins, recent items, hidden formulas, smart/usage/recent/name sorting, card density, and result limits
+- **Mermaid Diagrams**: Flowchart, mind-map, sequence, state, and class-diagram templates with live preview and Markdown insertion
 - **Configurable Shortcuts**: Custom keyboard shortcuts for fraction, sqrt, superscript, subscript (default: unbound)
 - **Matrix Templates**: cases, matrix, bmatrix, pmatrix, jacobian, hessian, identity, diagonal, augmented
 - **Visual / Source Mode**: Toggle between WYSIWYG and raw LaTeX editing
 - **Edit Existing Formulas**: Place cursor inside `$...$` or `$$...$$` and run command to edit
 - **Sidebar Quick Insert**: Click formulas in the sidebar to insert directly
 - **Group Dropdown**: Category selector as dropdown for compact sidebar layout
-- **Settings Page**: Language, insert format, editor mode, shortcuts, font size, font style, formula group toggles
+- **Settings Page**: Language, insert format, editor mode, shortcuts, font size/style, density, sorting, search limits, labels, and formula group toggles
 - **Extensible Formula Folders**: Add custom formula groups by dropping JSON files into `formulas/`
 - **Bilingual**: Full Chinese/English localization, follows Obsidian language setting
 
@@ -41,6 +42,11 @@ A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ c
 - **Ribbon Icon**: Click the Σ icon on the left
 - Select a formula category on the right, click a formula to insert into the editor
 - Click **Insert** (or `Shift+Enter`) to write the formula to your note
+
+### Mermaid Diagram Editor
+- **Command Palette**: `Ctrl+P` → "Open Mermaid Diagram Editor"
+- Pick a template, edit Mermaid source, and verify the live preview
+- Click **Insert diagram** (or `Shift+Enter`) to insert a native Mermaid code block
 
 ### Sidebar Quick Insert
 - Click the Σ icon to toggle the sidebar
@@ -73,6 +79,7 @@ A LaTeX formula editor for Obsidian with **MathLive WYSIWYG editing**, **2100+ c
 | Sets | 40 | Set theory, logic, cardinals |
 | Functions | 131 | Elementary, special functions, distributions |
 | Probability | 170 | Distributions, theorems, stochastic processes |
+| Computing | 95 | Algorithms, graph theory, information theory, ML, graphics, signals, numerical methods |
 | Physics | 251 | Mechanics, EM, quantum, relativity, QFT |
 | Chemistry | 229 | Reactions, molecules, ions, thermodynamics |
 | Misc | 56 | Ellipsis, infinity, special symbols |
