@@ -11,7 +11,7 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 - **Smart Search**: Pinyin initials, LaTeX command aliases, word-based English matching, abbreviation matching (e.g., "lt" → less than), and fuzzy matching
 - **Usage Frequency Sorting**: Formulas you use most appear first — search results and category lists are sorted by insertion count
 - **Formula Controls**: Favorites, pins, recent items, hidden formulas, smart/usage/recent/name sorting, card density, and result limits
-- **Mermaid Diagrams**: Flowchart, mind-map, sequence, state, and class-diagram templates with live preview and Markdown insertion
+- **Mermaid Diagrams**: 11 templates; flowcharts and state diagrams include node/connection visual editing, with centered preview and Markdown insertion for every type
 - **Configurable Shortcuts**: Custom keyboard shortcuts for fraction, sqrt, superscript, subscript (default: unbound)
 - **Matrix Templates**: cases, matrix, bmatrix, pmatrix, jacobian, hessian, identity, diagonal, augmented
 - **Visual / Source Mode**: Toggle between WYSIWYG and raw LaTeX editing
@@ -45,7 +45,9 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 
 ### Mermaid Diagram Editor
 - **Command Palette**: `Ctrl+P` → "Open Mermaid Diagram Editor"
-- Pick a template, edit Mermaid source, and verify the live preview
+- Flowcharts and state diagrams switch between **Visual / Source** modes, with direct node, connection, direction, shape, and label controls
+- Templates include flowchart, mind map, sequence, state, class, ER, Gantt, timeline, pie, quadrant, and Git graph
+- When Excalidraw is installed, the toolbar exposes a shortcut for freehand and drag-and-drop drawing
 - Click **Insert diagram** (or `Shift+Enter`) to insert a native Mermaid code block
 
 ### Sidebar Quick Insert

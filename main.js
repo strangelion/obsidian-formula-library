@@ -5160,6 +5160,7 @@ const DRAWING_TEMPLATES = {
   flowchart: {
     zh: "流程图",
     en: "Flowchart",
+    visualType: "flowchart",
     source: "flowchart LR\n  A[开始] --> B{条件}\n  B -->|是| C[处理]\n  B -->|否| D[调整]\n  C --> E[完成]\n  D --> B",
   },
   mindmap: {
@@ -5175,6 +5176,7 @@ const DRAWING_TEMPLATES = {
   state: {
     zh: "状态图",
     en: "State",
+    visualType: "state",
     source: "stateDiagram-v2\n  [*] --> 编辑\n  编辑 --> 预览\n  预览 --> 编辑: 修改\n  预览 --> 完成: 插入\n  完成 --> [*]",
   },
   classDiagram: {
@@ -5182,7 +5184,133 @@ const DRAWING_TEMPLATES = {
     en: "Class diagram",
     source: "classDiagram\n  class Formula {\n    +String latex\n    +String label\n    +insert()\n  }\n  class Library {\n    +search(query)\n    +pin(formula)\n  }\n  Library o-- Formula",
   },
+  er: {
+    zh: "实体关系图",
+    en: "ER diagram",
+    source: "erDiagram\n  USER ||--o{ NOTE : creates\n  USER {\n    string id PK\n    string name\n  }\n  NOTE {\n    string id PK\n    string title\n  }",
+  },
+  gantt: {
+    zh: "甘特图",
+    en: "Gantt",
+    source: "gantt\n  title 项目计划\n  dateFormat YYYY-MM-DD\n  section 设计\n  需求分析 :done, a1, 2026-08-01, 3d\n  界面设计 :active, a2, after a1, 4d\n  section 开发\n  功能实现 :a3, after a2, 7d\n  测试发布 :a4, after a3, 3d",
+  },
+  timeline: {
+    zh: "时间线",
+    en: "Timeline",
+    source: "timeline\n  title 版本路线图\n  2026 Q1 : 搜索与收藏\n  2026 Q2 : 公式编辑器\n  2026 Q3 : 可视化绘图\n  2026 Q4 : 扩展与同步",
+  },
+  pie: {
+    zh: "饼图",
+    en: "Pie chart",
+    source: "pie showData\n  title 公式分类\n  \"代数\" : 42\n  \"微积分\" : 30\n  \"几何\" : 18\n  \"其他\" : 10",
+  },
+  quadrant: {
+    zh: "象限图",
+    en: "Quadrant chart",
+    source: "quadrantChart\n  title 功能优先级\n  x-axis 低成本 --> 高成本\n  y-axis 低价值 --> 高价值\n  quadrant-1 战略投入\n  quadrant-2 快速收益\n  quadrant-3 暂缓\n  quadrant-4 谨慎评估\n  搜索优化: [0.25, 0.82]\n  绘图编辑: [0.62, 0.76]",
+  },
+  gitGraph: {
+    zh: "Git 分支图",
+    en: "Git graph",
+    source: "gitGraph\n  commit id: \"初始化\"\n  branch feature\n  checkout feature\n  commit id: \"功能开发\"\n  checkout main\n  merge feature\n  commit id: \"发布\"",
+  },
 };
+
+function parseDrawingNodeToken(token) {
+  const value = String(token || "").trim();
+  const match = value.match(/^([\p{L}\p{N}_-]+)(?:\(\((.*?)\)\)|\{(.*?)\}|\[(.*?)\])$/u);
+  if (!match) return { id: value, label: value, shape: "rect" };
+  if (match[2] !== undefined) return { id: match[1], label: match[2], shape: "circle" };
+  if (match[3] !== undefined) return { id: match[1], label: match[3], shape: "diamond" };
+  return { id: match[1], label: match[4], shape: "rect" };
+}
+
+function parseVisualDrawing(source, visualType) {
+  const lines = String(source || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const graph = { visualType, direction: "LR", nodes: [], edges: [] };
+  const nodeMap = new Map();
+  const stateAliases = new Map();
+  const addNode = (token) => {
+    if (visualType === "state") {
+      if (token === "[*]") return token;
+      if (nodeMap.has(token)) return nodeMap.get(token).id;
+      const node = { id: `S${nodeMap.size + 1}`, label: stateAliases.get(token) || token, shape: "rect" };
+      nodeMap.set(token, node);
+      graph.nodes.push(node);
+      return node.id;
+    }
+    const parsed = parseDrawingNodeToken(token);
+    if (!parsed.id) return "";
+    const existing = nodeMap.get(parsed.id);
+    if (existing) {
+      if (parsed.label && parsed.label !== parsed.id) existing.label = parsed.label;
+      if (parsed.shape) existing.shape = parsed.shape;
+      return existing.id;
+    }
+    nodeMap.set(parsed.id, parsed);
+    graph.nodes.push(parsed);
+    return parsed.id;
+  };
+
+  if (visualType === "flowchart") {
+    const header = lines.shift() || "";
+    const headerMatch = header.match(/^(?:flowchart|graph)\s+(TB|TD|BT|RL|LR)$/i);
+    graph.direction = headerMatch ? headerMatch[1].toUpperCase() : "LR";
+    for (const line of lines) {
+      const edge = line.match(/^(.+?)\s*-->\s*(?:\|([^|]*)\|\s*)?(.+?)$/);
+      if (!edge) continue;
+      graph.edges.push({ from: addNode(edge[1]), to: addNode(edge[3]), label: (edge[2] || "").trim() });
+    }
+  } else if (visualType === "state") {
+    lines.shift();
+    for (const line of lines) {
+      const alias = line.match(/^state\s+"([^"]*)"\s+as\s+([\p{L}\p{N}_-]+)$/u);
+      if (alias) stateAliases.set(alias[2], alias[1]);
+    }
+    for (const line of lines) {
+      const direction = line.match(/^direction\s+(TB|BT|RL|LR)$/i);
+      if (direction) {
+        graph.direction = direction[1].toUpperCase();
+        continue;
+      }
+      if (/^state\s+/.test(line)) continue;
+      const edge = line.match(/^(.+?)\s*-->\s*([^:]+?)(?:\s*:\s*(.+))?$/);
+      if (!edge) continue;
+      const fromToken = edge[1].trim();
+      const toToken = edge[2].trim();
+      graph.edges.push({
+        from: fromToken === "[*]" ? "__start__" : addNode(fromToken),
+        to: toToken === "[*]" ? "__end__" : addNode(toToken),
+        label: (edge[3] || "").trim(),
+      });
+    }
+  }
+  return graph;
+}
+
+function serializeVisualDrawing(graph) {
+  if (graph.visualType === "state") {
+    const aliases = graph.nodes.map((node) => `  state "${String(node.label || node.id).replace(/"/g, "'")}" as ${node.id}`);
+    const edges = graph.edges.map((edge) => {
+      const from = edge.from === "__start__" ? "[*]" : edge.from;
+      const to = edge.to === "__end__" ? "[*]" : edge.to;
+      return `  ${from} --> ${to}${edge.label ? `: ${edge.label}` : ""}`;
+    });
+    return ["stateDiagram-v2", `  direction ${graph.direction}`, ...aliases, ...edges].join("\n");
+  }
+  const nodeMap = new Map(graph.nodes.map((node) => [node.id, node]));
+  const token = (id) => {
+    const node = nodeMap.get(id) || { id, label: id, shape: "rect" };
+    const label = String(node.label || node.id).replace(/[\[\]{}]/g, "");
+    if (node.shape === "diamond") return `${node.id}{${label}}`;
+    if (node.shape === "circle") return `${node.id}((${label}))`;
+    return `${node.id}[${label}]`;
+  };
+  const edges = graph.edges.map((edge) => `  ${token(edge.from)} -->${edge.label ? `|${edge.label.replace(/\|/g, "/")}|` : ""} ${token(edge.to)}`);
+  const connected = new Set(graph.edges.flatMap((edge) => [edge.from, edge.to]));
+  const isolated = graph.nodes.filter((node) => !connected.has(node.id)).map((node) => `  ${token(node.id)}`);
+  return [`flowchart ${graph.direction}`, ...edges, ...isolated].join("\n");
+}
 
 class DrawingModal extends obsidian.Modal {
   constructor(app, plugin) {
@@ -5190,6 +5318,9 @@ class DrawingModal extends obsidian.Modal {
     this.plugin = plugin;
     this.renderVersion = 0;
     this.renderTimer = null;
+    this.mode = "visual";
+    this.currentTemplateKey = "flowchart";
+    this.visualGraph = null;
   }
 
   onOpen() {
@@ -5205,14 +5336,29 @@ class DrawingModal extends obsidian.Modal {
       select.createEl("option", { value: key, text: template[loc(this.plugin)] });
     }
 
+    const modeToggle = toolbar.createDiv({ cls: "fd-mode-toggle" });
+    this.visualModeButton = modeToggle.createEl("button", { cls: "fd-mode-button", text: loc(this.plugin) === "zh" ? "可视化" : "Visual", attr: { type: "button" } });
+    this.sourceModeButton = modeToggle.createEl("button", { cls: "fd-mode-button", text: ui(this.plugin, "drawingSource"), attr: { type: "button" } });
+
     const actions = toolbar.createDiv({ cls: "fd-actions" });
+    if (this.app.plugins?.getPlugin?.("obsidian-excalidraw-plugin")) {
+      const excalidrawButton = actions.createEl("button", { cls: "fe-btn", text: "Excalidraw", attr: { type: "button" } });
+      excalidrawButton.addEventListener("click", () => {
+        this.close();
+        window.setTimeout(() => {
+          const opened = this.app.commands?.executeCommandById?.("obsidian-excalidraw-plugin:excalidraw-autocreate");
+          if (!opened) new obsidian.Notice(loc(this.plugin) === "zh" ? "无法打开 Excalidraw，请确认插件已启用" : "Unable to open Excalidraw. Make sure the plugin is enabled.");
+        }, 0);
+      });
+    }
     actions.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "cancel") }).addEventListener("click", () => this.close());
     const insertButton = actions.createEl("button", { cls: "fe-btn fe-btn-primary", text: ui(this.plugin, "drawingInsert") });
 
     const workspace = this.contentEl.createDiv({ cls: "fd-workspace" });
     const sourcePane = workspace.createDiv({ cls: "fd-pane fd-source-pane" });
-    sourcePane.createEl("label", { text: ui(this.plugin, "drawingSource") });
+    this.editorTitle = sourcePane.createEl("label", { text: ui(this.plugin, "drawingSource") });
     this.source = sourcePane.createEl("textarea", { cls: "fd-source", attr: { spellcheck: "false", "aria-label": ui(this.plugin, "drawingSource") } });
+    this.visualEditor = sourcePane.createDiv({ cls: "fd-visual-editor" });
 
     const previewPane = workspace.createDiv({ cls: "fd-pane fd-preview-pane" });
     previewPane.createEl("div", { cls: "fd-pane-title", text: ui(this.plugin, "drawingPreview") });
@@ -5220,9 +5366,18 @@ class DrawingModal extends obsidian.Modal {
     this.status = previewPane.createDiv({ cls: "fd-status" });
 
     const applyTemplate = () => {
+      this.currentTemplateKey = select.value;
       this.source.value = DRAWING_TEMPLATES[select.value].source;
+      const template = DRAWING_TEMPLATES[select.value];
+      if (template.visualType) {
+        this.visualGraph = parseVisualDrawing(this.source.value, template.visualType);
+        this.setMode(this.mode === "source" ? "source" : "visual");
+      } else {
+        this.visualGraph = null;
+        this.setMode("source");
+        this.status.setText(loc(this.plugin) === "zh" ? "此图型使用 Mermaid 源码编辑" : "This diagram type uses Mermaid source editing");
+      }
       this.scheduleRender();
-      this.source.focus();
     };
     select.addEventListener("change", applyTemplate);
     this.source.addEventListener("input", () => this.scheduleRender());
@@ -5232,8 +5387,126 @@ class DrawingModal extends obsidian.Modal {
         this.accept();
       }
     });
+    this.visualModeButton.addEventListener("click", () => this.setMode("visual"));
+    this.sourceModeButton.addEventListener("click", () => this.setMode("source"));
     insertButton.addEventListener("click", () => this.accept());
     applyTemplate();
+  }
+
+  setMode(mode) {
+    const template = DRAWING_TEMPLATES[this.currentTemplateKey];
+    if (mode === "visual" && !template.visualType) mode = "source";
+    if (mode === "visual") this.visualGraph = parseVisualDrawing(this.source.value, template.visualType);
+    this.mode = mode;
+    const visual = mode === "visual";
+    this.source.style.display = visual ? "none" : "";
+    this.visualEditor.style.display = visual ? "" : "none";
+    this.visualModeButton.toggleClass("is-active", visual);
+    this.sourceModeButton.toggleClass("is-active", !visual);
+    this.visualModeButton.disabled = !template.visualType;
+    this.editorTitle.setText(visual ? (loc(this.plugin) === "zh" ? "可视化编辑" : "Visual editor") : ui(this.plugin, "drawingSource"));
+    if (visual) this.renderVisualEditor();
+    else this.source.focus();
+  }
+
+  syncVisualDrawing() {
+    this.source.value = serializeVisualDrawing(this.visualGraph);
+    this.scheduleRender();
+  }
+
+  createVisualSelect(parent, value, options, onChange) {
+    const select = parent.createEl("select");
+    for (const option of options) select.createEl("option", { value: option.value, text: option.label });
+    select.value = value;
+    select.addEventListener("change", () => onChange(select.value));
+    return select;
+  }
+
+  renderVisualEditor() {
+    const graph = this.visualGraph;
+    this.visualEditor.empty();
+    if (!graph) {
+      this.visualEditor.createDiv({ cls: "fd-visual-empty", text: loc(this.plugin) === "zh" ? "当前图型暂不支持可视化编辑" : "Visual editing is not available for this diagram type" });
+      return;
+    }
+
+    const toolbar = this.visualEditor.createDiv({ cls: "fd-visual-toolbar" });
+    const directionLabel = toolbar.createEl("label", { text: loc(this.plugin) === "zh" ? "方向" : "Direction" });
+    this.createVisualSelect(directionLabel, graph.direction, [
+      { value: "LR", label: "→" }, { value: "RL", label: "←" }, { value: "TB", label: "↓" }, { value: "BT", label: "↑" },
+    ], (value) => { graph.direction = value; this.syncVisualDrawing(); });
+
+    const nodeSection = this.visualEditor.createDiv({ cls: "fd-visual-section" });
+    const nodeHead = nodeSection.createDiv({ cls: "fd-visual-section-head" });
+    nodeHead.createSpan({ text: loc(this.plugin) === "zh" ? `节点 · ${graph.nodes.length}` : `Nodes · ${graph.nodes.length}` });
+    const addNode = nodeHead.createEl("button", { cls: "fe-btn", text: loc(this.plugin) === "zh" ? "+ 节点" : "+ Node", attr: { type: "button" } });
+    addNode.addEventListener("click", () => {
+      const prefix = graph.visualType === "state" ? "S" : "N";
+      let index = graph.nodes.length + 1;
+      while (graph.nodes.some((node) => node.id === `${prefix}${index}`)) index++;
+      graph.nodes.push({ id: `${prefix}${index}`, label: loc(this.plugin) === "zh" ? `节点 ${index}` : `Node ${index}`, shape: "rect" });
+      this.syncVisualDrawing();
+      this.renderVisualEditor();
+    });
+
+    if (!graph.nodes.length) nodeSection.createDiv({ cls: "fd-visual-empty", text: loc(this.plugin) === "zh" ? "添加节点开始绘图" : "Add a node to start drawing" });
+    graph.nodes.forEach((node, index) => {
+      const row = nodeSection.createDiv({ cls: "fd-visual-row" });
+      row.createSpan({ cls: "fd-visual-node-id", text: node.id });
+      const input = row.createEl("input", { value: node.label, attr: { "aria-label": loc(this.plugin) === "zh" ? "节点名称" : "Node label" } });
+      input.addEventListener("input", () => { node.label = input.value; this.syncVisualDrawing(); });
+      if (graph.visualType === "flowchart") {
+        this.createVisualSelect(row, node.shape, [
+          { value: "rect", label: loc(this.plugin) === "zh" ? "矩形" : "Rectangle" },
+          { value: "diamond", label: loc(this.plugin) === "zh" ? "判断" : "Decision" },
+          { value: "circle", label: loc(this.plugin) === "zh" ? "圆形" : "Circle" },
+        ], (value) => { node.shape = value; this.syncVisualDrawing(); });
+      }
+      const remove = row.createEl("button", { cls: "fd-icon-button", attr: { type: "button", "aria-label": loc(this.plugin) === "zh" ? "删除节点" : "Delete node" } });
+      obsidian.setIcon(remove, "trash-2");
+      remove.addEventListener("click", () => {
+        graph.nodes.splice(index, 1);
+        graph.edges = graph.edges.filter((edge) => edge.from !== node.id && edge.to !== node.id);
+        this.syncVisualDrawing();
+        this.renderVisualEditor();
+      });
+    });
+
+    const edgeSection = this.visualEditor.createDiv({ cls: "fd-visual-section" });
+    const edgeHead = edgeSection.createDiv({ cls: "fd-visual-section-head" });
+    edgeHead.createSpan({ text: loc(this.plugin) === "zh" ? `连线 · ${graph.edges.length}` : `Connections · ${graph.edges.length}` });
+    const addEdge = edgeHead.createEl("button", { cls: "fe-btn", text: loc(this.plugin) === "zh" ? "+ 连线" : "+ Connection", attr: { type: "button" } });
+    addEdge.disabled = graph.nodes.length < 1;
+    addEdge.addEventListener("click", () => {
+      const first = graph.nodes[0]?.id;
+      const second = graph.nodes[1]?.id || first;
+      if (!first) return;
+      graph.edges.push({ from: first, to: second, label: "" });
+      this.syncVisualDrawing();
+      this.renderVisualEditor();
+    });
+
+    const endpointOptions = graph.nodes.map((node) => ({ value: node.id, label: node.label || node.id }));
+    if (graph.visualType === "state") {
+      endpointOptions.unshift({ value: "__start__", label: loc(this.plugin) === "zh" ? "● 开始" : "● Start" });
+      endpointOptions.push({ value: "__end__", label: loc(this.plugin) === "zh" ? "◎ 结束" : "◎ End" });
+    }
+    if (!graph.edges.length) edgeSection.createDiv({ cls: "fd-visual-empty", text: loc(this.plugin) === "zh" ? "添加连线建立节点关系" : "Add a connection between nodes" });
+    graph.edges.forEach((edge, index) => {
+      const row = edgeSection.createDiv({ cls: "fd-visual-row" });
+      this.createVisualSelect(row, edge.from, endpointOptions, (value) => { edge.from = value; this.syncVisualDrawing(); });
+      row.createSpan({ cls: "fd-visual-edge-arrow", text: "→" });
+      this.createVisualSelect(row, edge.to, endpointOptions, (value) => { edge.to = value; this.syncVisualDrawing(); });
+      const label = row.createEl("input", { value: edge.label, attr: { placeholder: loc(this.plugin) === "zh" ? "连线文字（可选）" : "Label (optional)", "aria-label": loc(this.plugin) === "zh" ? "连线文字" : "Connection label" } });
+      label.addEventListener("input", () => { edge.label = label.value; this.syncVisualDrawing(); });
+      const remove = row.createEl("button", { cls: "fd-icon-button", attr: { type: "button", "aria-label": loc(this.plugin) === "zh" ? "删除连线" : "Delete connection" } });
+      obsidian.setIcon(remove, "trash-2");
+      remove.addEventListener("click", () => {
+        graph.edges.splice(index, 1);
+        this.syncVisualDrawing();
+        this.renderVisualEditor();
+      });
+    });
   }
 
   scheduleRender() {
@@ -5259,6 +5532,12 @@ class DrawingModal extends obsidian.Modal {
       await obsidian.MarkdownRenderer.render(this.app, "```mermaid\n" + source + "\n```", stage, "", this);
       if (version !== this.renderVersion) return;
       this.preview.replaceChildren(...stage.childNodes);
+      const svg = this.preview.querySelector("svg");
+      if (svg) {
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        svg.setAttribute("width", "100%");
+        svg.setAttribute("height", "100%");
+      }
       this.status.setText(loc(this.plugin) === "zh" ? "预览已更新" : "Preview updated");
     } catch (error) {
       if (version !== this.renderVersion) return;

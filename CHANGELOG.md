@@ -2,6 +2,17 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.3.1]
+
+### Added
+- Visual node and connection editing for Mermaid flowcharts and state diagrams, with bidirectional source synchronization.
+- ER, Gantt, timeline, pie, quadrant, and Git graph templates.
+- An Excalidraw launcher when the Excalidraw plugin is installed and enabled.
+
+### Fixed
+- Mermaid previews now scale to the available canvas and remain centered instead of rendering against the top-left edge.
+- Replaced the sidebar card height overrides with a scoped, higher-specificity selector so the plugin CSS contains no `!important` declarations.
+
 ## [1.3.0] - 2026-08-28
 
 ### Added
