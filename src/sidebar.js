@@ -1,4 +1,5 @@
 import * as obsidian from "obsidian";
+import { applyLibraryTypography } from "./typography.js";
 import { FORMULA_DATA, log, logErr, loc, ui, tabName, groupSourceSuffix, itemLabel, itemTags, itemNote, formatTags, trackUsage, getUsageCount, isFavorite, toggleFavorite, sortByUsage, isPinned, formulaMatchesView, createLibraryFilterBar, openFormulaMenu, searchLibrary, searchSummaryText, searchMoreText } from "./core.js";
 
 // ======================== Sidebar (simplified) ========================
@@ -13,17 +14,19 @@ class SidebarView extends obsidian.ItemView {
     if (!FORMULA_DATA) { logErr("Sidebar: no data"); return; }
     this.currentGroup = FORMULA_DATA.GROUPS[0];
     const c = this.containerEl.children[1]; c.empty(); c.addClass("formula-library-sidebar");
+    applyLibraryTypography(c, this.plugin.settings);
 
     const sc = c.createDiv({ cls: "fl-search-container" });
     const si = sc.createEl("input", { cls: "fl-search-input", attr: { type: "text", placeholder: ui(this.plugin, "search") } });
+    this.searchInput = si;
     si.addEventListener("input", () => { this.globalQ = si.value; this.searchLimit = 0; this.renderList(); });
 
     const isZh = loc(this.plugin) === "zh";
     const hint = sc.createDiv({ cls: "fl-search-hint" });
-    hint.createEl("span", { text: isZh ? "支持: 拼音首字母 · LaTeX命令( frac sqrt lim ) · 模糊匹配" : "Smart: pinyin initials · LaTeX commands (frac sqrt lim) · fuzzy match", cls: "fl-search-hint-text" });
+    this.hintEl = hint.createEl("span", { text: isZh ? "支持: 拼音首字母 · LaTeX命令( frac sqrt lim ) · 模糊匹配" : "Smart: pinyin initials · LaTeX commands (frac sqrt lim) · fuzzy match", cls: "fl-search-hint-text" });
     this.searchCountEl = sc.createDiv({ cls: "fl-search-count" });
 
-    createLibraryFilterBar(this.plugin, c, this.viewMode, (view) => {
+    this.filterBar = createLibraryFilterBar(this.plugin, c, this.viewMode, (view) => {
       this.viewMode = view;
       this.searchLimit = 0;
       this.renderList();
@@ -33,13 +36,13 @@ class SidebarView extends obsidian.ItemView {
     this.listEl = c.createDiv({ cls: "fl-list" });
 
     const bar = c.createDiv({ cls: "fl-action-bar" });
-    bar.createEl("button", { cls: "fl-btn fl-btn-primary", text: ui(this.plugin, "openEditor") })
-      .addEventListener("click", () => {
+    this.openEditorButton = bar.createEl("button", { cls: "fl-btn fl-btn-primary", text: ui(this.plugin, "openEditor") });
+    this.openEditorButton.addEventListener("click", () => {
         this.plugin.openEditor("insert");
       });
     const drawingButton = bar.createEl("button", { cls: "fl-btn", attr: { type: "button" } });
     obsidian.setIcon(drawingButton, "workflow");
-    drawingButton.createSpan({ text: ui(this.plugin, "drawing") });
+    this.drawingLabel = drawingButton.createSpan({ text: ui(this.plugin, "drawing") });
     drawingButton.addEventListener("click", () => this.plugin.openDrawing());
 
     this.renderTabs(); this.renderList();
@@ -63,7 +66,16 @@ class SidebarView extends obsidian.ItemView {
     });
   }
 
+  refreshLocalization() {
+    if (this.searchInput) { this.searchInput.placeholder = ui(this.plugin, "search"); this.searchInput.setAttribute("aria-label", ui(this.plugin, "search")); }
+    if (this.hintEl) this.hintEl.setText(loc(this.plugin) === "zh" ? "支持: 拼音首字母 · LaTeX命令( frac sqrt lim ) · 模糊匹配" : "Smart: pinyin initials · LaTeX commands (frac sqrt lim) · fuzzy match");
+    this.filterBar?.refreshLabels(this.plugin);
+    this.openEditorButton?.setText(ui(this.plugin, "openEditor"));
+    this.drawingLabel?.setText(ui(this.plugin, "drawing"));
+  }
+
   renderList() {
+    applyLibraryTypography(this.containerEl.children[1], this.plugin.settings);
     this.listEl.empty();
     const q = this.globalQ.trim();
     const limit = Number(this.plugin.settings.searchResultLimit) || 160;

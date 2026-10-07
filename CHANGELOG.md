@@ -2,6 +2,15 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.4.1] - 2026-10-08
+
+### Fixed
+- Formula library names no longer use fixed 9 px text. The editor library and sidebar follow Obsidian's Appearance font size by default, updating live when it changes.
+- Added **Follow Obsidian font size** and a separate **Formula library font size** control (14–32 px). MathLive's preview size remains independent.
+- Library source labels have a readable minimum size; longer names wrap, and card columns/heights adapt to larger fonts without horizontal overflow.
+- Language changes refresh sidebar/editor search, filters, buttons and accessibility labels. Automatic language prefers Obsidian's language API; MathLive can switch back to English.
+- All eleven Mermaid templates provide English samples. Existing drafts and note diagrams are preserved; bare node references no longer reset a decision node's shape.
+
 ## [1.4.0] - 2026-10-08
 
 ### Added

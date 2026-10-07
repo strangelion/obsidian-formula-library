@@ -225,6 +225,10 @@ Each formula is an array: `[label_zh, LaTeX code, label_en (optional)]`
 - **Matrix template**: `["Matrix", "matrix:matrix", "Matrix"]` (prefix `matrix:` triggers template)
 - **Personal library metadata**: `["Name", "\\latex", "English name", {"tags": ["algebra"], "note": "why it matters"}]` (the 4th element is optional and only used by the custom library; tags are shown as `#tag` in lists)
 
+### Library font size
+
+Formula names, source labels and library controls follow **Settings → Appearance → Font size** by default, in both the editor's right-hand panel and the sidebar. To choose an independent size, open **Settings → Formula Library**, turn off **Follow Obsidian font size**, then adjust **Formula library font size** (14–32 px). Changes apply to open libraries immediately. **Preview font size** only controls the MathLive editing area.
+
 ## Development
 
 Feature source lives in `src/`; do not edit generated `main.js` or `styles.css` directly. See [development](docs/DEVELOPMENT.md) and [UI acceptance rules](docs/UI-GUIDELINES.md).

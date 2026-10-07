@@ -5,6 +5,7 @@ import { SaveToLibraryModal } from "./personal-library.js";
 import { ParamTemplateModal } from "./parameters.js";
 import { MatrixPasteModal } from "./matrix.js";
 import { PlotFunctionModal } from "./plot.js";
+import { applyLibraryTypography } from "./typography.js";
 
 // ======================== Editor Modal ========================
 class EditorModal extends obsidian.Modal {
@@ -33,6 +34,7 @@ class EditorModal extends obsidian.Modal {
     this.btnV = tg.createEl("button", { text: ui(this.plugin, "visual"), cls: "active" });
     this.btnS = tg.createEl("button", { text: ui(this.plugin, "source") });
     const tools = this.contentEl.createDiv({ cls: "fe-tools-bar", attr: { role: "group", "aria-label": loc(this.plugin) === "zh" ? "公式工具" : "Formula tools" } });
+    this.toolsBar = tools;
     this.btnParams = tools.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "paramTemplates") });
     this.btnParams.addEventListener("click", () => {
       new ParamTemplateModal(this.app, this.plugin, { onInsert: (latex) => this.insertIntoEditor(latex) }).open();
@@ -48,7 +50,8 @@ class EditorModal extends obsidian.Modal {
       new PlotFunctionModal(this.app, this.plugin, {}).open();
     });
     top.createDiv({ cls: "fe-spacer" });
-    top.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "cancel") }).addEventListener("click", () => this.close());
+    this.btnCancel = top.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "cancel") });
+    this.btnCancel.addEventListener("click", () => this.close());
     this.btnAccept = top.createEl("button", { cls: "fe-btn fe-btn-primary", text: ui(this.plugin, "acceptInsert") });
     this.btnAccept.addEventListener("click", () => this.accept());
 
@@ -83,14 +86,16 @@ class EditorModal extends obsidian.Modal {
     }
 
     const lp = ml.createDiv({ cls: "fe-library-panel" });
+    this.libraryPanel = lp;
+    applyLibraryTypography(lp, this.plugin.settings);
     const lc = lp.createDiv({ cls: "fl-search-container" });
     this.libSI = lc.createEl("input", { cls: "fl-search-input", attr: { type: "text", placeholder: ui(this.plugin, "search") } });
     this.libSI.addEventListener("input", () => { this.libLimit = 0; this.renderLibGrid(); });
     const hintZh = loc(this.plugin) === "zh";
-    lc.createDiv({ cls: "fl-search-hint" }).createEl("span", { text: hintZh ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy", cls: "fl-search-hint-text" });
+    this.libHint = lc.createDiv({ cls: "fl-search-hint" }).createEl("span", { text: hintZh ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy", cls: "fl-search-hint-text" });
     this.libCountEl = lc.createDiv({ cls: "fl-search-count" });
 
-    createLibraryFilterBar(this.plugin, lp, this.viewMode, (view) => {
+    this.libFilterBar = createLibraryFilterBar(this.plugin, lp, this.viewMode, (view) => {
       this.viewMode = view;
       this.libLimit = 0;
       this.renderLibGrid();
@@ -110,6 +115,7 @@ class EditorModal extends obsidian.Modal {
         try { MathfieldElement.strings = { "zh-CN": MATHLIVE_ZH }; } catch {}
         try { MathfieldElement.locale = "zh-CN"; } catch {}
       }
+      try { MathfieldElement.locale = loc(this.plugin) === "zh" ? "zh-CN" : "en"; } catch {}
       this.mf = new MathfieldElement();
       this.mf.classList.add("fe-mathfield");
       this.mf.mathVirtualKeyboardPolicy = this.plugin.settings.mathliveKeyboard ? "auto" : "manual";
@@ -479,6 +485,7 @@ class EditorModal extends obsidian.Modal {
   // change in the settings tab shows up without reopening the editor.
   refreshLibrary() {
     if (!FORMULA_DATA) return;
+    this.refreshLocalization();
     this.libCurG = FORMULA_DATA.GROUPS.find((g) => this.libCurG && g.id === this.libCurG.id && g.source === this.libCurG.source) || FORMULA_DATA.GROUPS[0] || null;
     this.renderLibTabs();
     this.renderLibGrid();
@@ -487,6 +494,7 @@ class EditorModal extends obsidian.Modal {
 
   applyDisplaySettings() {
     const s = this.plugin.settings;
+    applyLibraryTypography(this.libraryPanel, s);
     this.modalEl.dataset.density = s.libraryDensity || "comfortable";
     if (!this.mf) return;
     this.mf.style.fontSize = (s.previewFontSize || 20) + "px";
@@ -495,6 +503,25 @@ class EditorModal extends obsidian.Modal {
     if (s.mathFontFamily) this.mf.style.setProperty("--math-font-family", s.mathFontFamily);
     else this.mf.style.removeProperty("--math-font-family");
     this.mf.mathVirtualKeyboardPolicy = s.mathliveKeyboard ? "auto" : "manual";
+  }
+
+  refreshLocalization() {
+    this.titleEl.setText(ui(this.plugin, "title"));
+    const labels = [
+      [this.btnV, "visual"], [this.btnS, "source"], [this.btnParams, "paramTemplates"],
+      [this.btnMatrix, "matrixPaste"], [this.btnSave, "saveToLibrary"], [this.btnPlot, "plotTitle"],
+      [this.btnCancel, "cancel"], [this.btnAccept, this.initMode === "update" ? "acceptUpdate" : "acceptInsert"],
+    ];
+    for (const [button, key] of labels) button?.setText(ui(this.plugin, key));
+    this.libSI.placeholder = ui(this.plugin,"search");
+    this.libSI.setAttribute("aria-label",ui(this.plugin,"search"));
+    this.libHint?.setText(loc(this.plugin) === "zh" ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy");
+    this.libFilterBar?.refreshLabels(this.plugin);
+    this.toolsBar?.setAttribute("aria-label",loc(this.plugin) === "zh" ? "公式工具" : "Formula tools");
+    if (["Ready", "就绪"].includes(this.statusEl?.textContent)) this.statusEl.setText(ui(this.plugin,"ready"));
+    if (typeof window.MathfieldElement !== "undefined") {
+      try { window.MathfieldElement.locale = loc(this.plugin) === "zh" ? "zh-CN" : "en"; } catch {}
+    }
   }
 }
 

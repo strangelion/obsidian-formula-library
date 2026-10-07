@@ -11,6 +11,8 @@ const DEFAULT_SETTINGS = {
   mathliveKeyboard: true,
   formulasPath: "formulas",
   previewFontSize: 20,
+  libraryFontFollowObsidian: true,
+  libraryFontSize: 18,
   mathFontStyle: "italic",
   mathFontFamily: "",
   enabledGroups: {},
@@ -54,6 +56,8 @@ const UI_STRINGS = {
     mathliveKbd: "MathLive virtual keyboard", mathliveKbdDesc: "Enable virtual keyboard in visual mode.",
     formulasFolder: "Formulas folder", formulasFolderDesc: "Path to formulas folder relative to plugin directory.",
     fontSize: "Preview font size", fontSizeDesc: "Font size (px) for MathLive editor.",
+    libraryFontFollow: "Follow Obsidian font size", libraryFontFollowDesc: "Formula names, source labels and library controls follow Appearance → Font size in both the editor and sidebar. Does not change the MathLive preview font.",
+    libraryFontSize: "Formula library font size", libraryFontSizeDesc: "Independent library text size (14–32 px). Turn off Follow Obsidian font size to adjust; open libraries update immediately.",
     fontStyle: "Math font style", fontStyleDesc: "Italic (default) or upright math rendering.",
     fontFamily: "Custom font family", fontFamilyDesc: "Override math font. Leave empty for KaTeX default.",
     density: "Library density", densityDesc: "Controls formula card size and spacing.",
@@ -98,6 +102,8 @@ const UI_STRINGS = {
     mathliveKbd: "MathLive 虚拟键盘", mathliveKbdDesc: "可视化模式下启用虚拟键盘。",
     formulasFolder: "公式文件夹", formulasFolderDesc: "公式文件相对插件目录的路径。",
     fontSize: "预览字体大小", fontSizeDesc: "MathLive 编辑器字号 (px)。",
+    libraryFontFollow: "跟随 Obsidian 字号", libraryFontFollowDesc: "编辑器右侧和侧栏中的公式名称、源码标签及控件跟随「外观 → 字体大小」。不影响 MathLive 预览字号。",
+    libraryFontSize: "公式库字体大小", libraryFontSizeDesc: "独立调整公式库文字（14–32 px）。关闭「跟随 Obsidian 字号」后可调整，已打开的公式库即时更新。",
     fontStyle: "数学字体样式", fontStyleDesc: "斜体（默认）或正体渲染。",
     fontFamily: "自定义字体", fontFamilyDesc: "覆盖数学字体，留空使用 KaTeX 默认。",
     density: "公式库密度", densityDesc: "控制公式卡片的尺寸与间距。",
@@ -221,7 +227,9 @@ function logWarn(...args) { console.warn(LOG_PREFIX, ...args); }
 function logErr(...args) { console.error(LOG_PREFIX, ...args); }
 
 function loc(plugin) {
-  return (plugin.settings?.locale === "auto" ? navigator.language : plugin.settings.locale).startsWith("zh") ? "zh" : "en";
+  const selected = plugin.settings?.locale || "auto";
+  const language = selected === "auto" ? (typeof obsidian.getLanguage === "function" ? obsidian.getLanguage() : navigator.language) : selected;
+  return String(language || "en").startsWith("zh") ? "zh" : "en";
 }
 function ui(plugin, key) {
   const lang = loc(plugin);
@@ -422,7 +430,17 @@ function createLibraryFilterBar(plugin, parent, initialView, onChange) {
     buttons.set(key, button);
   }
   setActive(initialView || "all");
-  return { controls, setActive };
+  const refreshLabels = (currentPlugin = plugin) => {
+    controls.setAttribute("aria-label", loc(currentPlugin) === "zh" ? "公式筛选" : "Formula filters");
+    const keys = { all: "allFormulas", favorites: "favorites", pinned: "pinned", recent: "recent", hidden: "hidden" };
+    for (const [key, button] of buttons) {
+      const label = ui(currentPlugin, keys[key]);
+      button.title = label;
+      button.setAttribute("aria-label", label);
+      button.querySelector(".fl-filter-label").textContent = label;
+    }
+  };
+  return { controls, setActive, refreshLabels };
 }
 
 function openFormulaMenu(plugin, item, event, refresh) {

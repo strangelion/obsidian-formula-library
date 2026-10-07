@@ -8,59 +8,75 @@ const DRAWING_TEMPLATES = {
     en: "Flowchart",
     visualType: "flowchart",
     source: "flowchart LR\n  A[开始] --> B{条件}\n  B -->|是| C[处理]\n  B -->|否| D[调整]\n  C --> E[完成]\n  D --> B",
+    sourceEn: "flowchart LR\n  A[Start] --> B{Condition}\n  B -->|Yes| C[Process]\n  B -->|No| D[Adjust]\n  C --> E[Done]\n  D --> B",
   },
   mindmap: {
     zh: "思维导图",
     en: "Mind map",
     source: "mindmap\n  root((主题))\n    分支 A\n      要点 A1\n      要点 A2\n    分支 B\n      要点 B1",
+    sourceEn: "mindmap\n  root((Topic))\n    Branch A\n      Point A1\n      Point A2\n    Branch B\n      Point B1",
   },
   sequence: {
     zh: "时序图",
     en: "Sequence",
     source: "sequenceDiagram\n  participant U as 用户\n  participant P as 插件\n  participant O as Obsidian\n  U->>P: 提交内容\n  P->>O: 写入笔记\n  O-->>U: 更新完成",
+    sourceEn: "sequenceDiagram\n  participant U as User\n  participant P as Plugin\n  participant O as Obsidian\n  U->>P: Submit content\n  P->>O: Write to note\n  O-->>U: Update complete",
   },
   state: {
     zh: "状态图",
     en: "State",
     visualType: "state",
     source: "stateDiagram-v2\n  [*] --> 编辑\n  编辑 --> 预览\n  预览 --> 编辑: 修改\n  预览 --> 完成: 插入\n  完成 --> [*]",
+    sourceEn: "stateDiagram-v2\n  [*] --> Edit\n  Edit --> Preview\n  Preview --> Edit: Revise\n  Preview --> Done: Insert\n  Done --> [*]",
   },
   classDiagram: {
     zh: "类图",
     en: "Class diagram",
     source: "classDiagram\n  class Formula {\n    +String latex\n    +String label\n    +insert()\n  }\n  class Library {\n    +search(query)\n    +pin(formula)\n  }\n  Library o-- Formula",
+    sourceEn: "classDiagram\n  class Formula {\n    +String latex\n    +String label\n    +insert()\n  }\n  class Library {\n    +search(query)\n    +pin(formula)\n  }\n  Library o-- Formula",
   },
   er: {
     zh: "实体关系图",
     en: "ER diagram",
     source: "erDiagram\n  USER ||--o{ NOTE : creates\n  USER {\n    string id PK\n    string name\n  }\n  NOTE {\n    string id PK\n    string title\n  }",
+    sourceEn: "erDiagram\n  USER ||--o{ NOTE : creates\n  USER {\n    string id PK\n    string name\n  }\n  NOTE {\n    string id PK\n    string title\n  }",
   },
   gantt: {
     zh: "甘特图",
     en: "Gantt",
     source: "gantt\n  title 项目计划\n  dateFormat YYYY-MM-DD\n  section 设计\n  需求分析 :done, a1, 2026-08-01, 3d\n  界面设计 :active, a2, after a1, 4d\n  section 开发\n  功能实现 :a3, after a2, 7d\n  测试发布 :a4, after a3, 3d",
+    sourceEn: "gantt\n  title Project plan\n  dateFormat YYYY-MM-DD\n  section Design\n  Requirements :done, a1, 2026-08-01, 3d\n  Interface design :active, a2, after a1, 4d\n  section Development\n  Implementation :a3, after a2, 7d\n  Test and release :a4, after a3, 3d",
   },
   timeline: {
     zh: "时间线",
     en: "Timeline",
     source: "timeline\n  title 版本路线图\n  2026 Q1 : 搜索与收藏\n  2026 Q2 : 公式编辑器\n  2026 Q3 : 可视化绘图\n  2026 Q4 : 扩展与同步",
+    sourceEn: "timeline\n  title Release roadmap\n  2026 Q1 : Search and favorites\n  2026 Q2 : Formula editor\n  2026 Q3 : Visual diagrams\n  2026 Q4 : Extensions and sync",
   },
   pie: {
     zh: "饼图",
     en: "Pie chart",
     source: "pie showData\n  title 公式分类\n  \"代数\" : 42\n  \"微积分\" : 30\n  \"几何\" : 18\n  \"其他\" : 10",
+    sourceEn: "pie showData\n  title Formula categories\n  \"Algebra\" : 42\n  \"Calculus\" : 30\n  \"Geometry\" : 18\n  \"Other\" : 10",
   },
   quadrant: {
     zh: "象限图",
     en: "Quadrant chart",
     source: "quadrantChart\n  title 功能优先级\n  x-axis 低成本 --> 高成本\n  y-axis 低价值 --> 高价值\n  quadrant-1 战略投入\n  quadrant-2 快速收益\n  quadrant-3 暂缓\n  quadrant-4 谨慎评估\n  搜索优化: [0.25, 0.82]\n  绘图编辑: [0.62, 0.76]",
+    sourceEn: "quadrantChart\n  title Feature priorities\n  x-axis Low cost --> High cost\n  y-axis Low value --> High value\n  quadrant-1 Strategic investment\n  quadrant-2 Quick wins\n  quadrant-3 Defer\n  quadrant-4 Evaluate carefully\n  Search: [0.25, 0.82]\n  Diagrams: [0.62, 0.76]",
   },
   gitGraph: {
     zh: "Git 分支图",
     en: "Git graph",
     source: "gitGraph\n  commit id: \"初始化\"\n  branch feature\n  checkout feature\n  commit id: \"功能开发\"\n  checkout main\n  merge feature\n  commit id: \"发布\"",
+    sourceEn: "gitGraph\n  commit id: \"Initialize\"\n  branch feature\n  checkout feature\n  commit id: \"Develop feature\"\n  checkout main\n  merge feature\n  commit id: \"Release\"",
   },
 };
+
+export function drawingTemplateSource(plugin, key) {
+  const template = DRAWING_TEMPLATES[key] || DRAWING_TEMPLATES.flowchart;
+  return loc(plugin) === "en" ? (template.sourceEn || template.source) : template.source;
+}
 
 const DRAWING_NODE_ID_RE = /^[\p{L}\p{N}_-]+$/u;
 const DRAWING_SHAPE_RE = /^[\p{L}\p{N}_-]+(?:\(\(.*\)\)|\{.*\}|\[.*\])$/u;
@@ -230,7 +246,7 @@ function parseVisualDrawing(source, visualType) {
     const existing = nodeMap.get(parsed.id);
     if (existing) {
       if (parsed.label && parsed.label !== parsed.id) existing.label = parsed.label;
-      if (parsed.shape) existing.shape = parsed.shape;
+      if (DRAWING_SHAPE_RE.test(token)) existing.shape = parsed.shape;
       return existing.id;
     }
     nodeMap.set(parsed.id, parsed);
@@ -423,19 +439,20 @@ class DrawingModal extends obsidian.Modal {
     const applyTemplate = (initial) => {
       const key = select.value in DRAWING_TEMPLATES ? select.value : "flowchart";
       const template = DRAWING_TEMPLATES[key];
+      const source = drawingTemplateSource(this.plugin, key);
       const previous = this.source.value;
-      if (!initial && previous && previous !== template.source) {
+      if (!initial && previous && previous !== source) {
         // Applying a template overwrites the current source: keep it undoable.
         this.pushHistoryValue(previous, { force: true });
       }
       this.currentTemplateKey = key;
-      this.source.value = template.source;
-      this.lastTextValue = template.source;
-      this.lastSerialized = template.source;
+      this.source.value = source;
+      this.lastTextValue = source;
+      this.lastSerialized = source;
       // "Restore original" returns to the text this session started from; a later
       // template switch stays recoverable through undo instead.
-      if (initial) this.originalSource = template.source;
-      this.visualGraph = template.visualType ? parseVisualDrawing(template.source, template.visualType) : null;
+      if (initial) this.originalSource = source;
+      this.visualGraph = template.visualType ? parseVisualDrawing(source, template.visualType) : null;
       if (template.visualType) {
         this.setMode(this.mode === "source" ? "source" : "visual");
         if (!initial) this.status.setText(ui(this.plugin, "drawingTemplateReplaced"));

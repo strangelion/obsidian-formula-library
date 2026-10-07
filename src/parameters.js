@@ -568,7 +568,7 @@ class CustomParamTemplateModal extends obsidian.Modal {
     this.key = !duplicate && template?.key.startsWith("custom-") ? template.key : "custom-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
     this.onSaved = onSaved;
     this.paramDraft = Object.create(null);
-    for (const param of template?.params || []) this.paramDraft[param.name] = { ...param };
+    for (const param of template?.params || []) this.paramDraft[param.name] = { ...param, label: paramLabel(plugin, param) };
   }
 
   onOpen() {
@@ -583,7 +583,7 @@ class CustomParamTemplateModal extends obsidian.Modal {
       labelControl(control, label);
       return control;
     };
-    this.nameInput = field(t("模板名称", "Template name"), this.initial?.name || "");
+    this.nameInput = field(t("模板名称", "Template name"), paramTemplateLabel(this.plugin, this.initial));
     this.categoryInput = field(t("分类（可选）", "Category (optional)"), this.initial?.category || "");
     this.latexInput = field("LaTeX", (this.initial?.latex || "y = {{a}} \\cdot x + {{b}}").replace(/#([A-Za-z][A-Za-z0-9_]*)#/g, "{{$1}}"), true);
     this.contentEl.createEl("p", { cls: "setting-item-description", text: t("用 {{a}}、{{b}} 标记参数。参数名使用英文字母、数字和下划线；默认值可填写 LaTeX。乘法请写 \\cdot，避免数字替换后连在一起。", "Mark parameters with {{a}}, {{b}}. Names use ASCII letters, digits and underscores; defaults may contain LaTeX. Use \\cdot for multiplication to keep numeric substitutions separate.") });
@@ -610,7 +610,7 @@ class CustomParamTemplateModal extends obsidian.Modal {
       const value = row.createEl("input", { cls: "ft-input", attr: { spellcheck: "false" } });
       value.value = draft.value;
       labelControl(value, (loc(this.plugin) === "zh" ? "默认值 · " : "Default · ") + name);
-      label.addEventListener("input", () => { draft.label = label.value; this.refresh(); });
+      label.addEventListener("input", () => { draft.label = label.value; draft.labelEn = label.value; this.refresh(); });
       value.addEventListener("input", () => { draft.value = value.value; this.refresh(); });
     }
     this.refresh();
@@ -635,7 +635,7 @@ class CustomParamTemplateModal extends obsidian.Modal {
     if (error) { this.errorEl.setText(this.errorText(error)); return; }
     const previous = this.plugin.settings.customParamTemplates || [];
     const next = previous.filter((entry) => entry.key !== data.key);
-    if (next.length >= 200) { this.errorEl.setText("At most 200 templates / 最多支持 200 个模板"); return; }
+    if (next.length >= 200) { this.errorEl.setText(this.errorText("At most 200 templates / 最多支持 200 个模板")); return; }
     this.plugin.settings.customParamTemplates = next.concat(data);
     try { await this.plugin.saveSettings(); } catch (error) { this.plugin.settings.customParamTemplates = previous; throw error; }
     this.onSaved(data.key);

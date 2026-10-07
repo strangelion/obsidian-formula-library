@@ -1,6 +1,7 @@
 import * as obsidian from "obsidian";
 import { log, loc, ui, groupDisplayName, FORMULA_INDEX, normalizeFolderPath } from "./core.js";
 import { customFolderFor, ImportFormulasModal, ExportFormulasModal, CustomFormulasModal } from "./custom-library.js";
+import { LIBRARY_FONT_MIN, LIBRARY_FONT_MAX, normalizeLibraryFontSize } from "./typography.js";
 
 // ======================== Settings Tab ========================
 class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
@@ -66,6 +67,36 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.previewFontSize)
         .setDynamicTooltip()
         .onChange(async (v) => { p.settings.previewFontSize = v; await p.saveSettings(); p.refreshViews(); }));
+
+    let libraryFontSlider;
+    new obsidian.Setting(containerEl)
+      .setName(ui(p, "libraryFontFollow"))
+      .setDesc(ui(p, "libraryFontFollowDesc"))
+      .addToggle((toggle) => toggle
+        .setValue(p.settings.libraryFontFollowObsidian !== false)
+        .onChange(async (value) => {
+          p.settings.libraryFontFollowObsidian = value;
+          libraryFontSlider?.setDisabled(value);
+          await p.saveSettings();
+          p.refreshViews();
+        }));
+
+    new obsidian.Setting(containerEl)
+      .setName(ui(p, "libraryFontSize"))
+      .setDesc(ui(p, "libraryFontSizeDesc"))
+      .addSlider((slider) => {
+        libraryFontSlider = slider;
+        slider.sliderEl.setAttribute("aria-label", ui(p, "libraryFontSize"));
+        return slider.setLimits(LIBRARY_FONT_MIN, LIBRARY_FONT_MAX, 1)
+          .setValue(normalizeLibraryFontSize(p.settings.libraryFontSize))
+          .setDisabled(p.settings.libraryFontFollowObsidian !== false)
+          .setDynamicTooltip()
+          .onChange(async (value) => {
+            p.settings.libraryFontSize = normalizeLibraryFontSize(value);
+            await p.saveSettings();
+            p.refreshViews();
+          });
+      });
 
     new obsidian.Setting(containerEl)
       .setName(ui(p, "fontStyle"))

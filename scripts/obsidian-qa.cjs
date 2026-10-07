@@ -18,6 +18,15 @@ const fs = require("node:fs");
         theme: document.body.className,
         commands: Object.keys(window.app?.commands?.commands || {}).filter((id) => id.startsWith("formula-library:")),
       })), null, 2));
+    } else if (command === "font-inspect") {
+      console.log(JSON.stringify(await page.evaluate(() => ({
+        baseFontSize: app.vault.getConfig('baseFontSize'),
+        bodyTextSize: getComputedStyle(document.body).getPropertyValue('--font-text-size'),
+        rootTextSize: getComputedStyle(document.documentElement).getPropertyValue('--font-text-size'),
+        fontMethod: typeof app.updateFontSize === 'function' ? app.updateFontSize.toString().slice(0,700) : null,
+        baseFontMethod: typeof app.getBaseFontSize === 'function' ? app.getBaseFontSize.toString().slice(0,600) : null,
+        paste: app.plugins.getPlugin('formula-library')?.manifest.version,
+      })),null,2));
     } else if (command === "reload") {
       await page.evaluate(async () => {
         const manifest = app.plugins.manifests['formula-library'];
@@ -80,6 +89,188 @@ const fs = require("node:fs");
       })), null, 2));
       await page.screenshot({path:'output/playwright/matrix-probe.png'});
       await page.evaluate(() => {window.__matrixProbe.close();delete window.__matrixProbe;});
+    } else if (command === "verify-fonts") {
+      fs.mkdirSync('output/playwright',{recursive:true});
+      const errors=[];
+      page.on('pageerror',(error)=>errors.push(error.message));
+      const originalViewport=await page.evaluate(()=>({width:innerWidth,height:innerHeight}));
+      await page.evaluate(async () => {
+        const p=app.plugins.getPlugin('formula-library');
+        window.__formulaFontStored=app.loadLocalStorage('base-font-size');
+        window.__formulaFontMathLocale=window.MathfieldElement?.locale;
+        window.__formulaFontOriginalLeaf=app.workspace.activeLeaf;
+        window.__formulaFontLeaf=app.workspace.getLeaf(true);
+        await window.__formulaFontLeaf.setViewState({type:'formula-library-sidebar'});
+        const sidebar=window.__formulaFontLeaf.view;
+        const m=p.openEditor();
+        window.__formulaFontModal=m;
+        m.modalEl.dataset.qaFont='true';
+        const clone=Object.assign(Object.create(p),{
+          settings:{...p.settings,locale:'en',libraryFontFollowObsidian:true,libraryFontSize:18},
+          saveSettings:async()=>{},
+          refreshViews:()=>{m.refreshLibrary();sidebar.refreshLocalization();sidebar.renderTabs();sidebar.renderList();},
+        });
+        m.plugin=clone;sidebar.plugin=clone;
+        clone.refreshViews();
+        const realTab=app.setting.pluginTabs.find((tab)=>tab.id==='formula-library');
+        if (!realTab) throw Error('Formula Library setting tab was not registered');
+        const tab=new realTab.constructor(app,clone);
+        tab.containerEl=document.createElement('div');
+        tab.containerEl.dataset.qaFontSettings='true';
+        // Render actual Obsidian Setting controls inside this owned test dialog.
+        tab.containerEl.style.cssText='position:absolute;inset:45px 20px 20px;overflow:auto;background:var(--background-primary);z-index:2;padding:12px;';
+        m.modalEl.appendChild(tab.containerEl);
+        await tab.display();
+        window.__formulaFontTab=tab;
+        app.saveLocalStorage('base-font-size',18);app.updateFontSize();
+      });
+      const modal=page.locator('[data-qa-font="true"]');
+      const settings=modal.locator('[data-qa-font-settings]');
+      const follow=settings.locator('.setting-item').filter({has:page.locator('.setting-item-name',{hasText:'Follow Obsidian font size'})}).locator('.checkbox-container');
+      const slider=settings.getByLabel('Formula library font size',{exact:true});
+      const sizes=async()=>page.evaluate(()=>({
+        label:parseFloat(getComputedStyle(window.__formulaFontModal.libraryPanel.querySelector('.fl-sym-label')).fontSize),
+        source:parseFloat(getComputedStyle(window.__formulaFontModal.libraryPanel.querySelector('.fl-sym-fallback')).fontSize),
+        sidebar:parseFloat(getComputedStyle(window.__formulaFontLeaf.view.listEl.querySelector('.fl-list-item-symbol')).fontSize),
+        math:window.__formulaFontModal.mf?.style.fontSize,
+      }));
+      const screenshot=async(name)=>{
+        if(process.argv.includes('--no-screenshots')) return;
+        await page.screenshot({path:'output/playwright/'+name+'.png',timeout:12000});
+      };
+      try {
+        await page.setViewportSize({width:1280,height:900});
+        await modal.locator('math-field').waitFor();
+        const originalMath=(await sizes()).math;
+        assert.equal((await sizes()).label,18);assert.equal((await sizes()).sidebar,18);
+        assert.equal(await slider.isDisabled(),true);
+        await follow.click();
+        assert.equal(await slider.isDisabled(),false);
+        await slider.fill('22');
+        await slider.dispatchEvent('input');
+        await page.waitForFunction(()=>parseFloat(getComputedStyle(window.__formulaFontModal.libraryPanel.querySelector('.fl-sym-label')).fontSize)===22);
+        assert.equal((await sizes()).sidebar,22);assert.equal((await sizes()).math,originalMath);
+        // Reload the settings controls from the same saved settings object.
+        await page.evaluate(()=>window.__formulaFontTab.display());
+        assert.equal(await slider.inputValue(),'22');
+        assert.equal(await slider.isDisabled(),false);
+        await follow.click();
+        assert.equal((await sizes()).label,18);
+        await page.evaluate(()=>{app.saveLocalStorage('base-font-size',24);app.updateFontSize();});
+        await page.waitForFunction(()=>parseFloat(getComputedStyle(window.__formulaFontModal.libraryPanel.querySelector('.fl-sym-label')).fontSize)===24,null,{timeout:5000});
+        assert.equal((await sizes()).label,24);assert.equal((await sizes()).sidebar,24);
+        assert.equal((await sizes()).math,originalMath);
+        console.log('PASS actual settings controls, independent font, restored follow mode and live Appearance changes');
+        await follow.click();
+        await slider.fill('32');await slider.dispatchEvent('input');
+        await page.waitForFunction(()=>parseFloat(getComputedStyle(window.__formulaFontModal.libraryPanel.querySelector('.fl-sym-label')).fontSize)===32);
+        await page.evaluate(()=>window.__formulaFontTab.containerEl.remove());
+        // Add an intentionally long choice without touching the user's library.
+        await page.evaluate(()=>{
+          const m=window.__formulaFontModal;
+          m.libGrid.appendChild(m.makeLibBtn(['Long choice name that must remain fully readable at a large font size','x^2','Long choice name that must remain fully readable at a large font size']));
+        });
+        const check=async(name)=>{
+          const issues=await modal.evaluate((root)=>{
+            const errors=[];
+            const panel=root.querySelector('.fe-library-panel');
+            if(root.scrollWidth>root.clientWidth+2||panel.scrollWidth>panel.clientWidth+2)errors.push('horizontal overflow');
+            for(const label of panel.querySelectorAll('.fl-sym-label')){
+              if(label.scrollHeight>label.clientHeight+1)errors.push('clipped label');
+              const card=label.closest('.fl-symbol-btn');
+              const box=label.getBoundingClientRect(),parent=card.getBoundingClientRect();
+              if(box.left<parent.left||box.right>parent.right+1||box.bottom>parent.bottom+1)errors.push('text outside card');
+            }
+            return errors;
+          });
+          assert.deepEqual(issues,[],name);await screenshot(name);console.log('PASS '+name);
+        };
+        await check('font-32-desktop');
+        await page.setViewportSize({width:390,height:844});
+        await check('font-32-portrait');
+        await page.evaluate(()=>{
+          const m=window.__formulaFontModal;m.plugin.settings.libraryFontFollowObsidian=true;m.plugin.refreshViews();
+          app.saveLocalStorage('base-font-size',18);app.updateFontSize();
+        });
+        await check('font-18-portrait');
+        await page.setViewportSize({width:1280,height:900});
+        await check('font-18-desktop');
+        assert.equal((await sizes()).label,18);assert.ok((await sizes()).source>=14);
+        assert.deepEqual(errors,[],'no renderer exceptions');
+      } finally {
+        await page.evaluate(()=>{
+          app.saveLocalStorage('base-font-size',window.__formulaFontStored);app.updateFontSize();
+          window.__formulaFontModal?.close();window.__formulaFontLeaf?.detach();
+          if(window.MathfieldElement && window.__formulaFontMathLocale) window.MathfieldElement.locale=window.__formulaFontMathLocale;
+          if(window.__formulaFontOriginalLeaf) app.workspace.setActiveLeaf(window.__formulaFontOriginalLeaf,{focus:true});
+          for(const key of ['__formulaFontStored','__formulaFontMathLocale','__formulaFontOriginalLeaf','__formulaFontLeaf','__formulaFontModal','__formulaFontTab'])delete window[key];
+        });
+        await page.setViewportSize(originalViewport);
+      }
+    } else if (command === "verify-locale") {
+      fs.mkdirSync('output/playwright',{recursive:true});
+      const errors=[];page.on('pageerror',(error)=>errors.push(error.message));
+      await page.evaluate(async()=>{
+        const p=app.plugins.getPlugin('formula-library');
+        window.__formulaLocaleOriginalLeaf=app.workspace.activeLeaf;
+        window.__formulaLocaleMath=window.MathfieldElement?.locale;
+        const clone=Object.assign(Object.create(p),{settings:{...p.settings,locale:'zh',drawingDraft:null},saveSettings:async()=>{},_editorModals:new Set()});
+        window.__formulaLocalePlugin=clone;
+        window.__formulaLocaleLeaf=app.workspace.getLeaf(true);
+        await window.__formulaLocaleLeaf.setViewState({type:'formula-library-sidebar'});
+        window.__formulaLocaleLeaf.view.plugin=clone;
+        window.__formulaLocaleModal=clone.openEditor();
+        window.__formulaLocaleModal.modalEl.dataset.qaLocale='editor';
+        clone.refreshViews();
+      });
+      const editor=page.locator('[data-qa-locale="editor"]');
+      try {
+        await editor.locator('math-field').waitFor();
+        await page.evaluate(()=>{window.__formulaLocalePlugin.settings.locale='en';window.__formulaLocalePlugin.refreshViews();});
+        const sidebarText=await page.evaluate(()=>window.__formulaLocaleLeaf.view.containerEl.children[1].innerText);
+        assert.equal(/[\u4e00-\u9fff]/.test(sidebarText),false,'all sidebar chrome should switch, not only category tabs');
+        const sidebarControls=await page.evaluate(()=>Array.from(window.__formulaLocaleLeaf.view.containerEl.querySelectorAll('.fl-filter-btn')).map((button)=>button.getAttribute('aria-label')));
+        assert.deepEqual(sidebarControls,['All','Favorites','Pinned','Recent','Hidden']);
+        const button=await page.evaluate(()=>window.__formulaLocaleLeaf.view.openEditorButton.textContent);
+        assert.equal(button,'Open Editor');
+        assert.equal(/[\u4e00-\u9fff]/.test(await editor.innerText()),false,'editor buttons, status and hints should switch live');
+        console.log('PASS sidebar/editor language refresh including filters, search, actions and accessibility names');
+        await page.evaluate(()=>{
+          window.__formulaLocaleModal.close();
+          window.__formulaLocaleDiagram=window.__formulaLocalePlugin.openDrawing();
+          window.__formulaLocaleDiagram.accepted=true;
+          window.__formulaLocaleDiagram.modalEl.dataset.qaLocale='drawing';
+        });
+        const diagram=page.locator('[data-qa-locale="drawing"]');
+        assert.equal(await diagram.getByRole('button',{name:'Insert diagram',exact:true}).count(),1);
+        const keys=await diagram.locator('.fd-template-field option').evaluateAll((options)=>options.map((option)=>option.value));
+        for(const key of keys){
+          await diagram.locator('.fd-template-field select').selectOption(key);
+          const source=await diagram.locator('.fd-source').inputValue();
+          assert.equal(/[\u4e00-\u9fff]/.test(source),false,key+' sample should be English');
+        }
+        await diagram.locator('.fd-template-field select').selectOption('flowchart');
+        await diagram.getByRole('button',{name:'Visual',exact:true}).click();
+        assert.equal(await diagram.getByLabel('Node label',{exact:true}).first().inputValue(),'Start');
+        assert.equal(await page.evaluate(()=>window.__formulaLocaleDiagram.visualGraph.nodes.find((node)=>node.id==='B').shape),'diamond');
+        await diagram.locator('.fd-preview svg').waitFor();
+        if(!process.argv.includes('--no-screenshots')) await page.screenshot({path:'output/playwright/english-flowchart.png',timeout:12000});
+        await page.evaluate(()=>{
+          window.__formulaLocaleDiagram.close();
+          window.__formulaLocaleDiagram=window.__formulaLocalePlugin.openDrawing('flowchart LR\n A[用户原文] --> B[保留]');
+          window.__formulaLocaleDiagram.accepted=true;
+        });
+        assert.equal(await page.evaluate(()=>window.__formulaLocaleDiagram.source.value),'flowchart LR\n A[用户原文] --> B[保留]');
+        console.log('PASS all eleven English samples, visual labels/shapes and preservation of existing Chinese content');
+        assert.deepEqual(errors,[],'no renderer exceptions');
+      } finally {
+        await page.evaluate(()=>{
+          window.__formulaLocaleModal?.close();window.__formulaLocaleDiagram?.close();window.__formulaLocaleLeaf?.detach();
+          if(window.MathfieldElement && window.__formulaLocaleMath) window.MathfieldElement.locale=window.__formulaLocaleMath;
+          if(window.__formulaLocaleOriginalLeaf)app.workspace.setActiveLeaf(window.__formulaLocaleOriginalLeaf,{focus:true});
+          for(const key of ['__formulaLocaleModal','__formulaLocaleMath','__formulaLocaleDiagram','__formulaLocaleLeaf','__formulaLocaleOriginalLeaf','__formulaLocalePlugin'])delete window[key];
+        });
+      }
     } else if (command === "verify") {
       fs.mkdirSync("output/playwright", { recursive: true });
       const errors = [];

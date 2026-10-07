@@ -4,14 +4,14 @@ const vm = require("node:vm");
 const { buildSync } = require("esbuild");
 
 const compiled = buildSync({
-  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
+  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing', 'typography'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
   bundle: true, write: false, platform: "node", format: "cjs", external: ["obsidian"],
 }).outputFiles[0].text;
 class Base { constructor(app) { this.app = app; } }
 const sandbox = { module: { exports: {} }, console: { log() {}, warn() {}, error() {} }, navigator: { language: "zh-CN" }, window: { setTimeout, clearTimeout }, setTimeout, clearTimeout,
   require: (id) => {
     assert.equal(id, "obsidian");
-    return { Plugin: Base, Modal: Base, PluginSettingTab: Base, ItemView: Base, MarkdownView: Base, Notice: Base };
+    return { Plugin: Base, Modal: Base, PluginSettingTab: Base, ItemView: Base, MarkdownView: Base, Notice: Base, getLanguage:()=>"en" };
   },
 };
 vm.runInNewContext(compiled, sandbox);
@@ -243,4 +243,48 @@ test("the first typing after a template switch is independently undoable", () =>
   modal.undo();
   assert.equal(modal.currentTemplateKey,'er');
   assert.equal(modal.source.value,api.DRAWING_TEMPLATES.er.source);
+});
+
+test("existing settings default to following the host without changing MathLive font", async () => {
+  const p = new api.FormulaLibraryPlugin({});
+  p.loadData = async () => ({previewFontSize:27});
+  await p.loadSettings();
+  assert.equal(p.settings.libraryFontFollowObsidian,true);
+  assert.equal(p.settings.previewFontSize,27);
+});
+
+test("independent library font sizes are validated and switching back removes overrides", () => {
+  assert.equal(api.normalizeLibraryFontSize(undefined),18);
+  assert.equal(api.normalizeLibraryFontSize('not a size'),18);
+  assert.equal(api.normalizeLibraryFontSize(null),18);
+  assert.equal(api.normalizeLibraryFontSize(''),18);
+  assert.equal(api.normalizeLibraryFontSize(1),14);
+  assert.equal(api.normalizeLibraryFontSize(100),32);
+  assert.equal(api.normalizeLibraryFontSize('21.6'),22);
+  const styles = new Map();
+  const root = { style: {setProperty:(name,value)=>styles.set(name,value),removeProperty:(name)=>styles.delete(name)} };
+  api.applyLibraryTypography(root,{libraryFontFollowObsidian:false,libraryFontSize:22});
+  assert.equal(styles.get('--fl-library-font-size'),'22px');
+  api.applyLibraryTypography(root,{});
+  assert.equal(styles.has('--fl-library-font-size'),false);
+});
+
+test("automatic locale follows the Obsidian API rather than OS language", () => {
+  assert.equal(api.loc({settings:{locale:'auto'}}),'en');
+  assert.equal(api.loc({settings:{locale:'zh'}}),'zh');
+});
+
+test("all bundled diagram samples have English sources without changing their Chinese originals", () => {
+  for(const [key,template] of Object.entries(api.DRAWING_TEMPLATES)) {
+    const en=api.drawingTemplateSource({settings:{locale:'en'}},key);
+    assert.equal(/[\u4e00-\u9fff]/.test(en),false,key);
+    assert.equal(api.drawingTemplateSource({settings:{locale:'zh'}},key),template.source);
+    assert.equal(api.detectDrawingTemplateKey(en),key);
+    if(template.visualType) assert.equal(api.analyzeDrawingSource(en,template.visualType).compatible,true);
+  }
+});
+
+test("bare references do not erase a flowchart node's decision shape", () => {
+  const graph=api.parseVisualDrawing('flowchart LR\n A --> B{Condition}\n B --> C\n D --> B','flowchart');
+  assert.equal(graph.nodes.find((node)=>node.id==='B').shape,'diamond');
 });

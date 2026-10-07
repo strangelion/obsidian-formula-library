@@ -18,6 +18,7 @@ regression tests, rebuilds the assets and syntax-checks the generated plugin.
 | `src/drawing.js` | Mermaid editing, source protection, history, drafts and navigation |
 | `src/editor.js`, `src/sidebar.js` | Formula editing and browsing |
 | `src/ui.js` | Labelled controls and async action feedback |
+| `src/typography.js`, `src/styles/typography.css` | Host-following and independently adjustable library fonts |
 | `src/mathlive.js`, `vendor/mathlive-embedded.js` | Lazy bundled MathLive initialization |
 | `src/styles/` | Vendor, foundation, drawing, tools and usability styles |
 
@@ -37,6 +38,11 @@ Append `dark` to temporarily verify the dark theme (the original preference is
 restored afterwards). Add `--no-screenshots` when native Electron window capture
 is unavailable; interaction assertions still run, but inspect screenshots from
 a capture-enabled pass before release.
+Run `node scripts/obsidian-qa.cjs verify-fonts` for actual settings controls,
+independent sizing, live Appearance font changes and 18/32 px layouts.
+`verify-locale` checks language changes in existing library views and all English
+diagram samples while preserving user-authored Chinese content. These checks use
+isolated plugin settings; temporary host font preferences are restored afterwards.
 
 The release workflow installs the lockfile, runs the checks, rebuilds the assets,
 synchronizes versions, attests the assets, and publishes a version tag without `v`.

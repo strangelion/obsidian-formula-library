@@ -171,7 +171,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     const leaves = this.app.workspace.getLeavesOfType("formula-library-sidebar");
     for (const leaf of leaves) {
       if (leaf.view && leaf.view.renderTabs) {
-        try { leaf.view.renderTabs(); leaf.view.renderList(); } catch (e) { logWarn("refresh sidebar failed:", e.message); }
+        try { leaf.view.refreshLocalization?.(); leaf.view.renderTabs(); leaf.view.renderList(); } catch (e) { logWarn("refresh sidebar failed:", e.message); }
       }
     }
     for (const modal of Array.from(this._editorModals || [])) {

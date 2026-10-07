@@ -2681,4 +2681,81 @@
   }
 }
 
+/* src/styles/typography.css */
+.formula-library-sidebar,
+.fe-library-panel {
+  --fl-library-font-size: max(14px, var(--font-text-size, var(--font-ui-medium, 16px)));
+  font-size: var(--fl-library-font-size);
+}
+.formula-library-modal .fe-library-panel .fl-sym-label,
+.formula-library-sidebar .fl-list-item-symbol {
+  font-size: var(--fl-library-font-size);
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+  text-overflow: clip;
+}
+.formula-library-modal .fe-library-panel .fl-sym-fallback,
+.formula-library-sidebar .fl-list-item-latex,
+.formula-library-modal .fe-library-panel :is(.fl-sym-tags, .fl-section-label, .fl-group-label, .fl-search-hint-text, .fl-search-count, .fl-empty-state, .fl-load-more),
+.formula-library-sidebar :is(.fl-list-item-tags, .fl-section-label, .fl-search-hint-text, .fl-search-count, .fl-empty-state, .fl-load-more) {
+  font-size: max(14px, calc(var(--fl-library-font-size) * 0.875));
+  line-height: 1.45;
+}
+.formula-library-modal .fe-library-panel .fl-sym-fallback,
+.formula-library-sidebar .fl-list-item-latex {
+  color: var(--text-muted);
+  opacity: 1;
+}
+.formula-library-modal .fe-library-panel :is(.fl-search-input, .fl-group-select, .fl-filter-btn),
+.formula-library-sidebar :is(.fl-search-input, .fl-group-select, .fl-filter-btn),
+.formula-library-sidebar .fl-action-bar .fl-btn {
+  font-size: var(--fl-library-font-size);
+  line-height: 1.4;
+}
+.formula-library-sidebar .fl-filter-btn .fl-filter-label,
+.fe-library-panel .fl-filter-btn .fl-filter-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.formula-library-sidebar .fl-filter-btn svg,
+.fe-library-panel .fl-filter-btn svg {
+  flex: 0 0 16px;
+}
+@container (max-width: 520px) {
+  .formula-library-sidebar .fl-filter-label,
+  .fe-library-panel .fl-filter-label {
+    display: none;
+  }
+}
+.formula-library-modal .fe-library-panel .fl-group-select,
+.formula-library-sidebar .fl-group-select {
+  height: auto;
+  min-height: max(38px, calc(var(--fl-library-font-size) * 1.5 + 10px));
+  padding-block: 6px;
+}
+.formula-library-modal[data-density] .fe-library-panel .fl-grid:not(.structures) {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--fl-library-font-size) * 7.5)), 1fr));
+}
+.formula-library-modal[data-density] .fe-library-panel .fl-symbol-btn {
+  height: auto;
+  max-height: none;
+  min-height: max(62px, calc(var(--fl-library-font-size) * 3.8));
+  padding: 10px 32px;
+}
+.formula-library-sidebar .fl-list-item {
+  height: auto;
+  min-height: max(52px, calc(var(--fl-library-font-size) * 3.5));
+}
+.formula-library-sidebar .fl-list-item-info {
+  overflow: visible;
+}
+.formula-library-modal .fe-library-panel .fl-grid-usage-badge,
+.formula-library-sidebar .fl-usage-badge {
+  font-size: max(12px, calc(var(--fl-library-font-size) * 0.7));
+}
+
 /* src/styles/index.css */

@@ -7,6 +7,7 @@ These rules apply the useful form, state, and responsive requirements from
 - Separate primary actions from auxiliary tools. Keep insert/cancel reachable while content scrolls.
 - Put descriptive labels above fields and provide accessible names for inputs and icon buttons.
 - Use 36–38 px controls on desktop and at least 40 px targets on narrow/touch layouts.
+- Formula choices follow the host text size by default, with a separately adjustable library font. Avoid fixed tiny labels; verify open-view updates and wrapping at 18–32 px.
 - Keep search, filters, categories and footers out of flex compression. Only results/editing areas scroll.
 - At narrow widths, use one column and contained scrolling rather than hiding overflowing content.
 - Leave padding around scrolling form edges and draw focus indicators inward.
