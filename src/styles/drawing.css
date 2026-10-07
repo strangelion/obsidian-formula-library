@@ -1,0 +1,524 @@
+/* ---- Mermaid drawing workspace ---- */
+.formula-drawing-modal {
+  width: min(1120px, calc(100dvw - 32px));
+  max-width: calc(100dvw - 32px);
+  height: min(760px, calc(100dvh - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 20px;
+}
+
+.formula-drawing-modal .modal-content {
+  display: flex;
+  min-height: 0;
+  height: calc(100% - 36px);
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fd-toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: end;
+  gap: 12px;
+}
+
+.fd-mode-toggle {
+  display: inline-flex;
+  align-self: end;
+  padding: 3px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  background: var(--background-secondary);
+}
+
+.fd-mode-button {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.fd-mode-button.is-active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.fd-template-field {
+  display: flex;
+  width: min(260px, 45%);
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fd-template-field label,
+.fd-pane > label,
+.fd-pane-title {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.fd-actions {
+  display: flex;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.fd-workspace {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+  gap: 14px;
+}
+
+.fd-pane {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fd-source,
+.fd-preview {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  padding: 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 14px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+}
+
+.fd-source {
+  resize: none;
+  font-family: var(--font-monospace);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fd-visual-editor {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 14px;
+  background: var(--background-primary);
+}
+
+.fd-visual-toolbar,
+.fd-visual-section-head,
+.fd-visual-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fd-visual-toolbar {
+  position: sticky;
+  z-index: 2;
+  top: -12px;
+  padding: 12px 0 8px;
+  background: var(--background-primary);
+}
+
+.fd-visual-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.fd-visual-toolbar select,
+.fd-visual-row select,
+.fd-visual-row input {
+  min-width: 0;
+  min-height: 32px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+
+.fd-visual-toolbar select,
+.fd-visual-row select {
+  padding: 4px 8px;
+}
+
+.fd-visual-row input {
+  flex: 1;
+  padding: 5px 8px;
+}
+
+.fd-visual-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fd-visual-section-head {
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.fd-visual-row {
+  padding: 7px;
+  border: 1px solid color-mix(in srgb, var(--background-modifier-border) 75%, transparent);
+  border-radius: 10px;
+  background: var(--background-secondary-alt);
+}
+
+.fd-visual-node-id {
+  min-width: 34px;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  font-size: 11px;
+  text-align: center;
+}
+
+.fd-visual-edge-arrow {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
+.fd-visual-row .fd-icon-button {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.fd-visual-row .fd-icon-button:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-error);
+}
+
+.fd-visual-empty {
+  padding: 14px;
+  border: 1px dashed var(--background-modifier-border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.fd-source:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+}
+
+.fd-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background-color: var(--background-secondary);
+  background-image: linear-gradient(var(--background-modifier-border) 1px, transparent 1px), linear-gradient(90deg, var(--background-modifier-border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fd-preview > .markdown-rendered,
+.fd-preview .mermaid,
+.fd-preview .mermaid > svg,
+.fd-preview > svg {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fd-preview > .markdown-rendered,
+.fd-preview .mermaid {
+  display: grid;
+  place-items: center;
+}
+
+.fd-preview svg {
+  display: block;
+  margin: auto;
+}
+
+.fd-status {
+  min-height: 18px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.fd-error {
+  max-width: 60ch;
+  padding: 12px 14px;
+  border-left: 3px solid var(--text-error);
+  background: var(--background-primary);
+  color: var(--text-error);
+  line-height: 1.5;
+}
+
+.fd-skeleton {
+  width: min(420px, 72%);
+  height: 180px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--background-modifier-hover), var(--background-primary), var(--background-modifier-hover));
+  background-size: 220% 100%;
+  animation: fl-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes fl-skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-skeleton { animation: none; }
+  .fl-filter-btn,
+  .fl-btn,
+  .fe-btn,
+  .fl-symbol-btn,
+  .fl-list-item { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .formula-library-modal-container,
+  .formula-drawing-modal-container {
+    align-items: flex-start;
+    padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+  }
+
+  .formula-library-modal,
+  .formula-drawing-modal {
+    width: calc(100dvw - 16px);
+    max-width: calc(100dvw - 16px);
+    height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    margin: 0;
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .formula-library-modal.is-keyboard-open {
+    height: 52dvh;
+    max-height: 52dvh;
+  }
+
+  .formula-editor-modal {
+    min-height: 0;
+  }
+
+  .fe-top-bar {
+    flex-wrap: wrap;
+  }
+
+  .fe-main-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(220px, 34dvh) minmax(0, 1fr);
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .fe-library-panel {
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--background-modifier-border);
+    border-left: 0;
+  }
+
+  .fe-preview-area {
+    min-height: 120px;
+    padding: 12px;
+  }
+
+  .fe-preview-area .fe-mathfield {
+    min-height: 84px;
+  }
+
+  .fd-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(180px, 0.82fr) minmax(210px, 1.18fr);
+  }
+
+  .fd-toolbar {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .fd-mode-toggle {
+    order: 2;
+  }
+
+  .fd-actions {
+    order: 3;
+  }
+
+  .formula-drawing-modal .modal-content {
+    height: calc(100% - 34px);
+  }
+}
+
+@media (max-width: 520px) {
+  .formula-library-sidebar {
+    padding: 10px max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  }
+
+  .fl-filter-label {
+    display: none;
+  }
+
+  .fl-filter-btn {
+    min-height: 36px;
+  }
+
+  .formula-library-modal,
+  .formula-drawing-modal {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .formula-library-modal .modal-title,
+  .formula-drawing-modal .modal-title {
+    padding-right: 30px;
+    font-size: 16px;
+  }
+
+  .fd-template-field {
+    width: 100%;
+  }
+
+  .fd-mode-toggle {
+    flex: 1;
+  }
+
+  .fd-mode-button {
+    flex: 1;
+  }
+
+  .fd-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .fd-actions .fe-btn {
+    flex: 1;
+  }
+
+  .fd-visual-row {
+    flex-wrap: wrap;
+  }
+
+  .fd-visual-row input {
+    flex-basis: calc(100% - 80px);
+  }
+
+  .fe-top-bar {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 6px;
+    padding-top: 6px;
+  }
+
+  .fe-mode-toggle button {
+    min-width: 0;
+    padding-inline: 10px;
+  }
+
+  .fe-spacer {
+    display: none;
+  }
+
+  .fe-btn {
+    min-height: 34px;
+    padding-inline: 11px;
+  }
+
+  .fe-main-layout {
+    grid-template-rows: minmax(205px, 32dvh) minmax(0, 1fr);
+  }
+
+  .fl-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fl-grid.structures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fd-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .fd-template-field {
+    width: 100%;
+  }
+
+  .fd-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .fd-actions .fe-btn {
+    flex: 1;
+  }
+
+  .fd-workspace {
+    grid-template-rows: minmax(150px, 0.78fr) minmax(180px, 1.22fr);
+    gap: 10px;
+  }
+}
+
+@container (max-width: 250px) {
+  .formula-library-sidebar .fl-filter-label {
+    display: none;
+  }
+
+  .formula-library-sidebar .fl-filter-bar {
+    gap: 4px;
+  }
+
+  .formula-library-sidebar .fl-filter-btn {
+    min-width: 0;
+    min-height: 34px;
+    padding-inline: 6px;
+  }
+
+  .formula-library-sidebar .fl-action-bar {
+    gap: 6px;
+  }
+
+  .formula-library-sidebar .fl-btn {
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: 10px;
+  }
+}

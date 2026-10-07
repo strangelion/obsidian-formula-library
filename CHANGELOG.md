@@ -2,6 +2,47 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.4.0] - 2026-10-08
+
+### Added
+- **Custom parameter templates**: create, duplicate, edit and delete personal templates; customize category, LaTeX, parameter labels and defaults with `{{name}}` tokens, live preview and validation. The original `#name#` syntax and saved presets remain compatible.
+- **Hidden formula view**: browse hidden entries and restore an individual formula without clearing every hidden item.
+- **Development modules**: feature source modules, separate embedded data and styles, an esbuild pipeline, and regression tests; the three Obsidian release assets remain self-contained.
+- **Built-in library controls**: a master switch for the built-in library, one switch per category, enable-all/disable-all, and a library section in the settings that lists every category even when the `formulas/` folder is missing.
+- **Separate built-in and custom libraries**: the custom folder loads and switches independently of the built-in library, so custom formulas and the formula editor keep working with the built-in library turned off.
+- **Custom formula manager**: add, edit, rename, delete, import, and export categories and formulas from the settings tab, with LaTeX validation and duplicate detection before saving.
+- **Drawing source protection**: the visual editor detects unsupported Mermaid syntax before switching modes, keeps the original source, and adds undo/redo, restore-original, and a draft that survives closing the modal.
+- **Editing existing diagrams**: put the cursor inside a ` ```mermaid ` block and run "Edit Mermaid Diagram at Cursor" or use the editor context menu; the modal opens that block, detects its template from the source, and saving replaces it in place instead of appending a new block.
+- **Preview navigation and SVG export**: zoom out/in with a percentage readout, `100%`, and **Fit**; drag inside the preview to pan and hold `Ctrl`/`⌘` while scrolling to zoom; export the current preview as a standalone SVG file.
+- **Ranked search**: exact names and exact LaTeX commands rank above prefixes and fuzzy matches; search reports the total hit count and loads more results instead of truncating later categories.
+- **Parameterized templates**: 19 templates (quadratic roots, parabola, vertex form, line, sum/product, definite integral, limit, derivative, partial derivative, binomial, 2×2 determinant, normal distribution, Taylor expansion, uniform acceleration, kinetic energy, Newton's second law, …) that use named `#name#` parameters, with a live preview of the generated LaTeX, up to 20 saved parameter presets per template, and insertion from the command palette or the **Templates** button in the editor toolbar; a value starting with `-` is parenthesized automatically so negatives stay correct inside powers and products.
+- **Personal formula library**: the **Save to my library** button in the formula editor stores the current formula in the custom library together with a name, tags, and a note; saving the same formula again updates its existing entry and the dialog prefills the stored name, tags, and note; with no custom folder configured, the first save adopts `my-formulas/` in the vault root as the custom library path.
+- **Searching tags and notes**: tags match exactly, by prefix, or as a substring (a leading `#` is accepted) and note text matches as a substring, ranking below exact names and commands but above fuzzy matches; tags are shown as `#tag` in the sidebar, the editor grid, and the custom formula manager.
+- **Matrix data paste**: paste rows copied from a spreadsheet or plain text and get `matrix`, `bmatrix`, `pmatrix`, `vmatrix`, `Vmatrix`, `array`, `cases`, or `aligned` LaTeX; tab, comma, semicolon, pipe, and space separators are detected automatically, short rows are padded, two-column `aligned` grids are emitted as `left & = right`, the grid can be transposed and have rows or columns added and removed, non-ASCII or space-containing cells can be wrapped in `\text{}`, and the result can be filled into the editor, inserted into the note, or copied as LaTeX.
+- **Function plotting**: draw `y = f(x)` from a typed expression with implicit multiplication (`2x`, `3(x+1)`, `x sin(x)`), the usual functions and the constants `pi`/`e`; every other letter becomes a slider (range -10 to 10, step 0.1), curves can be overlaid with automatic quantile-based or manual `y` ranges, the theme can follow the note or be forced light/dark, and the figure can be inserted as inline SVG, written into an image folder (default `plots`) and embedded with `![[...]]`, copied, or downloaded.
+- **Callable definitions and local constants in plots**: type `f(x) = x^2 + a` lines into the plot modal and call them from any curve (a definition may call the functions defined above it, while recursion, forward references, repeated parameters, and built-in name clashes are refused with the line number); give each curve its own constants with `a=2, b=a+1`, which shadow sliders of the same name for that curve and stop those sliders from being created. Parentheses are optional as well (`sinx` means `sin(x)` and `x sinx` means `x sin(x)`), with the documented reading that `sin2x` is `sin(2) · x`; a backticked name stays a plain variable, and a curve calling a name that is neither built in nor defined is reported instead of drawing nothing silently.
+
+### Changed
+- Reorganized editor actions and tool dialogs around labelled inputs, independently scrolling content, persistent footers, and portrait layouts.
+- Moved the personal formula category selector above optional tags and notes, normalized dropdown sizing, and placed focus indicators inside controls to avoid edge clipping.
+- Function previews show only their coordinate grid; advanced function definitions can be collapsed.
+- Settings changes (library source, categories, font, density, sorting, result limit, language) now refresh the sidebar and any open editor modal immediately.
+- Custom categories are labelled in the category dropdowns, and the search summary separates total matches from the number of results currently shown.
+- Copying, downloading, or saving a plot as an image now bakes the current theme into the file, because a standalone SVG cannot inherit the note theme; inline inserts keep using `currentColor` and follow the theme as before.
+
+### Fixed
+- Prevented the plugin's box-model reset from interfering with MathJax glyphs and stretch delimiters. Oversized formula previews now scroll from a reachable left edge.
+- Mermaid zoom, fit, and export now resolve the current SVG after asynchronous rendering replaces it.
+- Cross-template undo/redo restores the template and editing mode together. Incompatible source stays in source mode instead of being parsed into the wrong visual form; previews use a proper Obsidian Component lifecycle.
+- Fixed reversed plot ranges, scientific notation, implicit `x(x+1)` multiplication, comma-containing local constant expressions, and redundant sliders for locally bound parameters.
+- Formula JSON backups retain tags, notes, category settings, and section labels; repeat imports no longer add duplicate formulas.
+- Matrix paste retains trailing blank cells and explicitly added empty rows and columns.
+- Formula insertion positions the cursor correctly after multiline LaTeX; category selection survives reloads and excludes disabled categories.
+- Existing malformed custom formula files are reported rather than being overwritten as empty files. Category counts exclude section headings, and refreshed folders include JSON files not yet listed in their index.
+- Embedded (fallback) loading now respects the category switches, so a disabled category is no longer loaded when the bundled data is used.
+- Custom `_strings.json` tab names are merged with the built-in strings instead of being ignored, and trailing slashes in the custom folder path no longer break loading.
+- Abbreviation matching no longer matches every formula when the query contains no ASCII letters.
+
 ## [1.3.1]
 
 ### Added

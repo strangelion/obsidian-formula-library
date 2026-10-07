@@ -4,6 +4,11 @@ Thanks for helping improve Formula Library.
 
 ## Development
 
+Run `npm ci` followed by `npm run check`. Edit `src/` and rebuild with
+`npm run build`; root `main.js` and `styles.css` are generated release artifacts.
+The feature modules are documented in [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md),
+and UI changes must follow [docs/UI-GUIDELINES.md](docs/UI-GUIDELINES.md).
+
 This repository keeps the Obsidian release assets in the repo root. Obsidian community plugin installs download the release assets `manifest.json`, `main.js`, and `styles.css`, so runtime code must not depend on files that are only present in the development tree unless those files are bundled into one of those release assets.
 
 Before opening a pull request:

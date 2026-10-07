@@ -1,0 +1,1046 @@
+/* ========================================
+   Formula Library Plugin - Styles
+   ======================================== */
+
+/* ---- Sidebar ---- */
+.formula-library-sidebar {
+  padding: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+
+.fl-search-container { margin-bottom: 6px; }
+
+.fl-search-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+}
+
+.fl-search-input:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
+}
+
+.fl-search-hint {
+  margin-top: 2px;
+}
+
+.fl-search-hint-text {
+  font-size: 10px;
+  color: var(--text-faint);
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+/* ---- Tabs ---- */
+.fl-tabs {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.fl-group-select {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+}
+
+.fl-group-select:focus {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
+}
+
+.fl-tab {
+  padding: 4px 10px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fl-tab.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+.fl-tab:hover:not(.active) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* ---- Sidebar List ---- */
+.fl-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.fl-list-item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: none;
+  color: var(--text-normal);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.formula-library-sidebar button.fl-list-item {
+  height: auto;
+  min-height: 48px;
+  max-height: none;
+}
+
+.fl-list-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+/* ---- Grid (for modal library) ---- */
+.fl-grid-scroll { flex: 1; overflow-y: auto; }
+
+.fl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 4px;
+}
+
+.fl-grid.structures { grid-template-columns: 1fr; }
+
+/* ---- Symbol Button ---- */
+.fl-symbol-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  cursor: pointer;
+  text-align: center;
+  min-height: 50px;
+  gap: 2px;
+}
+
+.fl-symbol-btn:hover {
+  background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
+}
+
+.fl-sym-preview {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 2px 0;
+}
+
+.fl-sym-preview svg {
+  width: auto;
+  height: 28px;
+}
+
+.fl-sym-preview [jax] {
+  font-size: 18px;
+}
+
+.fl-sym-preview [jax] svg {
+  height: 28px;
+  width: auto;
+}
+
+.fl-sym-fallback {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-monospace);
+}
+
+.fl-sym-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ---- Labels ---- */
+.fl-section-label, .fl-group-label {
+  grid-column: 1 / -1;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-accent);
+  padding: 8px 0 4px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.fl-group-label { border-top: 1px solid var(--background-modifier-border); margin-top: 4px; }
+
+/* ---- Action Bar ---- */
+.fl-action-bar { padding: 10px 0 0; display: flex; gap: 8px; }
+
+.fl-btn {
+  flex: 1;
+  padding: 8px 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: var(--font-ui-small);
+  font-weight: 500;
+}
+
+.fl-btn:hover { background: var(--background-modifier-hover); }
+
+.fl-btn-primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ---- Favorites Bar ---- */
+.fl-fav-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.fl-fav-toggle {
+  padding: 3px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fl-fav-toggle:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.fl-fav-toggle.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ---- Favorite Star (list) ---- */
+.fl-fav-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  min-width: 16px;
+  font-size: 12px;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color 0.15s;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.fl-fav-star:hover {
+  opacity: 1;
+  color: #e8a838;
+}
+
+.fl-fav-star.active {
+  opacity: 1;
+  color: #e8a838;
+}
+
+/* ---- Favorite Star (grid) ---- */
+.fl-grid-fav-star {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 12px;
+  color: var(--text-faint);
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.fl-grid-fav-star:hover {
+  color: #e8a838;
+}
+
+.fl-grid-fav-star.active {
+  color: #e8a838;
+}
+
+.fl-symbol-btn {
+  position: relative;
+}
+
+/* ---- Usage Badge ---- */
+.fl-usage-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--background-modifier-border);
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 600;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.fl-grid-usage-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- List Item Row ---- */
+.fl-list-item-row {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  gap: 6px;
+  width: 100%;
+}
+
+.fl-list-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  gap: 2px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fl-list-item-symbol {
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--text-normal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fl-list-item-latex {
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--text-faint);
+  font-family: var(--font-monospace);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.55;
+}
+
+/* ========================================
+   Editor Modal
+   ======================================== */
+
+.formula-editor-modal {
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: max-height 0.2s ease;
+}
+
+.formula-library-modal {
+  max-width: 1600px;
+  width: calc(100dvw - 32px);
+  max-height: calc(100dvh - 32px);
+}
+
+.formula-editor-modal {
+  min-height: 0;
+  max-height: calc(100dvh - 32px);
+}
+
+/* ---- Top Bar ---- */
+.fe-top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.fe-mode-toggle {
+  display: flex;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  overflow: hidden;
+}
+
+.fe-mode-toggle button {
+  padding: 6px 16px;
+  border: none;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.fe-mode-toggle button.active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.fe-spacer { flex: 1; }
+
+.fe-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.fe-btn-primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+}
+
+/* ---- Main Layout ---- */
+.fe-main-layout {
+  display: flex;
+  gap: 16px;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* ---- Editor Pane ---- */
+.fe-editor-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 8px;
+}
+
+.fe-visual-pane { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+/* Preview takes 65% of the left pane */
+.fe-preview-area {
+  flex: 65;
+  min-height: 200px;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: auto;
+  gap: 12px;
+}
+
+.fe-preview-area .fe-mathfield {
+  width: 100%;
+  min-height: 120px;
+  font-size: 20px;
+  --math-font-style: italic;
+  --text-color: var(--text-normal);
+  --background-color: transparent;
+  --border-color: transparent;
+  --focus-border-color: var(--interactive-accent);
+  user-select: text;
+  -webkit-user-select: text;
+  pointer-events: auto;
+}
+
+.fe-latex-inline-wrap {
+  flex-shrink: 0;
+}
+
+.fe-latex-inline {
+  width: 100%;
+  min-height: 36px;
+  max-height: 80px;
+  padding: 6px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.fe-latex-inline:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+}
+
+/* Textarea takes 35% of the left pane */
+.fe-source-pane { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.fe-textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-monospace);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.fe-textarea:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 2px rgba(124, 92, 191, 0.15);
+}
+
+.fe-status-bar { padding: 8px 0 0; font-size: 12px; color: var(--text-muted); text-align: left; }
+
+/* ---- Library Panel ---- */
+.fe-library-panel {
+  width: 220px;
+  min-width: 200px;
+  border-left: 1px solid var(--background-modifier-border);
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fe-library-panel .fl-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 3px; }
+
+.fe-library-panel .fl-symbol-btn {
+  min-height: 40px;
+  padding: 4px 2px;
+}
+
+.fe-library-panel .fl-sym-label { font-size: 9px; }
+.fe-library-panel .fl-sym-fallback { font-size: 9px; }
+
+@media (max-width: 900px) {
+  .fe-main-layout { flex-direction: column; }
+  .fe-library-panel { width: 100%; min-width: 0; border-left: none; border-top: 1px solid var(--background-modifier-border); padding-left: 0; max-height: 240px; }
+}
+
+/* MathLive virtual keyboard */
+.formula-editor-modal .ML__virtual-keyboard {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  z-index: auto;
+  width: 100%;
+  max-height: 40vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.formula-editor-modal .ML__virtual-keyboard-toggle {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.formula-editor-modal .ML__menu-toggle {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ========================================
+   Formula Library 1.3 responsive system
+   ======================================== */
+
+.formula-library-sidebar,
+.formula-library-modal,
+.formula-drawing-modal,
+.formula-library-sidebar *,
+.formula-library-modal *,
+.formula-drawing-modal * {
+  box-sizing: border-box;
+}
+
+.formula-library-sidebar {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 12px;
+  gap: 8px;
+  background: var(--background-primary);
+}
+
+.fl-search-container {
+  position: relative;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.fl-search-input {
+  min-height: 38px;
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: var(--background-secondary);
+  transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1), background 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fl-search-input:focus,
+.fl-group-select:focus,
+.fe-textarea:focus {
+  border-color: var(--interactive-accent);
+  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+}
+
+.fl-search-hint {
+  margin: 4px 2px 0;
+}
+
+.fl-search-hint-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.fl-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 11px;
+  background: var(--background-secondary);
+}
+
+.fl-filter-btn {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 7px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background 180ms cubic-bezier(0.16, 1, 0.3, 1), color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fl-filter-btn svg,
+.fl-action-bar svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+.fl-filter-btn:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+}
+
+.fl-filter-btn.active {
+  color: var(--text-on-accent);
+  background: var(--interactive-accent);
+}
+
+.fl-filter-btn:active,
+.fl-btn:active,
+.fe-btn:active,
+.fl-symbol-btn:active,
+.fl-list-item:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.fl-tabs {
+  margin-bottom: 0;
+}
+
+.fl-group-select {
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: var(--background-secondary);
+}
+
+.fl-list,
+.fl-grid-scroll {
+  min-width: 0;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.fl-list-item {
+  padding: 8px 6px;
+  border-bottom-color: color-mix(in srgb, var(--background-modifier-border) 72%, transparent);
+  border-radius: 8px;
+  transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1), background 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fl-list-item + .fl-list-item {
+  margin-top: 2px;
+}
+
+.fl-list-item-row {
+  min-width: 0;
+  gap: 7px;
+}
+
+.fl-fav-star,
+.fl-item-menu,
+.fl-item-pin {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  color: var(--text-faint);
+  opacity: 0.72;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.fl-fav-star svg,
+.fl-item-menu svg,
+.fl-item-pin svg {
+  width: 14px;
+  height: 14px;
+}
+
+.fl-fav-star:hover,
+.fl-item-menu:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+  opacity: 1;
+}
+
+.fl-fav-star.active {
+  color: var(--interactive-accent);
+  opacity: 1;
+}
+
+.fl-fav-star.active svg {
+  fill: currentColor;
+}
+
+.fl-item-pin {
+  width: 20px;
+  flex-basis: 20px;
+  color: var(--interactive-accent);
+}
+
+.fl-item-menu {
+  cursor: pointer;
+}
+
+.fl-list-item-symbol {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fl-list-item-latex {
+  font-size: 10px;
+  opacity: 0.66;
+}
+
+.fl-section-label,
+.fl-group-label {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 4px 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: color-mix(in srgb, var(--background-primary) 92%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fl-action-bar {
+  padding-top: 2px;
+}
+
+.fl-btn,
+.fe-btn {
+  min-height: 36px;
+  border-radius: 10px;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fl-action-bar .fl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fl-empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  min-height: 120px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.formula-library-modal {
+  width: min(1180px, calc(100dvw - 32px));
+  max-width: calc(100dvw - 32px);
+  height: min(720px, calc(100dvh - 48px));
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 20px;
+}
+
+.formula-library-modal.is-keyboard-open {
+  height: min(540px, 55dvh);
+  max-height: 55dvh;
+}
+
+.formula-editor-modal {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: none;
+  overflow: hidden;
+}
+
+.formula-library-modal .modal-title {
+  margin-bottom: 2px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.fe-top-bar {
+  min-width: 0;
+  gap: 8px;
+  padding: 8px 0 12px;
+  margin-bottom: 12px;
+}
+
+.fe-mode-toggle {
+  min-width: 0;
+  border-radius: 10px;
+}
+
+.fe-mode-toggle button {
+  min-height: 34px;
+  padding: 6px 14px;
+}
+
+.fe-main-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(270px, 29vw, 380px);
+  gap: 18px;
+  overflow: hidden;
+}
+
+.fe-editor-pane,
+.fe-visual-pane,
+.fe-source-pane {
+  min-width: 0;
+  min-height: 0;
+}
+
+.fe-preview-area {
+  min-width: 0;
+  min-height: 180px;
+  padding: 16px;
+  border-radius: 14px;
+  overflow: auto;
+}
+
+.fe-latex-inline,
+.fe-textarea {
+  min-width: 0;
+  border-radius: 12px;
+}
+
+.fe-library-panel {
+  width: auto;
+  min-width: 0;
+  padding-left: 16px;
+  gap: 8px;
+  border-left-color: color-mix(in srgb, var(--background-modifier-border) 76%, transparent);
+}
+
+.fl-grid {
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 6px;
+  align-content: start;
+}
+
+.fl-grid.structures {
+  grid-template-columns: 1fr;
+}
+
+.fl-symbol-btn {
+  min-width: 0;
+  min-height: 62px;
+  padding: 9px 28px;
+  gap: 4px;
+  border-radius: 11px;
+  border-color: color-mix(in srgb, var(--background-modifier-border) 78%, transparent);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fl-symbol-btn:hover {
+  border-color: color-mix(in srgb, var(--interactive-accent) 52%, var(--background-modifier-border));
+}
+
+.fl-sym-label {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.fl-sym-fallback {
+  width: 100%;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 9px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fl-grid-fav-star,
+.fl-grid-menu,
+.fl-grid-pin {
+  position: absolute;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  color: var(--text-faint);
+  cursor: pointer;
+  opacity: 0.68;
+}
+
+.fl-grid-fav-star {
+  top: 3px;
+  left: 3px;
+  right: auto;
+}
+
+.fl-grid-menu {
+  top: 3px;
+  right: 3px;
+}
+
+.fl-grid-pin {
+  bottom: 3px;
+  left: 3px;
+  color: var(--interactive-accent);
+}
+
+.fl-grid-fav-star svg,
+.fl-grid-menu svg,
+.fl-grid-pin svg {
+  width: 13px;
+  height: 13px;
+}
+
+.fl-grid-fav-star:hover,
+.fl-grid-menu:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+  opacity: 1;
+}
+
+.fl-grid-fav-star.active {
+  color: var(--interactive-accent);
+  opacity: 1;
+}
+
+.fl-grid-fav-star.active svg {
+  fill: currentColor;
+}
+
+.formula-library-modal[data-density="compact"] .fl-grid {
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 4px;
+}
+
+.formula-library-modal[data-density="compact"] .fl-symbol-btn {
+  min-height: 48px;
+  padding-block: 6px;
+}
+
+.formula-library-modal[data-density="spacious"] .fl-grid {
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 9px;
+}
+
+.formula-library-modal[data-density="spacious"] .fl-symbol-btn {
+  min-height: 78px;
+  padding-block: 13px;
+}

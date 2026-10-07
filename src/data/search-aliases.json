@@ -1,0 +1,1557 @@
+{
+  "frac": [
+    "分数",
+    "fraction"
+  ],
+  "sqrt": [
+    "根号",
+    "平方根",
+    "square root",
+    "radical"
+  ],
+  "lim": [
+    "极限",
+    "limit"
+  ],
+  "int": [
+    "积分",
+    "integral"
+  ],
+  "sum": [
+    "求和",
+    "summation",
+    "sigma notation"
+  ],
+  "prod": [
+    "求积",
+    "product",
+    "pi notation"
+  ],
+  "vec": [
+    "向量",
+    "vector",
+    "vector arrow"
+  ],
+  "dot": [
+    "点乘",
+    "dot",
+    "点",
+    "time derivative"
+  ],
+  "cross": [
+    "叉乘",
+    "cross"
+  ],
+  "hat": [
+    "帽",
+    "hat",
+    "circumflex"
+  ],
+  "bar": [
+    "划线",
+    "bar",
+    "overbar"
+  ],
+  "overline": [
+    "上划线",
+    "overline"
+  ],
+  "underline": [
+    "下划线",
+    "underline"
+  ],
+  "tilde": [
+    "波浪",
+    "tilde",
+    "tilde accent"
+  ],
+  "sin": [
+    "正弦",
+    "sine"
+  ],
+  "cos": [
+    "余弦",
+    "cosine"
+  ],
+  "tan": [
+    "正切",
+    "tangent"
+  ],
+  "cot": [
+    "余切",
+    "cotangent"
+  ],
+  "sec": [
+    "正割",
+    "secant"
+  ],
+  "csc": [
+    "余割",
+    "cosecant"
+  ],
+  "arcsin": [
+    "反正弦",
+    "arcsine"
+  ],
+  "arccos": [
+    "反余弦",
+    "arccosine"
+  ],
+  "arctan": [
+    "反正切",
+    "arctangent"
+  ],
+  "sinh": [
+    "双曲正弦",
+    "hyperbolic sine"
+  ],
+  "cosh": [
+    "双曲余弦",
+    "hyperbolic cosine"
+  ],
+  "tanh": [
+    "双曲正切",
+    "hyperbolic tangent"
+  ],
+  "log": [
+    "对数",
+    "logarithm"
+  ],
+  "ln": [
+    "自然对数",
+    "natural log",
+    "natural logarithm"
+  ],
+  "exp": [
+    "指数",
+    "exponential"
+  ],
+  "max": [
+    "最大值",
+    "maximum"
+  ],
+  "min": [
+    "最小值",
+    "minimum"
+  ],
+  "sup": [
+    "上确界",
+    "supremum"
+  ],
+  "inf": [
+    "下确界",
+    "infimum"
+  ],
+  "alpha": [
+    "阿尔法"
+  ],
+  "beta": [
+    "贝塔"
+  ],
+  "gamma": [
+    "伽马"
+  ],
+  "delta": [
+    "德尔塔"
+  ],
+  "epsilon": [
+    "艾普西隆"
+  ],
+  "theta": [
+    "西塔"
+  ],
+  "lambda": [
+    "拉姆达"
+  ],
+  "mu": [
+    "缪"
+  ],
+  "pi": [
+    "派"
+  ],
+  "sigma": [
+    "西格玛"
+  ],
+  "phi": [
+    "斐"
+  ],
+  "omega": [
+    "欧米伽"
+  ],
+  "rho": [
+    "柔"
+  ],
+  "tau": [
+    "陶"
+  ],
+  "kappa": [
+    "卡帕"
+  ],
+  "xi": [
+    "克西"
+  ],
+  "eta": [
+    "艾塔"
+  ],
+  "zeta": [
+    "泽塔"
+  ],
+  "psi": [
+    "普西"
+  ],
+  "Gamma": [
+    "大伽马"
+  ],
+  "Delta": [
+    "大德尔塔"
+  ],
+  "Theta": [
+    "大西塔"
+  ],
+  "Lambda": [
+    "大拉姆达"
+  ],
+  "Pi": [
+    "大派"
+  ],
+  "Sigma": [
+    "大西格玛"
+  ],
+  "Phi": [
+    "大斐"
+  ],
+  "Psi": [
+    "大普西"
+  ],
+  "Omega": [
+    "大欧米伽"
+  ],
+  "matrix": [
+    "矩阵",
+    "matrix"
+  ],
+  "bmatrix": [
+    "方括号矩阵",
+    "bracket matrix"
+  ],
+  "pmatrix": [
+    "圆括号矩阵",
+    "parenthesis matrix"
+  ],
+  "cases": [
+    "分段",
+    "cases",
+    "piecewise"
+  ],
+  "det": [
+    "行列式",
+    "determinant"
+  ],
+  "trace": [
+    "迹",
+    "trace"
+  ],
+  "rank": [
+    "秩",
+    "rank"
+  ],
+  "inverse": [
+    "逆",
+    "inverse"
+  ],
+  "eigen": [
+    "特征",
+    "eigen"
+  ],
+  "diagonal": [
+    "对角",
+    "diagonal"
+  ],
+  "transpose": [
+    "转置",
+    "transpose"
+  ],
+  "conjugate": [
+    "共轭",
+    "conjugate"
+  ],
+  "gradient": [
+    "梯度",
+    "gradient"
+  ],
+  "divergence": [
+    "散度",
+    "divergence"
+  ],
+  "curl": [
+    "旋度",
+    "curl"
+  ],
+  "laplacian": [
+    "拉普拉斯",
+    "laplacian"
+  ],
+  "nabla": [
+    "纳布拉",
+    "nabla",
+    "del",
+    "梯度算子",
+    "del operator"
+  ],
+  "partial": [
+    "偏导",
+    "partial",
+    "partial derivative"
+  ],
+  "infty": [
+    "无穷",
+    "infinity"
+  ],
+  "emptyset": [
+    "空集",
+    "empty set",
+    "empty"
+  ],
+  "forall": [
+    "任意",
+    "for all",
+    "universal"
+  ],
+  "exists": [
+    "存在",
+    "exists",
+    "existential"
+  ],
+  "land": [
+    "逻辑与",
+    "and",
+    "logical and"
+  ],
+  "lor": [
+    "逻辑或",
+    "or",
+    "logical or"
+  ],
+  "neg": [
+    "非",
+    "not",
+    "negation"
+  ],
+  "leq": [
+    "小于等于",
+    "less than or equal",
+    "leq",
+    "leqslant"
+  ],
+  "geq": [
+    "大于等于",
+    "greater than or equal",
+    "geq",
+    "geqslant"
+  ],
+  "neq": [
+    "不等于",
+    "not equal",
+    "neq"
+  ],
+  "approx": [
+    "约等于",
+    "approximately",
+    "approximate"
+  ],
+  "equiv": [
+    "恒等于",
+    "equivalent",
+    "congruent"
+  ],
+  "sim": [
+    "相似",
+    "similar",
+    "tilde"
+  ],
+  "simeq": [
+    "相似于",
+    "approximately equal"
+  ],
+  "cong": [
+    "全等",
+    "congruent"
+  ],
+  "subset": [
+    "子集",
+    "subset"
+  ],
+  "supset": [
+    "超集",
+    "superset"
+  ],
+  "cup": [
+    "并集",
+    "union"
+  ],
+  "cap": [
+    "交集",
+    "intersection"
+  ],
+  "in": [
+    "属于",
+    "element of",
+    "belongs to",
+    "membership"
+  ],
+  "ni": [
+    "包含",
+    "contains"
+  ],
+  "notin": [
+    "不属于",
+    "not element of"
+  ],
+  "leftarrow": [
+    "左箭头",
+    "left arrow",
+    "left"
+  ],
+  "rightarrow": [
+    "右箭头",
+    "right arrow",
+    "right",
+    "maps to"
+  ],
+  "Rightarrow": [
+    "推出",
+    "implies",
+    "double right arrow"
+  ],
+  "Leftarrow": [
+    "逆推",
+    "implied by",
+    "double left arrow"
+  ],
+  "Leftrightarrow": [
+    "等价",
+    "iff",
+    "if and only if",
+    "equivalent",
+    "double arrow"
+  ],
+  "leftrightarrow": [
+    "等价箭头",
+    "bidirectional",
+    "left right arrow"
+  ],
+  "pm": [
+    "正负",
+    "plus minus",
+    "plus-minus"
+  ],
+  "mp": [
+    "负正",
+    "minus plus"
+  ],
+  "cdot": [
+    "点乘",
+    "centered dot",
+    "dot product"
+  ],
+  "times": [
+    "叉乘",
+    "times",
+    "cross product"
+  ],
+  "div": [
+    "除",
+    "divide",
+    "division",
+    "obelus"
+  ],
+  "binom": [
+    "组合数",
+    "binomial",
+    "binomial coefficient"
+  ],
+  "choose": [
+    "组合",
+    "choose"
+  ],
+  "text": [
+    "文本",
+    "text"
+  ],
+  "mathbf": [
+    "粗体",
+    "bold",
+    "boldface"
+  ],
+  "mathbb": [
+    "黑板粗体",
+    "blackboard",
+    "blackboard bold",
+    "double struck"
+  ],
+  "mathcal": [
+    "书法体",
+    "caligraphic",
+    "script"
+  ],
+  "mathfrak": [
+    "哥特体",
+    "fraktur",
+    "gothic"
+  ],
+  "mathit": [
+    "斜体",
+    "italic"
+  ],
+  "operatorname": [
+    "运算符名",
+    "operator name"
+  ],
+  "coprod": [
+    "余积",
+    "coproduct"
+  ],
+  "iint": [
+    "二重积分",
+    "double integral"
+  ],
+  "iiint": [
+    "三重积分",
+    "triple integral"
+  ],
+  "oint": [
+    "环路积分",
+    "contour integral",
+    "closed integral"
+  ],
+  "d": [
+    "微分",
+    "differential",
+    "d operator"
+  ],
+  "ddot": [
+    "双点",
+    "double dot",
+    "second derivative"
+  ],
+  "prime": [
+    "导数",
+    "prime",
+    "derivative"
+  ],
+  "ast": [
+    "星号",
+    "asterisk",
+    "star"
+  ],
+  "star": [
+    "星号",
+    "star"
+  ],
+  "circ": [
+    "圆",
+    "circle",
+    "composition"
+  ],
+  "bullet": [
+    "圆点",
+    "bullet"
+  ],
+  "Diamond": [
+    "菱形",
+    "diamond",
+    "方块",
+    "diamond suit"
+  ],
+  "club": [
+    "梅花",
+    "club suit"
+  ],
+  "diamond": [
+    "方块",
+    "diamond suit"
+  ],
+  "heart": [
+    "红桃",
+    "heart suit"
+  ],
+  "spade": [
+    "黑桃",
+    "spade suit"
+  ],
+  "flat": [
+    "降号",
+    "flat"
+  ],
+  "natural": [
+    "还原号",
+    "natural"
+  ],
+  "sharp": [
+    "升号",
+    "sharp"
+  ],
+  "top": [
+    "顶",
+    "top",
+    "top element"
+  ],
+  "bot": [
+    "底",
+    "bottom",
+    "bottom element"
+  ],
+  "perp": [
+    "垂直",
+    "perpendicular"
+  ],
+  "parallel": [
+    "平行",
+    "parallel"
+  ],
+  "mid": [
+    "整除",
+    "divides",
+    "mid"
+  ],
+  "nmid": [
+    "不整除",
+    "does not divide"
+  ],
+  "VDash": [
+    "双垂直",
+    "double vertical bar"
+  ],
+  "vdash": [
+    "推导",
+    "derives",
+    "proves"
+  ],
+  "Vvdash": [
+    "三重垂直",
+    "triple vertical bar"
+  ],
+  "vDash": [
+    "双线推导",
+    "double turnstile"
+  ],
+  "models": [
+    "满足",
+    "models",
+    "satisfies"
+  ],
+  "colon": [
+    "冒号",
+    "colon"
+  ],
+  "therefore": [
+    "所以",
+    "therefore"
+  ],
+  "because": [
+    "因为",
+    "because"
+  ],
+  "cdots": [
+    "居中省略号",
+    "centered dots"
+  ],
+  "vdots": [
+    "竖省略号",
+    "vertical dots"
+  ],
+  "ddots": [
+    "对角省略号",
+    "diagonal dots"
+  ],
+  "ldots": [
+    "省略号",
+    "lower dots",
+    "horizontal dots"
+  ],
+  "qed": [
+    "证毕",
+    "QED",
+    "halmos",
+    "tombstone"
+  ],
+  "angle": [
+    "角",
+    "angle"
+  ],
+  "measuredangle": [
+    "量角",
+    "measured angle"
+  ],
+  "triangle": [
+    "三角形",
+    "triangle"
+  ],
+  "square": [
+    "正方形",
+    "square"
+  ],
+  "lozenge": [
+    "菱形",
+    "lozenge"
+  ],
+  "bigcirc": [
+    "大圆",
+    "big circle"
+  ],
+  "large": [
+    "大",
+    "large"
+  ],
+  "Large": [
+    "特大",
+    "Large"
+  ],
+  "LARGE": [
+    "超大",
+    "LARGE"
+  ],
+  "huge": [
+    "巨大",
+    "huge"
+  ],
+  "Huge": [
+    "超巨大",
+    "Huge"
+  ],
+  "displaystyle": [
+    "显示模式",
+    "display style"
+  ],
+  "textstyle": [
+    "文本模式",
+    "text style"
+  ],
+  "scriptstyle": [
+    "脚本模式",
+    "script style"
+  ],
+  "scriptscriptstyle": [
+    "脚本脚本模式",
+    "scriptscript style"
+  ],
+  "overset": [
+    "上标注",
+    "overset"
+  ],
+  "underset": [
+    "下标注",
+    "underset"
+  ],
+  "stackrel": [
+    "堆叠",
+    "stackrel",
+    "堆叠关系",
+    "stack relation"
+  ],
+  "color": [
+    "颜色",
+    "color"
+  ],
+  "bgcolor": [
+    "背景色",
+    "background color"
+  ],
+  "boxed": [
+    "框",
+    "boxed"
+  ],
+  "phantom": [
+    "占位",
+    "phantom"
+  ],
+  "hug": [
+    "紧凑",
+    "hug"
+  ],
+  "mathop": [
+    "数学运算",
+    "math operator"
+  ],
+  "mathrel": [
+    "数学关系",
+    "math relation"
+  ],
+  "mathbin": [
+    "数学二元",
+    "math binary"
+  ],
+  "mathord": [
+    "数学普通",
+    "math ordinary"
+  ],
+  "mathopen": [
+    "数学开",
+    "math open"
+  ],
+  "mathclose": [
+    "数学闭",
+    "math close"
+  ],
+  "mathpunct": [
+    "数学标点",
+    "math punctuation"
+  ],
+  "stackbin": [
+    "堆叠二元",
+    "stack binary"
+  ],
+  "xrightarrow": [
+    "右长箭头",
+    "extensible right arrow"
+  ],
+  "xleftarrow": [
+    "左长箭头",
+    "extensible left arrow"
+  ],
+  "xRightarrow": [
+    "右双长箭头",
+    "extensible right double arrow"
+  ],
+  "xLeftarrow": [
+    "左双长箭头",
+    "extensible left double arrow"
+  ],
+  "xLeftrightarrow": [
+    "双向长箭头",
+    "extensible double arrow"
+  ],
+  "longmapsto": [
+    "长映射",
+    "long maps to"
+  ],
+  "hookrightarrow": [
+    "钩右箭头",
+    "hook right arrow"
+  ],
+  "hookleftarrow": [
+    "钩左箭头",
+    "hook left arrow"
+  ],
+  "twoheadrightarrow": [
+    "双头右箭头",
+    "two headed right arrow"
+  ],
+  "twoheadleftarrow": [
+    "双头左箭头",
+    "two headed left arrow"
+  ],
+  "nearrow": [
+    "右上箭头",
+    "near row arrow"
+  ],
+  "searrow": [
+    "右下箭头",
+    "searrow"
+  ],
+  "swarrow": [
+    "左下箭头",
+    "swarrow"
+  ],
+  "nwarrow": [
+    "左上箭头",
+    "nwarrow"
+  ],
+  "mapsto": [
+    "映射",
+    "maps to"
+  ],
+  "leftrightharpoon": [
+    "双向鱼叉",
+    "left right harpoon"
+  ],
+  "rightleftharpoons": [
+    "右左鱼叉",
+    "right left harpoons"
+  ],
+  "leftrightharpoons": [
+    "左右鱼叉",
+    "left right harpoons"
+  ],
+  "upharpoon": [
+    "上鱼叉",
+    "up harpoon"
+  ],
+  "downharpoon": [
+    "下鱼叉",
+    "down harpoon"
+  ],
+  "lrceil": [
+    "右上角",
+    "right ceiling"
+  ],
+  "lceil": [
+    "左上角",
+    "left ceiling"
+  ],
+  "rceil": [
+    "右上角",
+    "right ceiling"
+  ],
+  "lfloor": [
+    "左下角",
+    "left floor"
+  ],
+  "rfloor": [
+    "右下角",
+    "right floor"
+  ],
+  "llcorner": [
+    "左下角",
+    "lower left corner"
+  ],
+  "lrcorner": [
+    "右下角",
+    "lower right corner"
+  ],
+  "ulcorner": [
+    "左上角",
+    "upper left corner"
+  ],
+  "urcorner": [
+    "右上角",
+    "upper right corner"
+  ],
+  "Vert": [
+    "双竖线",
+    "double vertical bar"
+  ],
+  "lvert": [
+    "左竖线",
+    "left vertical bar"
+  ],
+  "rvert": [
+    "右竖线",
+    "right vertical bar"
+  ],
+  "lVert": [
+    "左双竖线",
+    "left double vertical bar"
+  ],
+  "rVert": [
+    "右双竖线",
+    "right double vertical bar"
+  ],
+  "lmoustache": [
+    "左大括号",
+    "left moustache"
+  ],
+  "rmoustache": [
+    "右大括号",
+    "right moustache"
+  ],
+  "lgroup": [
+    "左分组",
+    "left group"
+  ],
+  "rgroup": [
+    "右分组",
+    "right group"
+  ],
+  "bracevert": [
+    "大括号竖线",
+    "brace vertical"
+  ],
+  "uplus": [
+    "不相交并",
+    "multiset union"
+  ],
+  "sqcap": [
+    "方交",
+    "square cap"
+  ],
+  "sqcup": [
+    "方并",
+    "square cup"
+  ],
+  "vee": [
+    "逻辑或",
+    "logical or",
+    "vee"
+  ],
+  "wedge": [
+    "逻辑与",
+    "logical and",
+    "wedge"
+  ],
+  "dagger": [
+    "匕首",
+    "dagger"
+  ],
+  "ddagger": [
+    "双匕首",
+    "double dagger"
+  ],
+  "maltese": [
+    "马耳他十字",
+    "maltese cross"
+  ],
+  "clubuit": [
+    "梅花",
+    "club suit"
+  ],
+  "diamonduit": [
+    "方块",
+    "diamond suit"
+  ],
+  "heartuit": [
+    "红桃",
+    "heart suit"
+  ],
+  "spadeuit": [
+    "黑桃",
+    "spade suit"
+  ],
+  "rightthreetimes": [
+    "右三乘",
+    "right three times",
+    "right three times product"
+  ],
+  "leftthreetimes": [
+    "左三乘",
+    "left three times",
+    "left three times product"
+  ],
+  "ltimes": [
+    "左乘",
+    "left times",
+    "left times product"
+  ],
+  "rtimes": [
+    "右乘",
+    "right times",
+    "right times product"
+  ],
+  "bowl": [
+    "碗",
+    "bow"
+  ],
+  "merge": [
+    "合并",
+    "merge"
+  ],
+  "plusdot": [
+    "加点",
+    "plus dot"
+  ],
+  "minusdot": [
+    "减点",
+    "minus dot"
+  ],
+  "vert": [
+    "竖线",
+    "vertical bar"
+  ],
+  "bigtriangleup": [
+    "大上三角",
+    "big triangle up"
+  ],
+  "bigtriangledown": [
+    "大下三角",
+    "big triangle down"
+  ],
+  "bigsqcap": [
+    "大方交",
+    "big square cap"
+  ],
+  "blacktriangle": [
+    "实心上三角",
+    "black triangle up"
+  ],
+  "blacktriangledown": [
+    "实心下三角",
+    "black triangle down"
+  ],
+  "blacktriangleleft": [
+    "实心左三角",
+    "black triangle left"
+  ],
+  "blacktriangleright": [
+    "实心右三角",
+    "black triangle right"
+  ],
+  "vartriangleright": [
+    "变体右三角",
+    "variant triangle right"
+  ],
+  "vartriangleleft": [
+    "变体左三角",
+    "variant triangle left"
+  ],
+  "triangleright": [
+    "右三角",
+    "triangle right"
+  ],
+  "triangleleft": [
+    "左三角",
+    "triangle left"
+  ],
+  "trianglerighteq": [
+    "右三角等于",
+    "triangle right eq",
+    "triangle right equal"
+  ],
+  "trianglelefteq": [
+    "左三角等于",
+    "triangle left eq",
+    "triangle left equal"
+  ],
+  "vartrianglelefteq": [
+    "变体左三角等于",
+    "variant triangle left eq",
+    "variant triangle left equal"
+  ],
+  "vartrianglerighteq": [
+    "变体右三角等于",
+    "variant triangle right eq",
+    "variant triangle right equal"
+  ],
+  "triangleq": [
+    "三角等于",
+    "triangle eq"
+  ],
+  "eqcirc": [
+    "等于圆",
+    "equal circle"
+  ],
+  "eqsim": [
+    "等于相似",
+    "equal similar"
+  ],
+  "eqslantless": [
+    "等于斜小于",
+    "equal slant less"
+  ],
+  "eqslantgtr": [
+    "等于斜大于",
+    "equal slant greater"
+  ],
+  "leqq": [
+    "小于等于等于",
+    "less than or equal equal"
+  ],
+  "geqq": [
+    "大于等于等于",
+    "greater than or equal equal"
+  ],
+  "leqslant": [
+    "小于等于",
+    "less than or equal slant"
+  ],
+  "geqslant": [
+    "大于等于",
+    "greater than or equal slant"
+  ],
+  "lessgtr": [
+    "小于或大于",
+    "less or greater"
+  ],
+  "gtrless": [
+    "大于或小于",
+    "greater or less"
+  ],
+  "lesssim": [
+    "小于约",
+    "less similar"
+  ],
+  "gtrsim": [
+    "大于约",
+    "greater similar"
+  ],
+  "lessapprox": [
+    "小于约等于",
+    "less approximate"
+  ],
+  "gtrapprox": [
+    "大于约等于",
+    "greater approximate"
+  ],
+  "prec": [
+    "前于",
+    "precedes"
+  ],
+  "succ": [
+    "后于",
+    "succeeds"
+  ],
+  "preceq": [
+    "前于等于",
+    "precedes or equal"
+  ],
+  "succeq": [
+    "后于等于",
+    "succeeds or equal"
+  ],
+  "precsim": [
+    "前于约",
+    "precedes similar"
+  ],
+  "succsim": [
+    "后于约",
+    "succeeds similar"
+  ],
+  "precapprox": [
+    "前于约等于",
+    "precedes approximate"
+  ],
+  "succapprox": [
+    "后于约等于",
+    "succeeds approximate"
+  ],
+  "preccurlyeq": [
+    "前于卷曲等于",
+    "precedes curly equal"
+  ],
+  "succcurlyeq": [
+    "后于卷曲等于",
+    "succeeds curly equal"
+  ],
+  "curlypreceq": [
+    "卷曲前于等于",
+    "curly precedes equal"
+  ],
+  "curlysucceq": [
+    "卷曲后于等于",
+    "curly succeeds equal"
+  ],
+  "triangularneq": [
+    "三角不等于",
+    "triangular not equal"
+  ],
+  "triangularmeq": [
+    "三角约等于",
+    "triangular approximate"
+  ],
+  "backsim": [
+    "反约",
+    "back similar"
+  ],
+  "backsimeq": [
+    "反约等于",
+    "back similar equal"
+  ],
+  "between": [
+    "介于",
+    "between"
+  ],
+  "nless": [
+    "不小于",
+    "not less"
+  ],
+  "ngtr": [
+    "不大于",
+    "not greater"
+  ],
+  "nleq": [
+    "不小于等于",
+    "not less or equal"
+  ],
+  "ngeq": [
+    "不大于等于",
+    "not greater or equal"
+  ],
+  "nprec": [
+    "不前于",
+    "not precedes"
+  ],
+  "nsucc": [
+    "不后于",
+    "not succeeds"
+  ],
+  "npreceq": [
+    "不前于等于",
+    "not precedes or equal"
+  ],
+  "nsucceq": [
+    "不后于等于",
+    "not succeeds or equal"
+  ],
+  "precnapprox": [
+    "不前于约等于",
+    "not precedes approximate"
+  ],
+  "succnapprox": [
+    "不后于约等于",
+    "not succeeds approximate"
+  ],
+  "varsubsetneqq": [
+    "变体真子集",
+    "variant proper subset"
+  ],
+  "varsupsetneqq": [
+    "变体真超集",
+    "variant proper superset"
+  ],
+  "nsubseteq": [
+    "不子集等于",
+    "not subset or equal"
+  ],
+  "nsupseteq": [
+    "不超集等于",
+    "not superset or equal"
+  ],
+  "nparallel": [
+    "不平行",
+    "not parallel"
+  ],
+  "ntriangleleft": [
+    "不左三角",
+    "not triangle left"
+  ],
+  "ntriangleright": [
+    "不右三角",
+    "not triangle right"
+  ],
+  "ntrianglelefteq": [
+    "不左三角等于",
+    "not triangle left eq",
+    "not triangle left equal"
+  ],
+  "ntrianglerighteq": [
+    "不右三角等于",
+    "not triangle right eq",
+    "not triangle right equal"
+  ],
+  "nvdash": [
+    "不推导",
+    "not derives"
+  ],
+  "nvDash": [
+    "不双线推导",
+    "not double turnstile"
+  ],
+  "nVDash": [
+    "不三重垂直",
+    "not triple vertical"
+  ],
+  "nVdash": [
+    "不推导三重",
+    "not derives triple"
+  ],
+  "varsubsetneq": [
+    "变体子集不等于",
+    "variant subset not equal"
+  ],
+  "varsupsetneq": [
+    "变体超集不等于",
+    "variant superset not equal"
+  ],
+  "shortmid": [
+    "短整除",
+    "short mid"
+  ],
+  "shortparallel": [
+    "短平行",
+    "short parallel"
+  ],
+  "smid": [
+    "小整除",
+    "small mid"
+  ],
+  "sparrow": [
+    "小平行",
+    "small parallel"
+  ],
+  "bowtie": [
+    "蝴蝶结",
+    "bowtie"
+  ],
+  "Join": [
+    "连接",
+    "join"
+  ],
+  "semidirect": [
+    "半直积",
+    "semi direct"
+  ],
+  "circleast": [
+    "圆星",
+    "circle asterisk"
+  ],
+  "circledast": [
+    "圆星",
+    "circled asterisk"
+  ],
+  "circledcirc": [
+    "圆圆",
+    "circled circle"
+  ],
+  "circleddash": [
+    "圆破折号",
+    "circled dash"
+  ],
+  "odot": [
+    "点圆",
+    "dot circle"
+  ],
+  "ominus": [
+    "减圆",
+    "minus circle"
+  ],
+  "oplus": [
+    "加圆",
+    "plus circle"
+  ],
+  "otimes": [
+    "乘圆",
+    "times circle"
+  ],
+  "oslash": [
+    "斜圆",
+    "slash circle"
+  ],
+  "osmall": [
+    "小圆",
+    "small circle"
+  ],
+  "bigodot": [
+    "大点圆",
+    "big dot circle"
+  ],
+  "bigoplus": [
+    "大加圆",
+    "big plus circle"
+  ],
+  "bigotimes": [
+    "大乘圆",
+    "big times circle"
+  ],
+  "Coprod": [
+    "余积",
+    "coproduct"
+  ],
+  "idotsint": [
+    "省略积分",
+    "dots integral"
+  ],
+  "oiint": [
+    "环路二重积分",
+    "contour double integral"
+  ],
+  "oiiint": [
+    "环路三重积分",
+    "contour triple integral"
+  ],
+  "join": [
+    "连接",
+    "join"
+  ],
+  "colesssim": [
+    "余小于约",
+    "coless similar"
+  ],
+  "cvv": [
+    "叉乘",
+    "cross product",
+    "cvv"
+  ],
+  "xmark": [
+    "叉号",
+    "cross mark"
+  ],
+  "checkmark": [
+    "对号",
+    "checkmark"
+  ],
+  "ball": [
+    "球",
+    "ball"
+  ],
+  "Club": [
+    "梅花",
+    "club suit"
+  ],
+  "Heart": [
+    "红桃",
+    "heart suit"
+  ],
+  "Spade": [
+    "黑桃",
+    "spade suit"
+  ],
+  "clubsuit": [
+    "梅花",
+    "club suit"
+  ],
+  "diamondsuit": [
+    "方块",
+    "diamond suit"
+  ],
+  "heartsuit": [
+    "红桃",
+    "heart suit"
+  ],
+  "spadesuit": [
+    "黑桃",
+    "spade suit"
+  ],
+  "varpropto": [
+    "变体正比",
+    "variant proportional"
+  ],
+  "propto": [
+    "正比",
+    "proportional"
+  ],
+  "sqsubset": [
+    "方子集",
+    "square subset"
+  ],
+  "sqsupset": [
+    "方超集",
+    "square superset"
+  ],
+  "sqsubseteq": [
+    "方子集等于",
+    "square subset or equal"
+  ],
+  "sqsupseteq": [
+    "方超集等于",
+    "square superset or equal"
+  ],
+  "sqsubsetneq": [
+    "方子集不等于",
+    "square subset not equal"
+  ],
+  "sqsupsetneq": [
+    "方超集不等于",
+    "square superset not equal"
+  ],
+  "bbsqcap": [
+    "大方交",
+    "big square cap"
+  ],
+  "bbsqcup": [
+    "大方并",
+    "big square cup"
+  ],
+  "lhd": [
+    "左半三角",
+    "left half triangle"
+  ],
+  "rhd": [
+    "右半三角",
+    "right half triangle"
+  ],
+  "unhd": [
+    "无半三角",
+    "unhalf triangle"
+  ],
+  "varlhd": [
+    "变体左半三角",
+    "variant left half triangle"
+  ],
+  "varrhd": [
+    "变体右半三角",
+    "variant right half triangle"
+  ],
+  "unrhd": [
+    "变体无半三角",
+    "variant unhalf triangle"
+  ]
+}

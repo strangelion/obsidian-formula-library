@@ -1,0 +1,13 @@
+{
+  "name": "obsidian-formula-library",
+  "version": "1.4.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.cjs",
+    "check": "npm run test && npm run build && node --check main.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

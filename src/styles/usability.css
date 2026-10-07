@@ -1,0 +1,351 @@
+/* Interaction contract: stable actions, labelled fields, contained scrolling. */
+.formula-library-modal,
+.formula-drawing-modal {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.formula-library-modal > .modal-content,
+.formula-drawing-modal > .modal-content {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  margin: 0;
+}
+
+.formula-library-modal .modal-title,
+.formula-drawing-modal .modal-title {
+  flex: 0 0 auto;
+  padding-right: 28px;
+  margin-bottom: 12px;
+}
+
+.formula-library-modal .ft-modal {
+  overflow: hidden;
+}
+
+.ft-modal > .ft-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 6px;
+}
+
+.ft-modal > .ft-footer {
+  flex: 0 0 auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.ft-status,
+.fl-field-error,
+.fd-status {
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.ft-status[role="alert"] { color: var(--text-error); }
+
+.fe-tools-bar {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+
+.formula-library-modal .fe-top-bar {
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.formula-library-modal .fe-btn,
+.formula-drawing-modal .fe-btn,
+.formula-library-sidebar .fl-btn {
+  min-height: 36px;
+  height: auto;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.fl-control-field {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fl-control-field > span {
+  color: var(--text-muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.formula-library-modal .ft-modal input:not([type="range"]):not([type="checkbox"]),
+.formula-library-modal .ft-modal select {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+
+.fl-control-field > input,
+.fl-control-field > select,
+.ft-modal input:not([type="range"]):not([type="checkbox"]),
+.ft-modal select {
+  min-width: 0;
+  width: 100%;
+  min-height: 36px;
+  height: auto;
+  max-width: 100%;
+  padding: 7px 10px;
+}
+
+.formula-parameter-modal { width: min(900px, calc(100dvw - 32px)); }
+.formula-matrix-modal { width: min(920px, calc(100dvw - 32px)); }
+.formula-parameter-modal .fe-top-bar {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr) auto auto;
+  align-items: end;
+}
+
+.formula-plot-modal { width: min(1160px, calc(100dvw - 32px)); }
+.ft-workspace {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+}
+
+.ft-inspector {
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 6px;
+}
+
+.ft-plot-preview { min-height: 180px; }
+.ft-plot-preview > .fd-preview { background-image: none; }
+.ft-advanced {
+  padding-block: 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.ft-advanced > summary { cursor: pointer; color: var(--text-muted); font-size: 13px; }
+.ft-advanced .fl-import-textarea { min-height: 84px; margin-top: 8px; }
+
+.ft-input-row {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.ft-input-row > label { grid-column: 2; }
+.ft-input-row > .ft-color-chip { grid-column: 1; grid-row: 1; }
+.ft-input-row > button { grid-column: 3; grid-row: 1 / span 2; }
+.ft-input-row .ft-locals-input { width: 100%; }
+.ft-input-row .fl-control-field > input { flex: 0 0 auto; }
+
+.ft-range-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ft-range-controls > label:not(:last-child),
+.formula-plot-modal .mt-controls > .fl-control-field {
+  align-items: stretch;
+  flex-direction: column;
+  min-width: 0;
+}
+.ft-parameters .ft-param { flex: 1 1 180px; flex-wrap: wrap; }
+.ft-parameters .ft-param-slider { flex: 1; min-width: 80px; }
+.fd-pane-head, .fd-zoom-bar, .fd-actions { flex-wrap: wrap; }
+.formula-drawing-modal .fd-template-field { flex: 1 1 200px; width: auto; }
+.formula-drawing-modal .fd-mode-toggle { flex: 0 0 auto; }
+.formula-drawing-modal .fd-actions { flex: 1 1 340px; justify-content: flex-end; }
+.formula-drawing-modal .fd-zoom-btn { min-height: 32px; height: auto; }
+.formula-drawing-modal .fd-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+}
+.formula-drawing-modal .fd-actions { grid-column: 1 / -1; }
+.formula-drawing-modal .fd-zoom-btn {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1;
+}
+.formula-drawing-modal .fd-zoom-icon { width: 36px; padding: 0; }
+.formula-drawing-modal .fd-zoom-icon svg { width: 16px; height: 16px; }
+.formula-drawing-modal .fd-zoom-value { font-size: 12px; min-width: 48px; font-variant-numeric: tabular-nums; }
+
+.formula-library-sidebar .fl-filter-bar { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.formula-library-modal .fl-filter-bar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.fe-library-panel { container-type: inline-size; }
+.fe-library-panel > .fl-search-container,
+.fe-library-panel > .fl-filter-bar,
+.fe-library-panel > .fl-tabs,
+.formula-library-sidebar > .fl-search-container,
+.formula-library-sidebar > .fl-filter-bar,
+.formula-library-sidebar > .fl-tabs,
+.formula-library-sidebar > .fl-action-bar { flex: 0 0 auto; }
+.formula-library-modal .fl-filter-btn { min-width: 0; padding: 7px 5px; }
+.formula-library-modal .fl-group-select,
+.formula-library-sidebar .fl-group-select {
+  display: block;
+  height: 38px;
+  min-height: 38px;
+  padding: 0 10px;
+  line-height: normal;
+}
+@container (max-width: 380px) {
+  .fe-library-panel .fl-filter-label { display: none; }
+}
+.formula-library-sidebar .fl-list-item { min-height: 52px; }
+.formula-library-sidebar .fl-fav-star,
+.formula-library-sidebar .fl-item-menu { min-width: 30px; min-height: 30px; }
+
+.formula-library-modal :focus-visible,
+.formula-drawing-modal :focus-visible,
+.formula-library-sidebar :focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+.formula-library-modal :is(input, textarea, select):focus,
+.formula-drawing-modal :is(input, textarea, select):focus,
+.formula-custom-modal :is(input, textarea, select):focus,
+.formula-library-sidebar :is(input, textarea, select):focus,
+.formula-library-modal button:focus-visible,
+.formula-drawing-modal button:focus-visible,
+.formula-custom-modal button:focus-visible,
+.formula-library-sidebar button:focus-visible {
+  /* Theme-provided outer focus shadows are clipped by scroll containers.
+     Paint the entire focus indicator inside the control's own border. */
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+}
+.ft-modal input[aria-invalid="true"] { border-color: var(--text-error); }
+
+.formula-custom-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(620px, calc(100dvw - 32px));
+  max-width: calc(100dvw - 32px);
+  max-height: calc(100dvh - 32px);
+  padding: 20px;
+}
+.formula-custom-modal .modal-content { min-height: 0; overflow-y: auto; padding: 4px; }
+.formula-custom-modal .fl-field > label {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.formula-custom-modal .fl-field-input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 38px;
+  height: 38px;
+  padding: 7px 10px;
+  font-size: 13px;
+  line-height: normal;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+.formula-custom-modal select.fl-field-input { padding-block: 0; }
+.formula-custom-modal .fl-manage-bar {
+  position: sticky;
+  bottom: 0;
+  padding-block: 12px 0;
+  background: var(--background-primary);
+}
+.formula-custom-modal .fl-manage-bar .fl-btn { flex: 1; min-height: 40px; }
+.formula-custom-modal textarea.fl-field-input { height: auto; min-height: 96px; }
+.formula-template-editor .ft-row { display: flex; flex-direction: column; gap: 8px; }
+.formula-template-editor .ft-input { border: 1px solid var(--background-modifier-border); background: var(--background-secondary); color: var(--text-normal); border-radius: 8px; }
+.formula-template-editor .ft-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.formula-template-editor .ft-preview-title { display: block; margin: 16px 0 6px; font-size: 12px; color: var(--text-muted); }
+.formula-template-editor .ft-preview-wrap { margin-bottom: 8px; }
+.formula-template-editor .fl-field-error:empty { display: none; }
+.formula-custom-modal .fl-manage-item { flex-wrap: wrap; min-width: 0; }
+.formula-custom-modal .fl-manage-item-label { min-width: 0; }
+
+/* MathJax measures padding and stretch delimiters with the content-box model.
+   Do not apply our native-control reset to its internal typesetting nodes. */
+.formula-library-modal mjx-container,
+.formula-library-modal mjx-container *,
+.formula-custom-modal mjx-container,
+.formula-custom-modal mjx-container * {
+  box-sizing: content-box;
+}
+.formula-library-modal .ft-preview-wrap,
+.formula-custom-modal .ft-preview-wrap {
+  justify-content: flex-start;
+  overflow: auto;
+  min-width: 0;
+  max-width: 100%;
+  flex-shrink: 0;
+  padding: 16px;
+}
+.ft-preview-wrap > .ft-preview {
+  flex: 0 0 auto;
+  width: max-content;
+  margin-inline: auto;
+}
+.formula-matrix-modal .mt-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
+.formula-matrix-modal .mt-controls > .mt-check { grid-column: 1 / -1; }
+
+@media (max-width: 900px) {
+  .ft-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(160px, 0.65fr); gap: 10px; }
+  .formula-parameter-modal .fe-top-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .formula-parameter-modal .fl-control-field:last-of-type { grid-column: 1 / -1; }
+  .ft-plot-preview { min-height: 0; }
+}
+
+@media (max-width: 520px) {
+  .formula-template-editor .ft-form { grid-template-columns: minmax(0, 1fr); }
+  .formula-library-modal,
+  .formula-drawing-modal { width: calc(100dvw - 16px); }
+  .formula-library-modal .fe-tools-bar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .formula-editor-modal .fe-main-layout { grid-template-rows: minmax(0, 0.9fr) minmax(0, 1fr); }
+  .formula-editor-modal .fe-preview-area { min-height: 100px; }
+  .ft-footer { flex-direction: column; align-items: stretch; }
+  .ft-actions { display: grid; width: 100%; margin-left: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ft-actions > button:first-child { grid-column: 1 / -1; }
+  .formula-library-modal .fe-btn,
+  .formula-drawing-modal .fe-btn,
+  .ft-modal input:not([type="range"]):not([type="checkbox"]),
+  .ft-modal select { min-height: 40px; font-size: 13px; }
+  .formula-library-modal .ft-form { grid-template-columns: minmax(0, 1fr); }
+  .formula-drawing-modal .fd-toolbar { gap: 8px; }
+  .formula-drawing-modal .fd-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); flex-basis: auto; }
+  .formula-drawing-modal .fd-workspace { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .fd-visual-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .fd-visual-row input { width: 100%; }
+  .fd-visual-row .fd-visual-node-id { grid-column: 1 / -1; text-align: left; }
+  .fd-zoom-bar { gap: 4px; }
+  .fd-zoom-bar .fd-zoom-btn { min-height: 36px; }
+  .ft-input-row > button { min-width: 40px; }
+}
+
+@media (pointer: coarse) {
+  .formula-library-sidebar .fl-filter-btn,
+  .formula-library-modal .fl-filter-btn,
+  .formula-library-sidebar .fl-btn,
+  .formula-library-sidebar .fl-fav-star,
+  .formula-library-sidebar .fl-item-menu { min-height: 40px; }
+}
