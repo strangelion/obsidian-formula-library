@@ -286,10 +286,10 @@
 
 /* MathJax measures padding and stretch delimiters with the content-box model.
    Do not apply our native-control reset to its internal typesetting nodes. */
-.formula-library-modal mjx-container,
-.formula-library-modal mjx-container *,
-.formula-custom-modal mjx-container,
-.formula-custom-modal mjx-container * {
+.formula-library-modal [jax],
+.formula-library-modal [jax] *,
+.formula-custom-modal [jax],
+.formula-custom-modal [jax] * {
   box-sizing: content-box;
 }
 .formula-library-modal .ft-preview-wrap,

@@ -2554,10 +2554,10 @@
 .formula-custom-modal .fl-manage-item-label {
   min-width: 0;
 }
-.formula-library-modal mjx-container,
-.formula-library-modal mjx-container *,
-.formula-custom-modal mjx-container,
-.formula-custom-modal mjx-container * {
+.formula-library-modal [jax],
+.formula-library-modal [jax] *,
+.formula-custom-modal [jax],
+.formula-custom-modal [jax] * {
   box-sizing: content-box;
 }
 .formula-library-modal .ft-preview-wrap,

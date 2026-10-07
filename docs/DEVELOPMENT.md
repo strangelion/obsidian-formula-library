@@ -43,6 +43,9 @@ independent sizing, live Appearance font changes and 18/32 px layouts.
 `verify-locale` checks language changes in existing library views and all English
 diagram samples while preserving user-authored Chinese content. These checks use
 isolated plugin settings; temporary host font preferences are restored afterwards.
+`verify-mathjax-css.cjs` checks CHTML/SVG container selector equivalence and the
+box model in an isolated browser. It accepts `FORMULA_TEST_BROWSER_PATH` when
+using an already installed Chromium browser rather than Playwright's default.
 
 The release workflow installs the lockfile, runs the checks, rebuilds the assets,
 synchronizes versions, attests the assets, and publishes a version tag without `v`.

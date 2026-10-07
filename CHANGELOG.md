@@ -2,6 +2,11 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.4.2] - 2026-10-08
+
+### Fixed
+- Replaced MathJax custom-element type selectors with scoped `[jax]` container selectors. This removes CSS lint's unknown-type warning while preserving the content-box fix for formula glyphs and matrix delimiters.
+
 ## [1.4.1] - 2026-10-08
 
 ### Fixed

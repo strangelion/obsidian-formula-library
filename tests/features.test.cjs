@@ -1,6 +1,7 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const vm = require("node:vm");
+const fs = require("node:fs");
 const { buildSync } = require("esbuild");
 
 const compiled = buildSync({
@@ -287,4 +288,12 @@ test("all bundled diagram samples have English sources without changing their Ch
 test("bare references do not erase a flowchart node's decision shape", () => {
   const graph=api.parseVisualDrawing('flowchart LR\n A --> B{Condition}\n B --> C\n D --> B','flowchart');
   assert.equal(graph.nodes.find((node)=>node.id==='B').shape,'diamond');
+});
+
+test("MathJax box-model protection uses lint-compatible container attributes", () => {
+  const css=fs.readFileSync('src/styles/usability.css','utf8');
+  assert.doesNotMatch(css,/\bmjx-container\b/);
+  assert.match(css,/\.formula-library-modal \[jax\]/);
+  assert.match(css,/\.formula-custom-modal \[jax\]/);
+  assert.match(css,/box-sizing: content-box/);
 });
