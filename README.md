@@ -265,6 +265,28 @@ Formula names, source labels and library controls follow **Settings → Appearan
 
 ## Development
 
+## Future conversion extensions and support boundaries
+
+**Planning only: version 1.5.0 does not integrate LaTeXSnipper Core, discover conversion providers, or install conversion runtimes.** Its `src/core.js` contains plugin utilities, not the Rust Core. Third-party conversion extensions will be considered separately; existing LaTeX editing does not depend on them.
+
+The preferred direction is an optional, explicitly enabled provider installed independently by the user. Bundling a conversion runtime remains a separate packaging/licensing decision. There is no working Core installation procedure in this version. The official [Obsidian developer policies](https://docs.obsidian.md/community-directory/developer-policies) prohibit plugins from installing/updating themselves or their dependencies; we do not plan an in-plugin runtime installer. An extra `.wasm` release asset alone is not part of this plugin's standard three-file installation.
+
+| Candidate capability | Boundary for a future provider |
+| --- | --- |
+| Typst, MathML, OMML and LaTeX conversion | Only routes reported available by the installed provider/version; preview reconstructed output before inserting. |
+| Strict conversion | Core currently exposes only a supported LaTeX-to-OMML subset; strict does not mean complete TeX support or visual/round-trip identity. |
+| Best-effort conversion | Explicit opt-in with limitations shown; preserve the original source. |
+| AsciiMath, UnicodeMath, MTEF / MathType | Not available through the evaluated Core registered formula conversion API; experimental source parsers are not a support promise. |
+| Word objects, OCR, PDF / DOCX / PPTX generation | Outside the proposed formula-string provider scope. OMML XML alone does not provide Word clipboard or OLE integration. |
+
+The evaluated complete Core WASM is about 15.1 MiB plus matching generated JavaScript; a smaller conversion-only build is not currently an available feature switch. Its local wrapper package is private, and Actions artifacts must not be advertised as an existing public npm/release installation. The plugin is MIT and Core declares AGPL licensing: manual installation, separate plugins, or dynamic loading do not remove the need to review the actual combination/distribution. No licensing change or Core redistribution is made here.
+
+For future defects, the intended workflow is: show the provider/version and conversion route, retain the input, classify unsupported syntax separately from conversion failure, preview the result, and require confirmation before writing. No silent cloud fallback or lossless-conversion promise. A diagnostic report should contain versions, mode, error code and optional user-reviewed minimal examples—not automatically send notes, clipboard contents, or vault paths. UI/insertion defects belong here; converter accuracy/runtime defects belong upstream, with adapter reproductions and regression cases helping both projects.
+
+See the [conversion extension assessment and proposed support contract](docs/CONVERSION-EXTENSIONS.md) and [Core formula API boundaries](https://github.com/strangelion/latexsnipper-core/blob/main/crates/wasm/js/README.md). These are a roadmap, not an implemented extension API or permission to load arbitrary code.
+
+## Development
+
 Feature source lives in `src/`; do not edit generated `main.js` or `styles.css` directly. See [development](docs/DEVELOPMENT.md) and [UI acceptance rules](docs/UI-GUIDELINES.md).
 
 ```bash
