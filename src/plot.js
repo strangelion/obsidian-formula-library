@@ -1,7 +1,8 @@
 import * as obsidian from "obsidian";
-import { labelControl } from "./ui.js";
+import { labelControl, runModalAction } from "./ui.js";
 import { log, logWarn, loc, ui, normalizeFolderPath } from "./core.js";
-import { downloadTextFile, writeClipboard } from "./custom-library.js";
+import { downloadTextFile, writeClipboard, ConfirmModal } from "./custom-library.js";
+import { readDraft, writeDraft, DraftSession, validatePlotConfig, clone } from "./workspace-state.js";
 
 // ==================== Function plotting ====================
 // Expression parsing stays inside this file: no eval, no Function constructor.
@@ -589,6 +590,7 @@ class PlotFunctionModal extends obsidian.Modal {
     this.rows = [];
     this.curves = [];
     this.params = {};
+    this.paramRanges = {};
     this.paramNames = "";
     this.functions = {};
     this.model = null;
@@ -601,8 +603,10 @@ class PlotFunctionModal extends obsidian.Modal {
     this.modalEl.addClass("formula-plot-modal");
     this.contentEl.addClass("ft-modal");
     const p = this.plugin;
+    this.draftSession = new DraftSession(p, "plot");
     this.titleEl.setText(ui(p, "plotTitle"));
     this.contentEl.createDiv({ cls: "fl-manage-file", text: ui(p, "plotDesc") });
+    this.installPresets();
     const workspace = this.contentEl.createDiv({ cls: "ft-workspace" });
     const inspector = workspace.createDiv({ cls: "ft-inspector" });
 
@@ -672,19 +676,120 @@ class PlotFunctionModal extends obsidian.Modal {
     const inlineButton = actions.createEl("button", { cls: "fe-btn fe-btn-primary", text: ui(p, "plotInsertSvg") });
     inlineButton.addEventListener("click", () => this.insertInline());
     const fileButton = actions.createEl("button", { cls: "fe-btn", text: ui(p, "plotInsertFile") });
-    fileButton.addEventListener("click", () => { this.insertFile().catch((error) => logWarn("insert plot file failed:", error.message)); });
+    fileButton.addEventListener("click", () => runModalAction(this, () => this.insertFile()));
     const copyButton = actions.createEl("button", { cls: "fe-btn", text: ui(p, "plotCopySvg") });
-    copyButton.addEventListener("click", () => { this.copySvg().catch((error) => logWarn("copy plot failed:", error.message)); });
+    copyButton.addEventListener("click", () => runModalAction(this, () => this.copySvg()));
     const downloadButton = actions.createEl("button", { cls: "fe-btn", text: ui(p, "plotDownloadSvg") });
     downloadButton.addEventListener("click", () => this.downloadSvg());
     const cancelButton = actions.createEl("button", { cls: "fe-btn", text: ui(p, "cancel") });
     cancelButton.addEventListener("click", () => this.close());
 
+    this._hydrating = true;
     this.addRow("x^2");
+    if (this.options.config) this.applyConfig(this.options.config);
+    else this.refresh();
+    this._hydrating = false;
+    this.initialConfig = JSON.stringify(this.readConfig());
+    const draft = !this.options.config && readDraft(p.settings, "plot");
+    if (draft) {
+      const bar = this.contentEl.createDiv({ cls: "fl-draft-bar" });
+      this.contentEl.insertBefore(bar, workspace);
+      const t = (zh, en) => loc(p) === "zh" ? zh : en;
+      bar.createSpan({ text: t("有未完成的绘图草稿", "An unfinished plot draft is available") });
+      bar.createEl("button", { cls: "fe-btn", text: t("恢复草稿", "Restore draft") }).addEventListener("click", () => runModalAction(this, async () => { this.applyConfig(draft, false); await this.draftSession.save(draft); bar.remove(); }));
+      bar.createEl("button", { cls: "fe-btn", text: t("丢弃草稿", "Discard draft") }).addEventListener("click", () => runModalAction(this, async () => { await writeDraft(p, "plot", null); bar.remove(); }));
+    }
+  }
+
+  installPresets() {
+    const p = this.plugin, t = (zh, en) => loc(p) === "zh" ? zh : en;
+    const bar = this.contentEl.createDiv({ cls: "ft-preset-bar" });
+    this.presetSelect = bar.createEl("select");
+    labelControl(this.presetSelect, t("绘图预设", "Plot preset"));
+    const name = bar.createEl("input", { attr: { type: "text", maxlength: "80" } });
+    labelControl(name, t("预设名称", "Preset name"));
+    this.presetSelect.addEventListener("change", () => {
+      const preset = (p.settings.plotPresets || []).find((entry) => entry.name === this.presetSelect.value);
+      if (!preset) return;
+      try { this.applyConfig(preset.config); name.value = preset.name; }
+      catch (error) { this.statusEl.setText(error.message); }
+    });
+    const save = bar.createEl("button", { cls: "fe-btn", text: ui(p, "save") });
+    save.addEventListener("click", () => runModalAction(this, async () => {
+      const label = name.value.trim();
+      if (!label) throw new Error(t("请输入预设名称", "Enter a preset name"));
+      if (!this.svgText) throw new Error(t("请先修正绘图错误", "Fix plot errors before saving"));
+      const config = validatePlotConfig(this.readConfig());
+      const presets = [...(p.settings.plotPresets || [])];
+      const at = presets.findIndex((entry) => entry.name === label);
+      if (at >= 0) throw new Error(t("名称已存在，请使用新名称或先删除原预设", "Name already exists; use a new name or delete the old preset first"));
+      if (presets.length >= 50) throw new Error(t("最多保存 50 个绘图预设", "At most 50 plot presets"));
+      presets.push({ name: label, config });
+      p.settings.plotPresets = presets;
+      try { await p.saveSettings(); } catch (error) { p.settings.plotPresets = presets.slice(0, -1); throw error; }
+      this.refreshPresetOptions(label); this.statusEl.setText(t("预设已保存", "Preset saved"));
+    }));
+    const remove = bar.createEl("button", { cls: "fe-btn", text: t("删除预设", "Delete preset") });
+    remove.addEventListener("click", () => {
+      const selected = this.presetSelect.value;
+      if (!selected) return;
+      new ConfirmModal(this.app, p, t("删除绘图预设？", "Delete plot preset?"), selected, () => runModalAction(this, async () => {
+        const previous = p.settings.plotPresets;
+        p.settings.plotPresets = previous.filter((entry) => entry.name !== selected);
+        try { await p.saveSettings(); } catch (error) { p.settings.plotPresets = previous; throw error; }
+        this.refreshPresetOptions();
+      })).open();
+    });
+    this.refreshPresetOptions();
+  }
+
+  refreshPresetOptions(selected = "") {
+    this.presetSelect.empty();
+    this.presetSelect.createEl("option", { value: "", text: loc(this.plugin) === "zh" ? "未选择预设" : "No preset selected" });
+    (this.plugin.settings.plotPresets || []).forEach((entry) => this.presetSelect.createEl("option", { value: entry.name, text: entry.name }));
+    this.presetSelect.value = selected;
+  }
+
+  readConfig() {
+    return { version: 1, definitions: this.defInput.value,
+      curves: this.rows.map((row) => ({ expression: row.input.value, locals: row.locals.value })),
+      range: { xMin: this.readNumber(this.xMinInput, -10), xMax: this.readNumber(this.xMaxInput, 10), yMin: this.readNumber(this.yMinInput, -5), yMax: this.readNumber(this.yMaxInput, 5) },
+      autoY: this.autoY.checked, theme: this.themeSelect.value,
+      parameters: Object.fromEntries(this.paramNames.split(",").filter(Boolean).map((name) => [name, { value: this.params[name], ...this.paramRanges[name] }])) };
+  }
+
+  applyConfig(input, validate = true) {
+    const config = validate ? validatePlotConfig(input) : clone(input);
+    this.rowsEl.empty(); this.rows = [];
+    config.curves.forEach((curve) => { this.addRow(curve.expression); this.rows.at(-1).locals.value = curve.locals; });
+    this.defInput.value = config.definitions;
+    for (const key of ["xMin", "xMax", "yMin", "yMax"]) this[key + "Input"].value = String(config.range[key]);
+    this.autoY.checked = config.autoY; this.themeSelect.value = config.theme;
+    this.params = {}; this.paramRanges = {}; this.paramNames = "\0";
+    for (const [name, param] of Object.entries(config.parameters)) {
+      this.params[name] = param.value;
+      this.paramRanges[name] = { min: param.min, max: param.max, step: param.step };
+    }
     this.refresh();
   }
 
+  scheduleDraft() {
+    if (this._hydrating || this.accepted) return;
+    clearTimeout(this.draftTimer);
+    this.draftTimer = setTimeout(() => { this.draftTimer = null; this.persistDraft(); }, 600);
+  }
+
+  persistDraft() {
+    if (!this.rowsEl || this.accepted || this._hydrating) return;
+    const config = this.readConfig();
+    return (JSON.stringify(config) === this.initialConfig ? this.draftSession.clear() : this.draftSession.save(config)).catch((error) => logWarn("plot draft save failed:", error.message));
+  }
+
+  onClose() { this._closed = true; clearTimeout(this.draftTimer); this.persistDraft(); this.contentEl.empty(); }
+  onActionSettled() { this.renderPlot(); }
+
   addRow(value) {
+    if (this.rows.length >= 30) { this.statusEl?.setText(loc(this.plugin) === "zh" ? "最多 30 条曲线" : "At most 30 curves"); return; }
     const p = this.plugin;
     const row = this.rowsEl.createDiv({ cls: "ft-input-row" });
     const chip = row.createDiv({ cls: "ft-color-chip" });
@@ -739,19 +844,39 @@ class PlotFunctionModal extends obsidian.Modal {
     this.paramNames = key;
     Array.from(this.paramsEl.querySelectorAll ? this.paramsEl.querySelectorAll(".ft-param") : []).forEach((el) => this.paramsEl.removeChild(el));
     names.forEach((name) => {
-      const wrap = this.paramsEl.createEl("label", { cls: "mt-check ft-param" });
-      wrap.createEl("span", { text: name + " = " });
+      const wrap = this.paramsEl.createDiv({ cls: "ft-param" });
+      wrap.createEl("span", { text: name, cls: "fl-manage-title" });
       const value = this.params[name] === undefined ? 1 : this.params[name];
       this.params[name] = value;
-      const display = wrap.createEl("span", { cls: "ft-param-value", text: String(value) });
-      const slider = wrap.createEl("input", { cls: "ft-param-slider", attr: { type: "range", min: String(PLOT_PARAM_MIN), max: String(PLOT_PARAM_MAX), step: String(PLOT_PARAM_STEP) } });
+      const bounds = this.paramRanges[name] || { min: PLOT_PARAM_MIN, max: PLOT_PARAM_MAX, step: PLOT_PARAM_STEP };
+      this.paramRanges[name] = bounds;
+      const display = wrap.createEl("input", { cls: "fl-field-input ft-param-value", attr: { type: "number", step: "any", "aria-label": name + (loc(this.plugin) === "zh" ? " 值" : " value") } });
+      display.value = String(value);
+      labelControl(display, loc(this.plugin) === "zh" ? "值" : "Value");
+      const slider = wrap.createEl("input", { cls: "ft-param-slider", attr: { type: "range", min: String(bounds.min), max: String(bounds.max), step: String(bounds.step), "aria-label": name } });
       slider.value = String(value);
       slider.addEventListener("input", () => {
         const next = Number(slider.value);
         this.params[name] = next;
-        display.setText(String(Number(next.toFixed(2))));
+        display.value = String(next);
         this.renderPlot();
       });
+      display.addEventListener("input", () => {
+        this.params[name] = display.value.trim() ? Number(display.value) : NaN;
+        slider.value = display.value; this.renderPlot();
+      });
+      const details = wrap.createEl("details", { cls: "ft-param-bounds" });
+      details.createEl("summary", { text: loc(this.plugin) === "zh" ? "范围与步长" : "Range and step" });
+      const fields = details.createDiv({ cls: "ft-param-range-grid" });
+      for (const key of ["min", "max", "step"]) {
+        const field = fields.createEl("input", { cls: "fl-field-input", attr: { type: "number", step: "any" } });
+        field.value = String(bounds[key]);
+        labelControl(field, loc(this.plugin) === "zh" ? { min: "最小值", max: "最大值", step: "步长" }[key] : key);
+        field.addEventListener("input", () => {
+          bounds[key] = field.value.trim() ? Number(field.value) : NaN;
+          slider.setAttribute(key, String(bounds[key])); this.renderPlot();
+        });
+      }
     });
   }
 
@@ -763,7 +888,12 @@ class PlotFunctionModal extends obsidian.Modal {
     let yMax = this.readNumber(this.yMaxInput, 5);
     const rangeError = !(xMax > xMin) || (!this.autoY.checked && !(yMax > yMin));
     [this.xMinInput, this.xMaxInput, this.yMinInput, this.yMaxInput].forEach((input) => input.setAttribute("aria-invalid", String(rangeError)));
-    const invalid = rangeError || this.parseError || this.definitionError;
+    const paramError = this.paramNames.split(",").filter(Boolean).some((name) => {
+      const bounds = this.paramRanges[name];
+      return !bounds || ![bounds.min, bounds.max, bounds.step, this.params[name]].every(Number.isFinite) || bounds.min >= bounds.max || bounds.step <= 0 || bounds.step > bounds.max - bounds.min || this.params[name] < bounds.min || this.params[name] > bounds.max;
+    });
+    const invalid = rangeError || paramError || this.parseError || this.definitionError;
+    this.scheduleDraft();
     Array.from(this.outputActions?.querySelectorAll("button") || []).slice(0, 4).forEach((button) => { button.disabled = !!invalid || !this.curves.length; });
     this.yMinInput.disabled = this.autoY.checked;
     this.yMaxInput.disabled = this.autoY.checked;
@@ -773,7 +903,7 @@ class PlotFunctionModal extends obsidian.Modal {
       this.preview.empty();
       const message = rangeError
         ? (loc(p) === "zh" ? "坐标范围的最大值必须大于最小值" : "Each maximum must be greater than its minimum")
-        : this.parseError || this.definitionError;
+        : paramError ? (loc(p) === "zh" ? "参数值须在有效范围内，步长须为正且不超过范围" : "Parameter values must be within valid bounds, with a positive step no larger than the range") : this.parseError || this.definitionError;
       this.preview.createDiv({ cls: "fl-empty-state", text: message });
       this.statusEl.setText(message);
       this.statusEl.setAttribute("role", "alert");
@@ -869,7 +999,9 @@ class PlotFunctionModal extends obsidian.Modal {
       this.statusEl.setText(ui(this.plugin, "plotNoFunction"));
       return;
     }
-    if (this.plugin.insertPlotSvg(this.svgText)) {
+    if (this.plugin.insertPlotSvg(this.svgText, validatePlotConfig(this.readConfig()), this.options.plotInfo, this.options.editor)) {
+      this.accepted = true;
+      this.draftSession.clear().catch((error) => logWarn("clear plot draft failed:", error.message));
       this.statusEl.setText(ui(this.plugin, "plotInserted"));
       this.close();
     }
@@ -884,9 +1016,9 @@ class PlotFunctionModal extends obsidian.Modal {
     this.folderInput.value = folder;
     this.plugin.settings.plotFolder = folder;
     await this.plugin.saveSettings();
-    const ok = await this.plugin.insertPlotFile(this.buildSvgForExport(), folder);
+    const ok = await this.plugin.insertPlotFile(this.buildSvgForExport(), folder, validatePlotConfig(this.readConfig()));
     this.statusEl.setText(ui(this.plugin, ok ? "plotInserted" : "plotInsertFailed"));
-    if (ok) this.close();
+    if (ok) { this.accepted = true; await this.draftSession.clear(); this.close(); }
   }
 
   async copySvg() {

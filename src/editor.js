@@ -6,6 +6,8 @@ import { ParamTemplateModal } from "./parameters.js";
 import { MatrixPasteModal } from "./matrix.js";
 import { PlotFunctionModal } from "./plot.js";
 import { applyLibraryTypography } from "./typography.js";
+import { keyboardButton, wireSearchNavigation } from "./ui.js";
+import { readDraft, writeDraft, DraftSession } from "./workspace-state.js";
 
 // ======================== Editor Modal ========================
 class EditorModal extends obsidian.Modal {
@@ -104,11 +106,13 @@ class EditorModal extends obsidian.Modal {
     this.libTabs = lp.createDiv({ cls: "fl-tabs" });
     this.libScroll = lp.createDiv({ cls: "fl-grid-scroll" });
     this.libGrid = this.libScroll.createDiv({ cls: "fl-grid" });
+    this.resetKeyboardSelection = wireSearchNavigation(this.libSI, this.libGrid, ".fl-symbol-btn");
     this.libMoreEl = this.libScroll.createDiv({ cls: "fl-load-more-wrap" });
     this.libCurG = FORMULA_DATA.GROUPS[0];
     this.renderLibTabs(); this.renderLibGrid();
 
     await loadMathLive(this);
+    if (this._closed) return;
 
     if (window.MathfieldElement) {
       if (loc(this.plugin) === "zh") {
@@ -239,6 +243,46 @@ class EditorModal extends obsidian.Modal {
 
     this.btnAccept.setText(this.initMode === "update" ? ui(this.plugin, "acceptUpdate") : ui(this.plugin, "acceptInsert"));
     this.statusEl.setText(this.initMode === "update" ? ui(this.plugin, "editMode") : ui(this.plugin, "ready"));
+    this.sourceTA.value = this.initLatex || "";
+    this.ta.value = this.initLatex || "";
+    this.installDraftProtection();
+  }
+
+  installDraftProtection() {
+    const p = this.plugin, t = (zh, en) => loc(p) === "zh" ? zh : en;
+    const draft = readDraft(p.settings, "formula");
+    this.draftSession = new DraftSession(p, "formula");
+    const context = this.initMode === "update" ? this.initLatex : "";
+    if (draft && typeof draft.latex === "string" && draft.context === context) {
+      const bar = this.contentEl.createDiv({ cls: "fl-draft-bar" });
+      this.contentEl.insertBefore(bar, this.contentEl.firstChild);
+      bar.createSpan({ text: t("有未完成的公式草稿", "An unfinished formula draft is available") });
+      bar.createEl("button", { cls: "fe-btn", text: t("恢复草稿", "Restore draft") }).addEventListener("click", () => {
+        if (this.mf) this.mf.value = draft.latex;
+        this.sourceTA.value = this.ta.value = draft.latex;
+        this.latexSource.value = draft.latex;
+        (draft.mode === "source" ? this.btnS : this.btnV).click();
+        this.draftSession.save(draft).catch((error) => logWarn("restore formula draft failed:", error.message));
+        bar.remove();
+      });
+      bar.createEl("button", { cls: "fe-btn", text: t("丢弃草稿", "Discard draft") }).addEventListener("click", async () => {
+        await writeDraft(p, "formula", null); bar.remove();
+      });
+    }
+    [this.mf, this.sourceTA, this.latexSource].filter(Boolean).forEach((input) => input.addEventListener("input", () => this.scheduleDraft()));
+  }
+
+  scheduleDraft() {
+    clearTimeout(this.draftTimer);
+    this.draftTimer = setTimeout(() => { this.draftTimer = null; this.persistDraft(); }, 600);
+  }
+
+  persistDraft() {
+    if (!this.draftSession || this.accepted) return;
+    const latex = this.currentLatex();
+    const data = { latex, context: this.initMode === "update" ? this.initLatex : "", mode: this.btnS.classList.contains("active") ? "source" : "visual" };
+    return (latex === (this.initLatex || "") ? this.draftSession.clear() : this.draftSession.save(data))
+      .catch((error) => logWarn("formula draft save failed:", error.message));
   }
 
   renderLibTabs() {
@@ -255,6 +299,7 @@ class EditorModal extends obsidian.Modal {
   }
 
   renderLibGrid() {
+    this.resetKeyboardSelection?.();
     this.libGrid.empty();
     if (this.libMoreEl) this.libMoreEl.empty();
     const q = this.libSI?.value?.trim() || "";
@@ -332,6 +377,7 @@ class EditorModal extends obsidian.Modal {
 
     const star = b.createDiv({ cls: "fl-grid-fav-star", attr: { role: "button", tabindex: "0", "aria-label": ui(this.plugin, "favorites") } });
     obsidian.setIcon(star, "star");
+    keyboardButton(star);
     star.toggleClass("active", isFavorite(this.plugin, latex));
     star.addEventListener("click", (e) => {
       e.preventDefault();
@@ -353,6 +399,7 @@ class EditorModal extends obsidian.Modal {
 
     const menuButton = b.createDiv({ cls: "fl-grid-menu", attr: { role: "button", tabindex: "0", "aria-label": loc(this.plugin) === "zh" ? "公式操作" : "Formula actions" } });
     obsidian.setIcon(menuButton, "more-horizontal");
+    keyboardButton(menuButton);
     menuButton.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -398,6 +445,7 @@ class EditorModal extends obsidian.Modal {
       this.ta.focus();
       this.sourceTA.value = this.ta.value;
     }
+    this.scheduleDraft();
   }
 
   currentLatex() {
@@ -470,13 +518,18 @@ class EditorModal extends obsidian.Modal {
     const latex = this.mf ? (this.mf.value || "").trim() : ((this.sourceTA?.value || this.ta?.value || "").trim());
     if (!latex) { this.statusEl.setText("Please enter a formula"); return; }
     log("accept: writing formula to editor");
-    if (this.initMode === "update" && this.formulaInfo) this.plugin.replaceFormula(latex, this.formulaInfo);
-    else this.plugin.insertFormula(latex, true);
+    const ok = this.initMode === "update" && this.formulaInfo ? this.plugin.replaceFormula(latex, this.formulaInfo) : this.plugin.insertFormula(latex, true);
+    if (ok === false) { this.statusEl.setText(ui(this.plugin, "noEditor")); return; }
+    this.accepted = true;
+    this.draftSession?.clear().catch((error) => logWarn("clear formula draft failed:", error.message));
     this.close();
   }
 
   onClose() {
     log("Modal onClose");
+    this._closed = true;
+    clearTimeout(this.draftTimer);
+    if (this.sourceTA && this.btnS) this.persistDraft();
     if (this.plugin.untrackOpenModal) this.plugin.untrackOpenModal(this);
     this.contentEl.empty();
   }

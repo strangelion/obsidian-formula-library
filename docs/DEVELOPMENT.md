@@ -1,7 +1,7 @@
 # Development
 
 Use Node.js 20+ and `npm ci`. Run `npm run check` before committing. It runs
-regression tests, rebuilds the assets and syntax-checks the generated plugin.
+regression tests, checks authored CSS guardrails, rebuilds the assets and syntax-checks the generated plugin.
 
 | Source | Responsibility |
 | --- | --- |
@@ -19,6 +19,9 @@ regression tests, rebuilds the assets and syntax-checks the generated plugin.
 | `src/editor.js`, `src/sidebar.js` | Formula editing and browsing |
 | `src/ui.js` | Labelled controls and async action feedback |
 | `src/typography.js`, `src/styles/typography.css` | Host-following and independently adjustable library fonts |
+| `src/backup.js` | Full workspace schema, staged restore/rollback and backup dialog |
+| `src/workspace-state.js` | Safe JSON state, drafts and plot configuration metadata |
+| `src/formula-details.js` | Structured personal annotations and detail views |
 | `src/mathlive.js`, `vendor/mathlive-embedded.js` | Lazy bundled MathLive initialization |
 | `src/styles/` | Vendor, foundation, drawing, tools and usability styles |
 
@@ -46,6 +49,20 @@ isolated plugin settings; temporary host font preferences are restored afterward
 `verify-mathjax-css.cjs` checks CHTML/SVG container selector equivalence and the
 box model in an isolated browser. It accepts `FORMULA_TEST_BROWSER_PATH` when
 using an already installed Chromium browser rather than Playwright's default.
+
+`npm run test:ui` runs an isolated Chromium harness with an in-memory adapter:
+plot preset/range/draft flows, backup preview/restore, narrow-screen controls,
+keyboard actions, density and MathJax CSS scope. Install its browser with
+`npx playwright install chromium`; in CI use `--with-deps`. No user vault is
+accessed. This harness does not emulate MathLive/MathJax rendering fidelity:
+continue native Obsidian verification for rendering and theme compatibility.
+`npm run lint:css` uses esbuild's CSS parser and project guards against
+`!important` and unknown MathJax type selectors; it is not a full Stylelint ruleset.
+`node scripts/obsidian-workspace-qa.cjs --no-screenshots` verifies backup preview,
+plot presets/ranges/drafts, configuration insertion, formula draft recovery,
+keyboard navigation and source-settings alignment using owned native dialogs,
+cloned settings and an in-memory editor. It asserts that real user settings are
+unchanged. Omit the switch for screenshot capture when Electron frames are available.
 
 The release workflow installs the lockfile, runs the checks, rebuilds the assets,
 synchronizes versions, attests the assets, and publishes a version tag without `v`.

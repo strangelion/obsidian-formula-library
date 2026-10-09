@@ -70,6 +70,17 @@ jobs:
       - name: Test and build self-contained release assets
         run: npm run check
 
+      - name: Install isolated UI test browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify responsive controls and data workflows
+        run: npm run test:ui
+
+      - name: Prepare release notes from changelog
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: node scripts/release-notes.mjs
+
       - name: Commit version update when needed
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -119,7 +130,7 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.version }}
           name: ${{ steps.version.outputs.version }}
-          generate_release_notes: true
+          body_path: output/release-notes.md
           files: |
             main.js
             manifest.json

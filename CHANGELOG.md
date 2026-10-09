@@ -2,6 +2,25 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.5.0] - 2026-10-09
+
+### Added
+- Versioned full workspace backups for personal categories, templates, parameter/plot presets, favorites, pins, history, drafts and settings. Restore includes validation, preview, explicit conflict policies, additive merging and write-failure rollback; vault folder paths are not imported.
+- Recoverable formula and function plot drafts with restore/discard actions, plus a setting controlling formula, plot and Mermaid draft storage.
+- Up to 50 named function plot presets, numeric parameter inputs, configurable parameter bounds/steps and configuration metadata for editing new note plots at the cursor.
+- Formula details with optional variables, units, conditions and references in personal entries; metadata is searchable and retained by JSON import/export.
+- Search result keyboard navigation and keyboard activation of favorite/action controls.
+- CSS safety checks and isolated responsive browser tests in push, pull-request and release workflows.
+
+### Fixed
+- Library density now changes card dimensions and spacing in both the editor and sidebar, without overriding text-size settings.
+- Library-source settings align headings, descriptions and status rows; embedded-data wording no longer suggests a missing required folder.
+- Backup controls are separated into export/restore sections with readable labels, file selection feedback and a responsive sticky action bar.
+- Formula drafts are retained if insertion fails; plot edits detect stale note blocks before replacing them, and image folders are constrained to the vault.
+
+### Documentation
+- Updated the English project description, installation, backup/draft/plot workflows and data/privacy boundaries.
+
 ## [1.4.2] - 2026-10-08
 
 ### Fixed

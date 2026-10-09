@@ -1,9 +1,9 @@
 {
   "id": "formula-library",
   "name": "Formula Library",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "minAppVersion": "1.0.0",
-  "description": "Responsive LaTeX and Mermaid editor with 2200+ formulas, smart search, favorites, pins, recent items, and extensible formula folders.",
+  "description": "Visual LaTeX editing, searchable formulas, custom templates, Mermaid diagrams, and parameter-driven function plotting.",
   "author": "strangelion",
   "isDesktopOnly": false
 }

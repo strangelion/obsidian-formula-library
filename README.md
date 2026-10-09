@@ -2,7 +2,13 @@
 
 [中文文档](README-cn.md) | English Doc
 
-A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editing**, **2216 categorized formulas**, **smart search** (pinyin, LaTeX commands, fuzzy matching), and a **formula library split into built-in and custom parts** (fully manageable from the settings tab).
+Visual LaTeX editing, a searchable formula library, customizable templates, Mermaid diagrams, and parameter-driven function plotting for Obsidian.
+
+Formula Library helps you create, find, and reuse mathematical notation in your notes. It combines MathLive-based visual LaTeX editing with **2,216 built-in formulas across 19 categories**, smart search, and independently configurable built-in and personal libraries.
+
+Create your own parameterized templates, keep named presets, generate matrices from pasted tables, and explore functions with live parameter controls. The Mermaid editor includes **11 diagram templates**, visual editing for flowcharts and state diagrams, live previews, and SVG export.
+
+Favorites, pins, recent items, searchable annotations, full workspace backups, and recoverable drafts help keep your work organized. Responsive layouts, adjustable fonts and density, and English and Chinese interfaces adapt to different screens and workflows.
 
 ## Features
 
@@ -17,6 +23,9 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 - **Parameterized Templates**: 19 ready-made templates (quadratic roots, parabola, vertex form, line, sum/product, definite integral, limit, derivative, partial derivative, binomial, 2×2 determinant, normal distribution, Taylor expansion, uniform acceleration, kinetic energy, Newton's second law, …) that use named parameters instead of bare placeholders — fill in the values and the preview updates live, keep up to 20 parameter presets per template, then insert into the note or into the editor
 - **Live Settings**: Changing the library source, categories, font, density, sorting, or result limit refreshes the sidebar and any open editor modal immediately
 - **Personal Formula Library**: Save the formula you are editing straight into the custom library with a name, tags, and a note; tags and notes are searchable, and JSON backups keep them
+- **Formula Details**: View the complete LaTeX and annotations from a formula's actions menu; personal entries can include variable meanings, units, conditions and sources. These fields are searchable and survive JSON backup/import.
+- **Full Backup and Restore**: Back up personal formula categories, templates, parameter and plot presets, favorites, pins, history, drafts and settings in one versioned JSON file; preview before restoring and choose how matching entries are handled.
+- **Recoverable Drafts**: Formula and function plot editors keep unfinished work with explicit restore/discard actions; Mermaid drafts remain supported. Draft storage can be disabled in settings.
 - **Mermaid Diagrams**: 11 templates; flowcharts and state diagrams include node/connection visual editing, with centered preview and Markdown insertion for every type; existing ` ```mermaid ` blocks can be edited in place, the preview supports zoom/pan/fit and SVG export, unsupported syntax is detected before switching to visual editing, and the source is preserved with undo/redo, restore-original, and a draft that survives closing the modal
 - **Configurable Shortcuts**: Custom keyboard shortcuts for fraction, sqrt, superscript, subscript (default: unbound)
 - **Matrix Templates**: cases, matrix, bmatrix, pmatrix, jacobian, hessian, identity, diagonal, augmented
@@ -33,9 +42,13 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 ## Installation
 
 ### Manual
-1. Copy `obsidian-formula-library` folder to your Vault's `.obsidian/plugins/` directory
-2. Enable in Obsidian Settings > Community Plugins
-3. (Optional) Set a hotkey for "Open Formula Editor" in Settings > Hotkeys
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the same [release](https://github.com/strangelion/obsidian-formula-library/releases).
+2. Create `.obsidian/plugins/formula-library/` inside your vault and place those three files in it.
+3. Enable Formula Library in **Settings → Community plugins**.
+4. Optionally assign hotkeys in **Settings → Hotkeys**.
+
+The installed plugin does not need Node.js, npm, `src/`, `node_modules/`, or a separate `formulas/` directory.
 
 ### BRAT
 1. Install the BRAT plugin in Obsidian
@@ -55,6 +68,7 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 - The **Plot function** button in the toolbar opens the function plot dialog and inserts the drawn figure into the note
 - The **Save to my library** button in the toolbar saves the current formula into your personal library (see below) with a name, tags, and a note
 - Click **Insert** (or `Shift+Enter`) to write the formula to your note
+- An unfinished formula is kept as a draft when you close the editor. On reopening a matching editing context, choose **Restore draft** or **Discard draft**; the draft never silently replaces the current formula. Drafts are saved after a short pause and when closing.
 
 ### Parameterized Templates
 
@@ -73,6 +87,7 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 - Save into an existing category or type a new category name and let the plugin create it
 - Saving the same formula again **updates the entry it already has**, and the dialog prefills the saved name, tags, and note
 - Tags and notes are searchable: type `#algebra` or part of a tag to find the entry, and words from the note match as well
+- Open **Formula details** from the actions menu to see the full source and annotations. In **Save to my library** or the custom formula manager, expand **Variables, units, conditions and source** to add structured details. Built-in entries remain read-only; save a personal copy to annotate them.
 - With no custom folder configured, the first save uses `my-formulas/` in the vault root and records it as the custom library path in the settings
 
 ### Matrix Data Paste
@@ -86,12 +101,16 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 ### Function Plotting
 - **Command Palette**: `Ctrl+P` → "Plot Function", or click **Plot function** in the formula editor toolbar
 - Draw `y = f(x)` from an expression: `+ - * / ^`, parentheses, implicit multiplication (`2x`, `3(x+1)`, `x sin(x)`), the usual functions (sin, cos, tan, ln, log10, sqrt, abs, min/max, pow, ...), and the constants `pi` and `e`; the parentheses are optional too (`sinx` means `sin(x)` and `x sinx` means `x sin(x)`), which makes `sin2x` mean `sin(2) · x` (write `sin(2x)` for the other reading), and a name in backticks (`` `sinx` ``) stays a plain variable
-- Every letter other than `x` and the known constants becomes a slider (range -10 to 10, step 0.1); dragging a slider redraws the plot live
+- Every free variable other than `x` and the known constants becomes a slider (initial range -10 to 10, step 0.1). Enter exact numeric values or expand **Range and step** to customize each parameter; invalid bounds, out-of-range values and non-positive steps disable export until corrected.
+- **Plot presets**: save up to 50 named configurations containing curves, local constants, function definitions, axes, theme, parameter values, ranges and steps. Apply or delete a preset from the plot editor. Use a new name when saving a variation.
 - Add several curves to overlay them, each with its own colour and legend entry; set the `x` and `y` ranges by hand or tick **Auto y** to derive the vertical range from the sampled quantiles
 - **Function definitions**: type lines such as `f(x) = x^2 + a` in the box at the top of the modal and call them from later definitions and from any curve; free variables of a definition (like `a`) become sliders, and a parameter name shadows the axis variable `x` inside that function. Recursion, forward references, repeated parameters, and names that clash with a built-in function are refused with the line number
 - **Local constants**: each curve can carry its own `a=2, b=a+1`, so one letter can mean different things in different curves; when a name also has a slider, the local constant wins for that curve and no slider is created for it
 - Theme: **Follow theme** (an inline SVG uses `currentColor`, so it adapts to light and dark notes), light, or dark; **copying, downloading, or saving the figure as an image bakes the current theme into the file** (a standalone SVG cannot inherit the note theme, so re-export after switching themes)
 - Output: **Insert SVG** (puts the vector markup in the note), **Save image and embed** (writes the file into the image folder and inserts an `![[...]]` embed), **Copy SVG**, and **Download SVG**; the image folder defaults to `plots`
+- New note inserts carry their plot configuration in an adjacent HTML comment. Put the cursor inside the plot block or its image embed and run **Edit Function Plot at Cursor** to reopen it. **Insert SVG** updates that block in place; if the note block changed while the editor was open, reopen it before updating. **Save image and embed** creates a new image/insert instead. Keep the configuration comment if you want to edit the plot again.
+- Older SVGs without configuration metadata cannot reliably recover their expressions. Copied/downloaded SVGs are static images, and saved note plots do not contain live sliders; parameter interaction happens in the plot editor.
+- Unfinished plots offer **Restore draft** and **Discard draft** when reopening. Toggle **Keep unfinished drafts** in settings to control formula, plot and Mermaid draft storage.
 
 ### Mermaid Diagram Editor
 - **Command Palette**: `Ctrl+P` → "Open Mermaid Diagram Editor"
@@ -110,7 +129,21 @@ A responsive LaTeX and Mermaid editor for Obsidian with **MathLive WYSIWYG editi
 - Search reports "N matches · showing M" with a **Show more** button, so later categories are never truncated away
 - Click ☆ to favorite a formula, click ★ to unfavorite
 - Click a formula to insert directly at cursor position
+- In the search box, use **Up/Down** to select a visible result and **Enter** to insert it. Favorite and actions controls support **Enter/Space** without inserting the enclosing formula. **Escape** clears the keyboard selection.
 - Most-used formulas appear first in each category
+
+### Backup and Restore
+
+Open **Settings → Formula Library → Backup and restore → Manage backups**, or run **Manage Formula Library Backups** from the command palette.
+
+1. Choose **Download full backup** to save a versioned JSON file. It includes disabled personal categories as well as your templates, presets, favorites, pins, hidden/recent formulas, usage counts, drafts and known plugin settings. Built-in formula data and saved image files are not duplicated in this backup.
+2. To restore, select a JSON file (up to 10 MB) or paste its contents. Choose **Keep existing on conflict** or **Use backup on conflict**. Matching formulas are identified by LaTeX within a category; templates by their key, and presets by name.
+3. Optionally restore UI and category preferences. Folder paths are never imported: personal formulas go to the currently configured folder, or `my-formulas` if none is configured. The preview shows this destination.
+4. Click **Validate and preview**, review the summary, then **Confirm restore**. Editing the input or options invalidates the preview and requires another check.
+
+Restore is additive: unmatched existing entries/categories remain intact. It validates and stages destination reads before writing, and attempts to roll back exact file bytes and settings if a write fails. A rollback failure is reported explicitly. Save a fresh backup before large changes; plugin backups are not a replacement for backing up the vault itself.
+
+The older custom-library JSON/text export remains available in **Manage custom formulas**. Use the full workspace backup for templates, presets and preferences; the two formats have separate import dialogs.
 
 ### Edit Existing Formulas
 - Place cursor inside `$...$` or `$$...$$`
@@ -224,6 +257,7 @@ Each formula is an array: `[label_zh, LaTeX code, label_en (optional)]`
 - **Section marker**: `{"section": "Section Title", "sectionEn": "Section Title"}`
 - **Matrix template**: `["Matrix", "matrix:matrix", "Matrix"]` (prefix `matrix:` triggers template)
 - **Personal library metadata**: `["Name", "\\latex", "English name", {"tags": ["algebra"], "note": "why it matters"}]` (the 4th element is optional and only used by the custom library; tags are shown as `#tag` in lists)
+- Optional metadata fields: `variables`, `units`, `conditions`, and `reference` are plain-text strings. They appear in **Formula details** and are included in search and JSON backups.
 
 ### Library font size
 
@@ -236,7 +270,17 @@ Feature source lives in `src/`; do not edit generated `main.js` or `styles.css` 
 ```bash
 npm ci
 npm run check
+npx playwright install chromium
+npm run test:ui
 ```
+
+## Data and Privacy
+
+Personal formulas are stored in your chosen vault folder. Settings, templates, presets and drafts use Obsidian's plugin data storage; saved plot images go to the configured image folder. Backup files can contain private formulas, annotations, drafts and folder names—store them securely.
+
+Clipboard access is used for copy/paste features. This is why automated plugin reviews may disclose clipboard access; the new backup and plotting features do not add background clipboard monitoring or an external service. Review results marked unavailable are not security guarantees.
+
+The mathematical editor and diagram features rely on MathLive and Obsidian's rendering environment. A separate account or plotting server is not required, but this is not a guarantee that every host or rendering resource is network-free.
 
 ## Acknowledgments
 

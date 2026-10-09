@@ -13,6 +13,7 @@ function normalizeLibraryFontSize(value) {
 
 function applyLibraryTypography(root, settings) {
   if (!root) return;
+  root.dataset.density = ["compact", "comfortable", "spacious"].includes(settings.libraryDensity) ? settings.libraryDensity : "comfortable";
   if (settings.libraryFontFollowObsidian !== false) {
     root.style.removeProperty("--fl-library-font-size");
   } else {

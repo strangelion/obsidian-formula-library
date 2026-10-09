@@ -9,6 +9,9 @@ import { plotFileName, PlotFunctionModal } from "./plot.js";
 import { SidebarView } from "./sidebar.js";
 import { EditorModal } from "./editor.js";
 import { findMermaidBlockAt, DrawingModal } from "./drawing.js";
+import { findPlotBlockAt, plotConfigComment } from "./workspace-state.js";
+import { FormulaDetailsModal } from "./formula-details.js";
+import { WorkspaceBackupModal } from "./backup.js";
 
 // ======================== Plugin ========================
 class FormulaLibraryPlugin extends obsidian.Plugin {
@@ -60,6 +63,14 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     this.addCommand({ id: "open-param-templates", name: "Insert Parameterized Formula", callback: () => { log("Command: open-param-templates"); this.openParamTemplates(); } });
     this.addCommand({ id: "paste-matrix-data", name: "Paste Matrix Data", callback: () => { log("Command: paste-matrix-data"); this.openMatrixPaste(); } });
     this.addCommand({ id: "plot-function", name: "Plot Function", callback: () => { log("Command: plot-function"); this.openFunctionPlot(); } });
+    this.addCommand({ id: "manage-backups", name: "Manage Formula Library Backups", callback: () => this.openWorkspaceBackup() });
+    this.addCommand({ id: "edit-plot-at-cursor", name: "Edit Function Plot at Cursor", checkCallback: (checking) => {
+      const editor = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)?.editor;
+      const info = editor && findPlotBlockAt(editor.getValue(), editor.posToOffset(editor.getCursor()));
+      if (!info) return false;
+      if (!checking) new PlotFunctionModal(this.app, this, { config: info.config, plotInfo: info, editor }).open();
+      return true;
+    } });
     this.addCommand({
       id: "edit-mermaid-diagram-at-cursor",
       name: "Edit Mermaid diagram at cursor",
@@ -108,6 +119,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     const data = (await this.loadData()) || {};
     this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
     this.settings.customParamTemplates = Array.isArray(data.customParamTemplates) ? JSON.parse(JSON.stringify(data.customParamTemplates)) : [];
+    this.settings.plotPresets = Array.isArray(data.plotPresets) ? JSON.parse(JSON.stringify(data.plotPresets)) : [];
     // Object.assign copies references: map/object defaults must be cloned per
     // instance, otherwise seeding a category switch would write straight into
     // DEFAULT_SETTINGS and outlive the settings object.
@@ -260,8 +272,11 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     return modal;
   }
 
-  insertPlotSvg(svg) {
-    const editor = this.findMarkdownEditor();
+  openFormulaDetails(item) { new FormulaDetailsModal(this.app, this, item).open(); }
+  openWorkspaceBackup() { const modal = new WorkspaceBackupModal(this.app, this); modal.open(); return modal; }
+
+  insertPlotSvg(svg, config, plotInfo, editorOverride) {
+    const editor = editorOverride || this.findMarkdownEditor();
     if (!editor) {
       new obsidian.Notice(ui(this, "noEditor"));
       return false;
@@ -269,14 +284,23 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     const markup = String(svg || "").trim();
     if (!markup) return false;
     const cursor = editor.getCursor();
-    const block = "\n" + markup + "\n\n";
+    const content = (config ? plotConfigComment(config) + "\n" : "") + markup;
+    if (plotInfo) {
+      if (editor.getValue().slice(plotInfo.start, plotInfo.end) !== plotInfo.original) {
+        new obsidian.Notice("The plot changed in the note. Reopen it before updating.");
+        return false;
+      }
+      editor.replaceRange(content, editor.offsetToPos(plotInfo.start), editor.offsetToPos(plotInfo.end));
+      editor.focus(); return true;
+    }
+    const block = "\n" + content + "\n\n";
     editor.replaceRange(block, cursor);
     editor.setCursor(editor.offsetToPos(editor.posToOffset(cursor) + block.length));
     editor.focus();
     return true;
   }
 
-  async insertPlotFile(svg, folder) {
+  async insertPlotFile(svg, folder, config) {
     const editor = this.findMarkdownEditor();
     if (!editor) {
       new obsidian.Notice(ui(this, "noEditor"));
@@ -286,6 +310,9 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     const markup = String(svg || "").trim();
     if (!adapter || !markup) return false;
     const dir = normalizeFolderPath(folder) || "plots";
+    if (dir.split("/").some((part) => part === "." || part === ".." || part.startsWith(".")) || /^\/|^[a-z]:|\\/i.test(dir)) {
+      new obsidian.Notice("Use an image folder inside the vault"); return false;
+    }
     try {
       const parts = dir.split("/").filter(Boolean);
       let current = "";
@@ -296,7 +323,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
       const path = dir + "/" + plotFileName("function");
       await adapter.write(path, '<?xml version="1.0" encoding="UTF-8"?>\n' + markup + "\n");
       const cursor = editor.getCursor();
-      const block = "\n![[" + path + "]]\n\n";
+      const block = "\n" + (config ? plotConfigComment(config) + "\n" : "") + "![[" + path + "]]\n\n";
       editor.replaceRange(block, cursor);
       editor.setCursor(editor.offsetToPos(editor.posToOffset(cursor) + block.length));
       editor.focus();
@@ -358,7 +385,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
 
   insertFormula(latex, _display) {
     const ed = this.findMarkdownEditor();
-    if (!ed) { logErr("insertFormula: no editor found"); new obsidian.Notice(ui(this, "noEditor")); return; }
+    if (!ed) { logErr("insertFormula: no editor found"); new obsidian.Notice(ui(this, "noEditor")); return false; }
     trackUsage(this, latex);
     const fmt = this.settings.insertFormat || "display";
     const w = fmt === "inline" ? "$" : "$$";
@@ -373,13 +400,13 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
       ed.setCursor(ed.offsetToPos(startOffset + t.length));
     }
     ed.focus();
+    return true;
   }
 
   replaceFormula(latex, formulaInfo) {
     const editor = this.findMarkdownEditor();
     if (!editor || !formulaInfo) {
-      this.insertFormula(latex, true);
-      return;
+      return this.insertFormula(latex, true);
     }
     trackUsage(this, latex);
     const wrapper = formulaInfo.display ? "$$" : "$";
@@ -389,6 +416,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     editor.replaceRange(replacement, start, end);
     editor.setCursor(editor.offsetToPos(formulaInfo.start + replacement.length));
     editor.focus();
+    return true;
   }
 }
 

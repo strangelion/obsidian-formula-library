@@ -487,7 +487,7 @@ class DrawingModal extends obsidian.Modal {
       }
     });
 
-    const draft = this.plugin.settings.drawingDraft;
+    const draft = this.plugin.settings.rememberDrafts === false ? null : this.plugin.settings.drawingDraft;
     if (this.existingSource) {
       // Editing a diagram that already lives in the note: the note content wins
       // over any leftover draft.
@@ -684,6 +684,7 @@ class DrawingModal extends obsidian.Modal {
   }
 
   saveDraft() {
+    if (this.plugin.settings.rememberDrafts === false) return;
     if (this.accepted) return Promise.resolve();
     this.plugin.settings.drawingDraft = {
       source: this.source.value,

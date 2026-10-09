@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const { buildSync } = require("esbuild");
 
 const compiled = buildSync({
-  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing', 'typography'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
+  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing', 'typography', 'backup', 'workspace-state', 'ui'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
   bundle: true, write: false, platform: "node", format: "cjs", external: ["obsidian"],
 }).outputFiles[0].text;
 class Base { constructor(app) { this.app = app; } }
@@ -25,6 +25,7 @@ const adapter = {
   async exists(path) { return files.has(path); },
   async mkdir(path) { files.set(path, ""); },
   async write(path, value) { files.set(path, value); },
+  async remove(path) { files.delete(path); },
 };
 const plugin = () => ({ settings: { ...plain(api.DEFAULT_SETTINGS), locale: "zh" }, manifest: { id: "formula-library" }, app: { vault: { adapter }, workspace: { getLeavesOfType: () => [] } }, async saveSettings() {}, async reloadFormulas() { await api.loadFormulas(this); } });
 
@@ -263,7 +264,7 @@ test("independent library font sizes are validated and switching back removes ov
   assert.equal(api.normalizeLibraryFontSize(100),32);
   assert.equal(api.normalizeLibraryFontSize('21.6'),22);
   const styles = new Map();
-  const root = { style: {setProperty:(name,value)=>styles.set(name,value),removeProperty:(name)=>styles.delete(name)} };
+  const root = { dataset: {}, style: {setProperty:(name,value)=>styles.set(name,value),removeProperty:(name)=>styles.delete(name)} };
   api.applyLibraryTypography(root,{libraryFontFollowObsidian:false,libraryFontSize:22});
   assert.equal(styles.get('--fl-library-font-size'),'22px');
   api.applyLibraryTypography(root,{});
@@ -296,4 +297,135 @@ test("MathJax box-model protection uses lint-compatible container attributes", (
   assert.match(css,/\.formula-library-modal \[jax\]/);
   assert.match(css,/\.formula-custom-modal \[jax\]/);
   assert.match(css,/box-sizing: content-box/);
+});
+
+const plotConfig = () => ({ version: 1, definitions: "f(t)=t^2+a", curves: [{ expression: "f(x)", locals: "b=2" }], range: { xMin: -4, xMax: 4, yMin: -3, yMax: 9 }, autoY: true, theme: "auto", parameters: { a: { value: 2, min: -20, max: 20, step: 0.25 } } });
+const workspaceBackup = (settings = {}) => ({ format: "formula-library-workspace", version: 1, groups: [{ id: "personal", name: "Personal", structures: false, enabled: true, items: [["Test", "x^2", "Test", { tags: ["exam"], note: "original", units: "m" }]] }], settings });
+
+test("workspace backup refuses unknown versions, invalid data and unsafe keys before writes", () => {
+  assert.throws(() => api.parseWorkspaceBackup(JSON.stringify({ ...workspaceBackup(), version: 2 })));
+  assert.throws(() => api.parseWorkspaceBackup(JSON.stringify({ ...workspaceBackup(), groups: [{ id: "../unsafe", items: [] }] })));
+  assert.throws(() => api.parseWorkspaceBackup(JSON.stringify(workspaceBackup({ enabledGroups: [] }))));
+  assert.throws(() => api.parseWorkspaceBackup(JSON.stringify(workspaceBackup({ libraryDensity: "invalid" }))));
+  assert.throws(() => api.parseWorkspaceBackup('{"format":"formula-library-workspace","version":1,"groups":[],"settings":{"__proto__":{}}}'));
+  assert.throws(() => api.parseWorkspaceBackup(JSON.stringify(workspaceBackup({ plotPresets: [{ name: "bad", config: { version: 1 } }] }))));
+});
+
+test("full backup includes disabled categories, templates, presets, favorites and drafts", async () => {
+  files.clear(); const p = plugin(); p.settings.customFormulasPath = "full";
+  files.set("full/personal.json", JSON.stringify({ id: "personal", structures: false, items: [["Test", "x^2"]] }));
+  p.settings.customEnabledGroups.personal = false; p.settings.favorites = ["x^2"];
+  p.settings.plotPresets = [{ name: "Quadratic", config: plotConfig() }];
+  await api.writeDraft(p, "formula", { latex: "x+y", mode: "source", context: "" });
+  await p.reloadFormulas();
+  const backup = api.parseWorkspaceBackup(await api.buildWorkspaceBackup(p));
+  assert.equal(backup.groups.length, 1); assert.equal(backup.groups[0].enabled, false);
+  assert.deepEqual(plain(backup.settings.favorites), ["x^2"]);
+  assert.equal(backup.settings.plotPresets[0].config.parameters.a.step, 0.25);
+  assert.equal(backup.settings.formulaDraft.data.latex, "x+y");
+});
+
+test("workspace restore is additive, keeps paths/preferences and handles conflicts explicitly", async () => {
+  files.clear(); const p = plugin(); p.settings.customFormulasPath = "target"; p.settings.locale = "zh";
+  files.set("target/personal.json", JSON.stringify({ id: "personal", extra: "preserve", structures: false, items: [["Current", "x^2"], ["Other", "y"]] }));
+  await p.reloadFormulas();
+  const backup = workspaceBackup({ locale: "en", customFormulasPath: "wrong", plotFolder: "wrong", favorites: ["x^2"], plotPresets: [{ name: "test", config: plotConfig() }] });
+  await api.restoreWorkspaceBackup(p, backup);
+  assert.equal(p.settings.customFormulasPath, "target"); assert.equal(p.settings.locale, "zh"); assert.equal(p.settings.plotFolder, "plots");
+  assert.equal(JSON.parse(files.get("target/personal.json")).items[0][0], "Current");
+  await api.restoreWorkspaceBackup(p, backup, { conflict: "replace", preferences: true });
+  const result = JSON.parse(files.get("target/personal.json"));
+  assert.equal(result.items.length, 2); assert.equal(result.items[0][0], "Test"); assert.equal(result.extra, "preserve");
+  assert.equal(result.items[0][3].units, "m"); assert.equal(p.settings.locale, "en");
+  assert.equal(p.settings.plotPresets.length, 1);
+});
+
+test("restore rolls back exact file bytes and settings after a write fails", async () => {
+  files.clear(); const p = plugin(); p.settings.customFormulasPath = "rollback";
+  const original = '{"id":"personal","structures":false,"items":[["Original","y"]]}';
+  files.set("rollback/personal.json", original); await p.reloadFormulas();
+  const previous = plain(p.settings);
+  const originalWrite = adapter.write; let failed = false;
+  adapter.write = async (path, value) => { if (!failed && path.endsWith("_index.json")) { failed = true; throw new Error("simulated disk failure"); } return originalWrite(path, value); };
+  try { await assert.rejects(api.restoreWorkspaceBackup(p, workspaceBackup()), /rolled back/); }
+  finally { adapter.write = originalWrite; }
+  assert.equal(files.get("rollback/personal.json"), original);
+  assert.equal(files.has("rollback/_index.json"), false);
+  assert.deepEqual(plain(p.settings), previous);
+});
+
+test("restore refuses damaged destination files and vault traversal without changing bytes", async () => {
+  files.clear(); const p = plugin(); p.settings.customFormulasPath = "broken";
+  files.set("broken/_index.json", "{broken");
+  await assert.rejects(api.restoreWorkspaceBackup(p, workspaceBackup()));
+  assert.equal(files.get("broken/_index.json"), "{broken");
+  p.settings.customFormulasPath = "../outside";
+  await assert.rejects(api.restoreWorkspaceBackup(p, workspaceBackup()));
+  assert.equal(files.has("../outside/personal.json"), false);
+});
+
+test("parameter presets merge by name rather than dropping unrelated saved values", async () => {
+  files.clear(); const p = plugin(); p.settings.customFormulasPath = "presets"; await p.reloadFormulas();
+  p.settings.paramPresets.line = [{ name: "Existing", values: { a: "1" } }];
+  const backup = workspaceBackup({ paramPresets: { line: [{ name: "Imported", values: { a: "2" } }] } });
+  await api.restoreWorkspaceBackup(p, backup);
+  assert.equal(p.settings.paramPresets.line.length, 2);
+});
+
+test("draft settings are isolated, opt-out is respected and successful clear removes the draft", async () => {
+  const a = plugin(), b = plugin();
+  await api.writeDraft(a, "plot", plotConfig());
+  assert.equal(api.readDraft(b.settings, "plot"), null);
+  const restored = api.readDraft(a.settings, "plot"); restored.range.xMin = 50;
+  assert.equal(a.settings.plotDraft.data.range.xMin, -4);
+  a.settings.rememberDrafts = false;
+  assert.equal(api.readDraft(a.settings, "plot"), null);
+  a.settings.rememberDrafts = true; await api.writeDraft(a, "plot", null);
+  assert.equal(api.readDraft(a.settings, "plot"), null);
+});
+
+test("plot metadata round-trips safely and can locate either SVG or image-embed blocks", () => {
+  const config = plotConfig(); config.curves[0].locals = ""; config.definitions += "\n// --> <script>";
+  const comment = api.plotConfigComment(config);
+  assert.equal(comment.includes("<script>"), false);
+  for (const graphic of ['<svg viewBox="0 0 1 1"><g></g></svg>', '![[plots/example.svg]]']) {
+    const note = 'Before\n' + comment + '\n' + graphic + '\nAfter';
+    const info = api.findPlotBlockAt(note, note.indexOf(graphic) + 2);
+    assert.deepEqual(plain(info.config), config); assert.equal(note.slice(info.start, info.end), info.original);
+    assert.equal(api.findPlotBlockAt(note, 0), null);
+  }
+});
+
+test("invalid plot parameter ranges, values, step and config versions are refused", () => {
+  for (const change of [{ step: 0 }, { min: 30 }, { value: 21 }, { step: 50 }]) {
+    const config = plotConfig(); Object.assign(config.parameters.a, change);
+    assert.throws(() => api.validatePlotConfig(config));
+  }
+  assert.throws(() => api.validatePlotConfig({ ...plotConfig(), version: 2 }));
+});
+
+test("formula detail fields survive import and remain searchable", () => {
+  const item = api.withItemMeta(["Test", "x"], [], "", { variables: "distance", units: "metres", conditions: "positive", reference: "Textbook" });
+  assert.deepEqual(plain(api.sanitizeImportedEntries([item]).items[0]), plain(item));
+  assert.ok(api.searchRank(plugin(), "metres", item) > 0);
+});
+
+test("one draft session cannot clear another editor's unfinished work", async () => {
+  const p = plugin(), first = new api.DraftSession(p, "formula"), second = new api.DraftSession(p, "formula");
+  await first.save({ latex: "x", mode: "source", context: "" });
+  await second.save({ latex: "y", mode: "visual", context: "" });
+  await first.clear();
+  assert.equal(api.readDraft(p.settings, "formula").latex, "y");
+  await second.clear(); assert.equal(api.readDraft(p.settings, "formula"), null);
+});
+
+test("plot replacement refuses a stale note block instead of overwriting other content", () => {
+  const p = new api.FormulaLibraryPlugin({}); p.settings = plain(api.DEFAULT_SETTINGS);
+  const config = plotConfig(), original = api.plotConfigComment(config) + '\n<svg></svg>';
+  const editor = { text: original, getValue() { return this.text; }, getCursor:()=>({line:0,ch:0}), offsetToPos:(offset)=>({line:0,ch:offset}), replaceRange(value,start,end) { this.text=this.text.slice(0,start.ch)+value+this.text.slice(end.ch); }, focus(){} };
+  const info = api.findPlotBlockAt(original, original.length-2);
+  assert.equal(p.insertPlotSvg('<svg><g></g></svg>',config,info,editor),true);
+  const updated = editor.text;
+  assert.equal(p.insertPlotSvg('<svg><text>stale</text></svg>',config,info,editor),false);
+  assert.equal(editor.text,updated);
 });

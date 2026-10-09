@@ -1,6 +1,7 @@
 import * as obsidian from "obsidian";
 import { runModalAction } from "./ui.js";
-import { logWarn, ui, groupDisplayName, itemTags, itemNote, parseTagsInput, formatTags, withItemMeta, FORMULA_INDEX } from "./core.js";
+import { logWarn, ui, groupDisplayName, itemTags, itemNote, itemMeta, parseTagsInput, formatTags, withItemMeta, FORMULA_INDEX } from "./core.js";
+import { createDetailFields, detailFieldValues } from "./formula-details.js";
 import { customFolderFor, readCustomGroup, customGroupIdFromName, validateLatex, upsertCustomItem, createCustomGroup } from "./custom-library.js";
 import { renderLatexInto } from "./parameters.js";
 
@@ -56,7 +57,7 @@ async function savePersonalFormula(plugin, latex, fields) {
     return item && !item.section && String(item[1] == null ? "" : item[1]).trim() === latex;
   });
   const previous = index >= 0 ? data.items[index] : null;
-  const entry = withItemMeta([fields.name, latex, previous && previous[2] ? previous[2] : ""], fields.tags, fields.note);
+  const entry = withItemMeta([fields.name, latex, previous && previous[2] ? previous[2] : ""], fields.tags, fields.note, fields.details || itemMeta(previous));
   await upsertCustomItem(plugin, meta, index, entry);
   await plugin.reloadFormulas();
   return { group: meta, updated: index >= 0 };
@@ -88,8 +89,9 @@ class SaveToLibraryModal extends obsidian.Modal {
     this.nameInput = field(ui(p, "itemName"), this.options.label || "", "e.g. My quadratic shortcut");
     this.tagsInput = field(ui(p, "itemTags"), "", ui(p, "itemTagsPlaceholder"));
     this.noteInput = field(ui(p, "itemNote"), "", ui(p, "itemNotePlaceholder"));
+    this.detailInputs = createDetailFields(this.contentEl, p, this.options.metadata);
     // Typing wins over the prefill of an already saved formula.
-    for (const input of [this.nameInput, this.tagsInput, this.noteInput]) {
+    for (const input of [this.nameInput, this.tagsInput, this.noteInput, ...Object.values(this.detailInputs)]) {
       input.addEventListener("input", () => { this.touched = true; });
     }
     const groupWrap = this.contentEl.createDiv({ cls: "fl-field" });
@@ -133,6 +135,7 @@ class SaveToLibraryModal extends obsidian.Modal {
     this.nameInput.value = match[0] || "";
     this.tagsInput.value = formatTags(itemTags(match));
     this.noteInput.value = itemNote(match);
+    for (const [key, input] of Object.entries(this.detailInputs)) input.value = itemMeta(match)?.[key] || "";
   }
   async save() {
     const p = this.plugin;
@@ -147,6 +150,7 @@ class SaveToLibraryModal extends obsidian.Modal {
       name: name,
       tags: parseTagsInput(this.tagsInput.value),
       note: this.noteInput.value,
+      details: detailFieldValues(this.detailInputs),
       meta: meta,
       newGroupName: newGroupName,
     });

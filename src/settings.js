@@ -13,8 +13,22 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
   async display() {
     const { containerEl } = this;
     containerEl.empty();
+    containerEl.addClass("formula-library-settings");
     const p = this.plugin;
     containerEl.createEl("h2", { text: ui(p, "settingsTitle") });
+    const t = (zh, en) => loc(p) === "zh" ? zh : en;
+    new obsidian.Setting(containerEl)
+      .setName(t("备份与恢复", "Backup and restore"))
+      .setDesc(t("备份个人公式、模板、预设、收藏、草稿和设置；恢复前检查并选择冲突策略。", "Back up personal formulas, templates, presets, favorites, drafts and settings; preview before restoring."))
+      .addButton((button) => button.setButtonText(t("打开备份管理", "Manage backups")).onClick(() => p.openWorkspaceBackup()));
+    new obsidian.Setting(containerEl)
+      .setName(t("保留未完成草稿", "Keep unfinished drafts"))
+      .setDesc(t("关闭编辑器时保留公式、函数绘图和 Mermaid 草稿。重新打开时可恢复；关闭此开关会清除草稿。", "Keep formula, function plot and Mermaid drafts when closing. Restore them on reopen; disabling clears saved drafts."))
+      .addToggle((toggle) => toggle.setValue(p.settings.rememberDrafts !== false).onChange(async (value) => {
+        p.settings.rememberDrafts = value;
+        if (!value) for (const key of ["formulaDraft", "plotDraft", "drawingDraft"]) p.settings[key] = null;
+        await p.saveSettings();
+      }));
 
     new obsidian.Setting(containerEl)
       .setName(ui(p, "language"))
@@ -193,11 +207,12 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
     await this.renderGroupToggles(containerEl);
   }
 
-  async renderGroupToggles(containerEl) {
+  async renderGroupToggles(parentEl) {
+    const containerEl = parentEl.createDiv({ cls: "fl-settings-sources" });
     const p = this.plugin;
     const zh = loc(p) === "zh";
     containerEl.createEl("h3", { text: ui(p, "libraryTitle") });
-    containerEl.createEl("p", { text: ui(p, "libraryDesc"), cls: "setting-item-description" });
+    containerEl.createEl("p", { text: ui(p, "libraryDesc"), cls: "setting-item-description fl-settings-section-description" });
 
     const statusEl = containerEl.createDiv({ cls: "fl-library-status" });
     const paintStatus = () => {
@@ -210,21 +225,20 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
       const origin = FORMULA_INDEX.origin === "folder"
         ? (zh ? "公式文件夹 " : "formulas folder ") + (FORMULA_INDEX.folder || "")
         : FORMULA_INDEX.origin === "bundled"
-          ? (zh ? "插件内置（无 formulas 文件夹）" : "embedded in plugin (no formulas folder)")
+          ? (zh ? "内置数据（无需额外文件夹）" : "Built-in data (no extra folder required)")
           : (zh ? "无" : "none");
-
-      statusEl.createEl("div", { text: (zh ? "内置来源：" : "Built-in source: ") + origin });
-      statusEl.createEl("div", {
-        text: (zh ? "内置分类：" : "Built-in groups: ")
-          + (builtinEnabled
+      const statusRow = (label, value) => {
+        const row = statusEl.createDiv({ cls: "fl-library-status-row" });
+        row.createSpan({ cls: "fl-library-status-label", text: label });
+        row.createSpan({ cls: "fl-library-status-value", text: value });
+      };
+      statusRow(zh ? "内置来源" : "Built-in source", origin);
+      statusRow(zh ? "启用分类" : "Enabled groups", builtinEnabled
             ? on(FORMULA_INDEX.builtin, builtinMap).length + "/" + FORMULA_INDEX.builtin.length + " · " + (zh ? "公式 " : "formulas ") + total(on(FORMULA_INDEX.builtin, builtinMap))
-            : (zh ? "总开关已关闭" : "master switch off")),
-      });
-      statusEl.createEl("div", {
-        text: FORMULA_INDEX.customFolder
-          ? (zh ? "自定义：" : "Custom: ") + FORMULA_INDEX.customFolder + " · " + on(FORMULA_INDEX.custom, customMap).length + "/" + FORMULA_INDEX.custom.length + " · " + (zh ? "公式 " : "formulas ") + total(on(FORMULA_INDEX.custom, customMap))
-          : (zh ? "自定义：未设置" : "Custom: not set"),
-      });
+            : (zh ? "内置公式库已关闭，个人库仍可使用" : "Built-in library off; personal library remains available"));
+      statusRow(zh ? "个人公式库" : "Personal library", FORMULA_INDEX.customFolder
+          ? FORMULA_INDEX.customFolder + " · " + on(FORMULA_INDEX.custom, customMap).length + "/" + FORMULA_INDEX.custom.length + " · " + (zh ? "公式 " : "formulas ") + total(on(FORMULA_INDEX.custom, customMap))
+          : (zh ? "尚未设置，可在下方选择文件夹" : "Not configured — choose a folder below"));
       if (FORMULA_INDEX.errors.length) {
         statusEl.createEl("div", { text: (zh ? "加载错误：" : "Load errors: ") + FORMULA_INDEX.errors.length, cls: "fl-library-error" });
         for (const err of FORMULA_INDEX.errors.slice(0, 8)) {

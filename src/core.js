@@ -21,6 +21,10 @@ const DEFAULT_SETTINGS = {
   plotFolder: "plots",
   customEnabledGroups: {},
   drawingDraft: null,
+  formulaDraft: null,
+  plotDraft: null,
+  rememberDrafts: true,
+  plotPresets: [],
   paramPresets: {},
   customParamTemplates: [],
   libraryDensity: "comfortable",
@@ -300,14 +304,19 @@ function formatTags(tags) {
 // Returns `item` with the metadata attached, or a plain table entry when both
 // fields are empty. A missing English label becomes "" instead of a hole so the
 // JSON stays a clean rectangular array.
-function withItemMeta(item, tags, note) {
+function withItemMeta(item, tags, note, details) {
   const entry = [item[0] == null ? "" : item[0], item[1] == null ? "" : item[1]];
   if (item[2]) entry[2] = item[2];
   const list = tags && tags.length ? tags.slice() : [];
   const text = String(note == null ? "" : note).trim();
-  if (list.length || text) {
+  const extra = {};
+  for (const key of ["variables", "units", "conditions", "reference"]) {
+    const value = details?.[key] ?? itemMeta(item)?.[key];
+    if (typeof value === "string" && value.trim()) extra[key] = value.trim().slice(0, 5000);
+  }
+  if (list.length || text || Object.keys(extra).length) {
     if (entry.length === 2) entry[2] = "";
-    const meta = { tags: list };
+    const meta = { ...extra, tags: list };
     if (text) meta.note = text;
     entry[3] = meta;
   }
@@ -446,6 +455,9 @@ function createLibraryFilterBar(plugin, parent, initialView, onChange) {
 function openFormulaMenu(plugin, item, event, refresh) {
   const latex = item[1];
   const menu = new obsidian.Menu();
+  if (plugin.openFormulaDetails) menu.addItem((entry) => entry
+    .setTitle(loc(plugin) === "zh" ? "公式详情" : "Formula details")
+    .setIcon("info").onClick(() => plugin.openFormulaDetails(item)));
   menu.addItem((entry) => entry
     .setTitle(isFavorite(plugin, latex) ? (loc(plugin) === "zh" ? "取消收藏" : "Remove favorite") : ui(plugin, "favorites"))
     .setIcon("star")
@@ -471,7 +483,11 @@ function openFormulaMenu(plugin, item, event, refresh) {
     .setTitle(isHidden(plugin, latex) ? (loc(plugin) === "zh" ? "取消隐藏" : "Unhide") : (loc(plugin) === "zh" ? "隐藏公式" : "Hide formula"))
     .setIcon(isHidden(plugin, latex) ? "eye" : "eye-off")
     .onClick(() => { toggleFormulaSetting(plugin, "hiddenFormulas", latex); refresh(); }));
-  menu.showAtMouseEvent(event);
+  if (event.clientX || event.clientY) menu.showAtMouseEvent(event);
+  else {
+    const rect = event.currentTarget?.getBoundingClientRect();
+    menu.showAtPosition({ x: rect?.left || 0, y: rect?.bottom || 0 });
+  }
 }
 
 
@@ -568,7 +584,7 @@ function searchRank(plugin, query, item) {
       else if (lower.includes(tagQuery)) bump(SEARCH_RANK.tagContains);
     }
   }
-  const note = itemNote(item).toLowerCase();
+  const note = [itemNote(item), ...["variables", "units", "conditions", "reference"].map((key) => itemMeta(item)?.[key] || "")].join(" ").toLowerCase();
   if (note && note.includes(q)) bump(SEARCH_RANK.noteContains);
 
   // Command aliases: "less equal" or "lte" also reach the formulas listed

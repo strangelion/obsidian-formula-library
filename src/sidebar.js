@@ -1,5 +1,6 @@
 import * as obsidian from "obsidian";
 import { applyLibraryTypography } from "./typography.js";
+import { keyboardButton, wireSearchNavigation } from "./ui.js";
 import { FORMULA_DATA, log, logErr, loc, ui, tabName, groupSourceSuffix, itemLabel, itemTags, itemNote, formatTags, trackUsage, getUsageCount, isFavorite, toggleFavorite, sortByUsage, isPinned, formulaMatchesView, createLibraryFilterBar, openFormulaMenu, searchLibrary, searchSummaryText, searchMoreText } from "./core.js";
 
 // ======================== Sidebar (simplified) ========================
@@ -34,6 +35,7 @@ class SidebarView extends obsidian.ItemView {
 
     this.tabsEl = c.createDiv({ cls: "fl-tabs" });
     this.listEl = c.createDiv({ cls: "fl-list" });
+    this.resetKeyboardSelection = wireSearchNavigation(si, this.listEl, ".fl-list-item");
 
     const bar = c.createDiv({ cls: "fl-action-bar" });
     this.openEditorButton = bar.createEl("button", { cls: "fl-btn fl-btn-primary", text: ui(this.plugin, "openEditor") });
@@ -75,6 +77,7 @@ class SidebarView extends obsidian.ItemView {
   }
 
   renderList() {
+    this.resetKeyboardSelection?.();
     applyLibraryTypography(this.containerEl.children[1], this.plugin.settings);
     this.listEl.empty();
     const q = this.globalQ.trim();
@@ -150,6 +153,7 @@ class SidebarView extends obsidian.ItemView {
 
     const star = row.createEl("span", { cls: "fl-fav-star", attr: { role: "button", tabindex: "0", "aria-label": ui(this.plugin, "favorites") } });
     obsidian.setIcon(star, "star");
+    keyboardButton(star);
     star.toggleClass("active", isFavorite(this.plugin, i[1]));
     star.addEventListener("click", (e) => {
       e.preventDefault();
@@ -175,6 +179,7 @@ class SidebarView extends obsidian.ItemView {
 
     const menuButton = row.createEl("span", { cls: "fl-item-menu", attr: { role: "button", tabindex: "0", "aria-label": loc(this.plugin) === "zh" ? "公式操作" : "Formula actions" } });
     obsidian.setIcon(menuButton, "more-horizontal");
+    keyboardButton(menuButton);
     menuButton.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();

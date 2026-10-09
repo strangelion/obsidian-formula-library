@@ -300,6 +300,7 @@ const fs = require("node:fs");
           const methods = { "plot-function": "openFunctionPlot", "paste-matrix-data": "openMatrixPaste", "open-param-templates": "openParamTemplates", "open-editor": "openEditor", "open-mermaid-diagram": "openDrawing" };
           window.__formulaQaModal = p[methods[command]]();
           if (!window.__formulaQaModal) throw new Error("Test modal was not opened");
+          window.__formulaQaModal.plugin = Object.assign(Object.create(p), { settings: { ...JSON.parse(JSON.stringify(p.settings)), rememberDrafts: false }, saveSettings: async () => {} });
           // Do not save this test diagram over the user's draft.
           if (command === "open-mermaid-diagram") window.__formulaQaModal.accepted = true;
           window.__formulaQaModal.modalEl.dataset.qaActive = "true";

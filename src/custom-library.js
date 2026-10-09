@@ -1,5 +1,6 @@
 import * as obsidian from "obsidian";
 import { runModalAction } from "./ui.js";
+import { createDetailFields, detailFieldValues } from "./formula-details.js";
 import { FORMULA_DATA, UI_STRINGS, logWarn, loc, ui, groupDisplayName, itemLabel, itemMeta, itemTags, itemNote, parseTagsInput, formatTags, withItemMeta, FORMULA_INDEX, normalizeFolderPath } from "./core.js";
 
 // ======================== Custom formula manager ========================
@@ -228,7 +229,7 @@ function sanitizeImportedEntries(entries) {
     let item = [String(label == null || label === "" ? latex : label).trim() || latex, latex];
     if (enLabel) item.push(String(enLabel));
     const metadata = Array.isArray(entry) ? itemMeta(entry) : entry;
-    if (metadata) item = withItemMeta(item, parseTagsInput(Array.isArray(metadata.tags) ? metadata.tags.join(",") : metadata.tags || ""), metadata.note || metadata.description || "");
+    if (metadata) item = withItemMeta(item, parseTagsInput(Array.isArray(metadata.tags) ? metadata.tags.join(",") : metadata.tags || ""), metadata.note || metadata.description || "", metadata);
     items.push(item);
   }
   return { items: items, skipped: skipped };
@@ -335,6 +336,7 @@ class FormulaItemModal extends CustomLibraryModal {
     this.latexInput = field(ui(p, "itemLatex"), current && current[1], "e.g. \\frac{a}{b}");
     this.tagsInput = field(ui(p, "itemTags"), formatTags(itemTags(current)), ui(p, "itemTagsPlaceholder"));
     this.noteInput = field(ui(p, "itemNote"), current ? itemNote(current) : "", ui(p, "itemNotePlaceholder"));
+    this.detailInputs = createDetailFields(this.contentEl, p, itemMeta(current));
     this.errorEl = this.contentEl.createDiv({ cls: "fl-field-error" });
     const bar = this.contentEl.createDiv({ cls: "fl-manage-bar" });
     bar.createEl("button", { cls: "fl-btn", text: ui(p, "cancel") }).addEventListener("click", () => this.close());
@@ -356,7 +358,7 @@ class FormulaItemModal extends CustomLibraryModal {
     const known = await collectKnownLatex(p);
     const others = (known.get(latex) || []).filter((where) => !(where.source === "custom" && where.group === this.meta.id));
     if (others.length) { this.errorEl.setText(ui(p, "latexDuplicate") + ": " + others[0].group); return; }
-    const entry = withItemMeta([name || latex, latex, nameEn || (current && current[2]) || ""], parseTagsInput(this.tagsInput.value), this.noteInput.value);
+    const entry = withItemMeta([name || latex, latex, nameEn || (current && current[2]) || ""], parseTagsInput(this.tagsInput.value), this.noteInput.value, detailFieldValues(this.detailInputs));
     await upsertCustomItem(p, this.meta, this.index, entry);
     await p.reloadFormulas();
     if (this.onDone) this.onDone();

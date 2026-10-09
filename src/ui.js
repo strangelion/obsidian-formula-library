@@ -30,7 +30,44 @@ async function runModalAction(modal, action) {
     buttons.forEach((button, index) => { button.disabled = states[index]; });
     modal.contentEl.removeAttribute("aria-busy");
     modal._actionPending = false;
+    if (!modal._closed) modal.onActionSettled?.();
   }
 }
 
-export { labelControl, runModalAction };
+// A nested role=button must not activate its enclosing formula card.
+function keyboardButton(control) {
+  control.addEventListener("keydown", (event) => {
+    if (!event.isComposing && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault(); event.stopPropagation(); control.click();
+    }
+  });
+  control.addEventListener("keyup", (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); }
+  });
+}
+
+function wireSearchNavigation(input, list, selector) {
+  let active = -1;
+  const reset = () => {
+    active = -1;
+    list.querySelectorAll(".fl-keyboard-active").forEach((el) => el.classList.remove("fl-keyboard-active"));
+  };
+  input.addEventListener("input", reset);
+  input.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const items = [...list.querySelectorAll(selector)];
+    if (!items.length) return;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      active = Math.max(0, Math.min(items.length - 1, active + (event.key === "ArrowDown" ? 1 : -1)));
+      items.forEach((el, index) => el.classList.toggle("fl-keyboard-active", index === active));
+      items[active].scrollIntoView({ block: "nearest" });
+      input.setAttribute("aria-label", (input.placeholder || "Search") + " — " + (items[active].title || items[active].textContent));
+    } else if (event.key === "Enter" && input.value.trim()) {
+      event.preventDefault(); items[Math.min(Math.max(active, 0), items.length - 1)].click(); reset();
+    } else if (event.key === "Escape" && active >= 0) { event.preventDefault(); event.stopPropagation(); reset(); }
+  });
+  return reset;
+}
+
+export { labelControl, runModalAction, keyboardButton, wireSearchNavigation };
