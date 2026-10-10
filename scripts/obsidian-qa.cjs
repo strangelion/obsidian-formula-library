@@ -126,6 +126,7 @@ const fs = require("node:fs");
       });
       const modal=page.locator('[data-qa-font="true"]');
       const settings=modal.locator('[data-qa-font-settings]');
+      await settings.getByRole('tab',{name:'Appearance',exact:true}).click();
       const follow=settings.locator('.setting-item').filter({has:page.locator('.setting-item-name',{hasText:'Follow Obsidian font size'})}).locator('.checkbox-container');
       const slider=settings.getByLabel('Formula library font size',{exact:true});
       const sizes=async()=>page.evaluate(()=>({

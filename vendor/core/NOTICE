@@ -1,0 +1,13 @@
+LaTeXSnipper Core
+Copyright contributors to the LaTeXSnipper project.
+
+This distribution is licensed under AGPL-3.0 as declared in Cargo.toml.
+It incorporates third-party Rust crates under their respective licenses.
+Release artifacts include third-party-licenses.json and an SPDX SBOM generated
+from the exact release source tree. Those generated reports are authoritative
+for the dependency versions contained in a particular release.
+
+OCR model files are separate artifacts. Their source, checksum, release tag,
+and licensing status must be reviewed from the model manifest and release notes
+before redistribution. The orientation model is not bundled in this source
+distribution while its redistribution terms remain externally governed.

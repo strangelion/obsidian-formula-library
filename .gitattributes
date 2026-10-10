@@ -1,0 +1,2 @@
+# Preserve exact pinned third-party bytes across Windows/Linux checkouts.
+vendor/core/** -text

@@ -5,11 +5,11 @@ const fs = require("node:fs");
 const { buildSync } = require("esbuild");
 
 const compiled = buildSync({
-  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing', 'typography', 'backup', 'workspace-state', 'ui'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
+  stdin: { contents: ['core', 'custom-library', 'parameters', 'matrix', 'plot', 'plugin', 'drawing', 'typography', 'backup', 'workspace-state', 'ui', 'tools', 'editor'].map((name) => `export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() },
   bundle: true, write: false, platform: "node", format: "cjs", external: ["obsidian"],
 }).outputFiles[0].text;
 class Base { constructor(app) { this.app = app; } }
-const sandbox = { module: { exports: {} }, console: { log() {}, warn() {}, error() {} }, navigator: { language: "zh-CN" }, window: { setTimeout, clearTimeout }, setTimeout, clearTimeout,
+const sandbox = { module: { exports: {} }, TextEncoder, AbortController, console: { log() {}, warn() {}, error() {} }, navigator: { language: "zh-CN" }, window: { setTimeout, clearTimeout }, setTimeout, clearTimeout,
   require: (id) => {
     assert.equal(id, "obsidian");
     return { Plugin: Base, Modal: Base, PluginSettingTab: Base, ItemView: Base, MarkdownView: Base, Notice: Base, getLanguage:()=>"en" };
@@ -28,6 +28,80 @@ const adapter = {
   async remove(path) { files.delete(path); },
 };
 const plugin = () => ({ settings: { ...plain(api.DEFAULT_SETTINGS), locale: "zh" }, manifest: { id: "formula-library" }, app: { vault: { adapter }, workspace: { getLeavesOfType: () => [] } }, async saveSettings() {}, async reloadFormulas() { await api.loadFormulas(this); } });
+
+test("tool defaults preserve older installs, normalize known switches and isolate loaded maps", async () => {
+  assert.ok(Object.values(api.normalizeEnabledTools()).every(Boolean));
+  assert.deepEqual(plain(api.normalizeEnabledTools({ conversion: false, unknown: false, matrix: 'false' })),
+    { conversion: false, templates: true, matrix: true, saveToLibrary: true, plot: true, mermaid: true });
+  const a = new api.FormulaLibraryPlugin({}), b = new api.FormulaLibraryPlugin({});
+  a.loadData = async () => ({ enabledTools: { conversion: false } }); b.loadData = async () => ({});
+  await a.loadSettings(); await b.loadSettings();
+  a.settings.enabledTools.plot = false;
+  assert.equal(b.settings.enabledTools.plot, true);
+  assert.equal(api.DEFAULT_SETTINGS.enabledTools.plot, true);
+  assert.equal(api.isToolEnabled(a, 'conversion'), false);
+});
+
+test("tool commands honor live switches and do not bypass context checks or lose stable IDs", () => {
+  const p = new api.FormulaLibraryPlugin({}); p.settings = plain(api.DEFAULT_SETTINGS);
+  let command, executed = 0, checked = 0;
+  p.addCommand = (value) => { command = value; };
+  p.addToolCommand('plot', { id: 'plot-function', name: 'Plot', callback: () => executed++ });
+  assert.equal(command.id, 'plot-function'); assert.equal(command.checkCallback(true), true);
+  assert.equal(executed, 0); command.checkCallback(false); assert.equal(executed, 1);
+  p.settings.enabledTools.plot = false;
+  assert.equal(command.checkCallback(true), false); assert.equal(command.checkCallback(false), false); assert.equal(executed, 1);
+  p.addToolCommand('plot', { id: 'edit-plot-at-cursor', name: 'Edit', checkCallback: () => { checked++; return false; } });
+  assert.equal(command.checkCallback(true), false); assert.equal(checked, 0);
+  p.settings.enabledTools.plot = true; assert.equal(command.checkCallback(true), false); assert.equal(checked, 1);
+});
+
+test("tool switches release disabled Core without deleting content and failed saves roll back", async () => {
+  const p = new api.FormulaLibraryPlugin({ workspace: { getLeavesOfType: () => [] } });
+  p.settings = plain(api.DEFAULT_SETTINGS); p.settings.paramPresets = { one: [{ name: 'keep', values: { a: '2' } }] };
+  let closed = 0, disposed = 0;
+  p._conversionModals = new Set([{ close() { closed++; p._conversionModals.clear(); } }]);
+  p._coreService = { async dispose() { disposed++; } }; p.saveSettings = async () => {};
+  const content = JSON.stringify(p.settings.paramPresets);
+  await p.setToolEnabled('conversion', false);
+  assert.equal(closed, 1); assert.equal(disposed, 1); assert.equal(p._coreService, null);
+  assert.equal(JSON.stringify(p.settings.paramPresets), content);
+  assert.equal(p.openConversion(), null);
+  assert.throws(() => p.getCoreConversionService(), (error) => error.code === 'CORE_DISABLED');
+  p.saveSettings = async () => { throw new Error('Disk unavailable'); };
+  await assert.rejects(p.setToolEnabled('matrix', false), /Disk unavailable/);
+  assert.equal(p.settings.enabledTools.matrix, true); assert.equal(p.settings.enabledTools.conversion, false);
+});
+
+test("all editor tool buttons can be hidden while the editor itself remains available", () => {
+  const p = { settings: { enabledTools: Object.fromEntries(Object.keys(api.DEFAULT_ENABLED_TOOLS).map((key) => [key, false])) } };
+  const modal = new api.EditorModal({}, p, 'insert', 'x', null);
+  for (const key of ['btnConvert', 'btnParams', 'btnMatrix', 'btnSave', 'btnPlot', 'toolsBar']) modal[key] = { hidden: false };
+  modal.refreshToolVisibility(); assert.equal(modal.toolsBar.hidden, true);
+  assert.equal(modal.btnMatrix.hidden, true);
+  p.settings.enabledTools.templates = true; modal.refreshToolVisibility();
+  assert.equal(modal.toolsBar.hidden, false); assert.equal(modal.btnParams.hidden, false); assert.equal(modal.btnPlot.hidden, true);
+});
+
+test("backup accepts known boolean tool switches but refuses malformed ones", () => {
+  const data = { format: 'formula-library-workspace', version: 1, groups: [], settings: { enabledTools: { plot: false } } };
+  assert.equal(api.parseWorkspaceBackup(JSON.stringify(data)).settings.enabledTools.plot, false);
+  data.settings.enabledTools.plot = 'false'; assert.throws(() => api.parseWorkspaceBackup(JSON.stringify(data)), /tool switches/);
+  data.settings.enabledTools = { unknownTool: false }; assert.throws(() => api.parseWorkspaceBackup(JSON.stringify(data)), /tool switches/);
+});
+
+test("unloading closes owned conversion dialogs and stale editor actions cannot restart Core", async () => {
+  const p = new api.FormulaLibraryPlugin({ workspace: { getLeavesOfType: () => [] } });
+  let closed = 0, disposed = 0;
+  p._conversionModals = new Set([{ close() { closed++; } }]);
+  p._coreService = { async dispose() { disposed++; } };
+  p.onunload();
+  assert.equal(closed, 1);
+  assert.equal(disposed, 1);
+  assert.equal(p._conversionModals.size, 0);
+  assert.throws(() => p.getCoreConversionService(), (error) => error.code === "CORE_DISPOSED");
+  assert.equal(p.openConversion(), null);
+});
 
 test("embedded library respects category and master switches, and accepts an empty library", async () => {
   const p = plugin();

@@ -12,10 +12,15 @@ import { findMermaidBlockAt, DrawingModal } from "./drawing.js";
 import { findPlotBlockAt, plotConfigComment } from "./workspace-state.js";
 import { FormulaDetailsModal } from "./formula-details.js";
 import { WorkspaceBackupModal } from "./backup.js";
+import { FormulaConversionModal } from "./conversion.js";
+import { CoreConversionService, CoreConversionError } from "./core-conversion.js";
+import { createBundledCoreSession } from "./core-assets.js";
+import { isToolEnabled, normalizeEnabledTools, DEFAULT_ENABLED_TOOLS } from "./tools.js";
 
 // ======================== Plugin ========================
 class FormulaLibraryPlugin extends obsidian.Plugin {
   async onload() {
+    this._coreUnloaded = false;
     log("Loading...");
     await this.loadSettings();
 
@@ -35,6 +40,8 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
 
     this._activeEditor = null;
     this._editorModals = new Set();
+    this._conversionModals = new Set();
+    this._coreService = null;
     this._reloadTimer = null;
 
     this.registerEvent(
@@ -59,19 +66,20 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     this.addSettingTab(new FormulaLibrarySettingTab(this.app, this));
     this.addRibbonIcon("sigma", "Formula Library", () => { log("Ribbon clicked"); this.toggleSidebar(); });
     this.addCommand({ id: "open-editor", name: "Open Formula Editor", callback: () => { log("Command: open-editor"); this.openEditor("insert"); } });
-    this.addCommand({ id: "open-mermaid-diagram", name: "Open Mermaid Diagram Editor", callback: () => this.openDrawing() });
-    this.addCommand({ id: "open-param-templates", name: "Insert Parameterized Formula", callback: () => { log("Command: open-param-templates"); this.openParamTemplates(); } });
-    this.addCommand({ id: "paste-matrix-data", name: "Paste Matrix Data", callback: () => { log("Command: paste-matrix-data"); this.openMatrixPaste(); } });
-    this.addCommand({ id: "plot-function", name: "Plot Function", callback: () => { log("Command: plot-function"); this.openFunctionPlot(); } });
+    this.addToolCommand("mermaid", { id: "open-mermaid-diagram", name: "Open Mermaid Diagram Editor", callback: () => this.openDrawing() });
+    this.addToolCommand("templates", { id: "open-param-templates", name: "Insert Parameterized Formula", callback: () => this.openParamTemplates() });
+    this.addToolCommand("matrix", { id: "paste-matrix-data", name: "Paste Matrix Data", callback: () => this.openMatrixPaste() });
+    this.addToolCommand("plot", { id: "plot-function", name: "Plot Function", callback: () => this.openFunctionPlot() });
     this.addCommand({ id: "manage-backups", name: "Manage Formula Library Backups", callback: () => this.openWorkspaceBackup() });
-    this.addCommand({ id: "edit-plot-at-cursor", name: "Edit Function Plot at Cursor", checkCallback: (checking) => {
+    this.addToolCommand("conversion", { id: "convert-formula", name: "Convert Formula Format", callback: () => this.openConversion() });
+    this.addToolCommand("plot", { id: "edit-plot-at-cursor", name: "Edit Function Plot at Cursor", checkCallback: (checking) => {
       const editor = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)?.editor;
       const info = editor && findPlotBlockAt(editor.getValue(), editor.posToOffset(editor.getCursor()));
       if (!info) return false;
       if (!checking) new PlotFunctionModal(this.app, this, { config: info.config, plotInfo: info, editor }).open();
       return true;
     } });
-    this.addCommand({
+    this.addToolCommand("mermaid", {
       id: "edit-mermaid-diagram-at-cursor",
       name: "Edit Mermaid diagram at cursor",
       checkCallback: (checking) => {
@@ -86,6 +94,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     });
     // Discoverability: offer the same action from the editor context menu.
     this.registerEvent(this.app.workspace.on("editor-menu", (menu, editor) => {
+      if (!isToolEnabled(this, "mermaid")) return;
       const info = this.getDrawingAtCursor(editor);
       if (!info) return;
       menu.addItem((item) => item.setTitle(ui(this, "drawingEditExisting")).setIcon("workflow").onClick(() => this.openDrawing(info.source, info)));
@@ -99,7 +108,12 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   }
 
   onunload() {
+    this._coreUnloaded = true;
     log("Unloading");
+    for (const modal of this._conversionModals || []) modal.close();
+    this._conversionModals?.clear();
+    this._coreService?.dispose().catch((error) => logWarn("Core cleanup failed:", error.code || error.message));
+    this._coreService = null;
     if (this._reloadTimer) { window.clearTimeout(this._reloadTimer); this._reloadTimer = null; }
     if (this._editorModals) this._editorModals.clear();
     try {
@@ -118,6 +132,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   async loadSettings() {
     const data = (await this.loadData()) || {};
     this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+    this.settings.enabledTools = normalizeEnabledTools(data.enabledTools);
     this.settings.customParamTemplates = Array.isArray(data.customParamTemplates) ? JSON.parse(JSON.stringify(data.customParamTemplates)) : [];
     this.settings.plotPresets = Array.isArray(data.plotPresets) ? JSON.parse(JSON.stringify(data.plotPresets)) : [];
     // Object.assign copies references: map/object defaults must be cloned per
@@ -137,6 +152,29 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     log("Settings:", this.settings);
   }
   async saveSettings() { await this.saveData(this.settings); }
+
+  addToolCommand(tool, command) {
+    const { callback, checkCallback, ...definition } = command;
+    this.addCommand({ ...definition, checkCallback: (checking) => {
+      if (this._coreUnloaded || !isToolEnabled(this, tool)) return false;
+      if (checkCallback) return checkCallback(checking);
+      if (!checking) callback();
+      return true;
+    } });
+  }
+
+  async setToolEnabled(tool, value) {
+    if (!Object.hasOwn(DEFAULT_ENABLED_TOOLS, tool) || typeof value !== "boolean") throw new Error("Invalid tool switch");
+    const previous = isToolEnabled(this, tool);
+    this.settings.enabledTools = { ...normalizeEnabledTools(this.settings.enabledTools), [tool]: value };
+    this.refreshViews();
+    try { await this.saveSettings(); }
+    catch (error) {
+      if (this.settings.enabledTools[tool] === value) this.settings.enabledTools[tool] = previous;
+      this.refreshViews();
+      throw error;
+    }
+  }
 
   async initEnabledGroups() {
     const builtin = this.settings.enabledGroups || {};
@@ -180,6 +218,12 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   // Pushes setting changes into the sidebar and every open editor modal so the
   // library updates without reopening the editor or reloading the plugin.
   refreshViews() {
+    if (!isToolEnabled(this, "conversion")) {
+      for (const modal of this._conversionModals || []) modal.close();
+      const service = this._coreService;
+      this._coreService = null;
+      service?.dispose().catch((error) => logWarn("Core cleanup failed:", error.code || error.message));
+    }
     const leaves = this.app.workspace.getLeavesOfType("formula-library-sidebar");
     for (const leaf of leaves) {
       if (leaf.view && leaf.view.renderTabs) {
@@ -189,6 +233,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
     for (const modal of Array.from(this._editorModals || [])) {
       try { modal.refreshLibrary(); } catch (e) { logWarn("refresh modal failed:", e.message); }
     }
+    for (const modal of this._conversionModals || []) modal.refreshLocalization();
   }
 
   // Folder paths are typed character by character: reload once typing stops.
@@ -243,6 +288,7 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   }
 
   openDrawing(source, drawingInfo) {
+    if (!isToolEnabled(this, "mermaid")) return null;
     if (!this.findMarkdownEditor()) {
       new obsidian.Notice(ui(this, "noEditor"));
       return;
@@ -255,18 +301,21 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
   // Named-parameter templates: ``#name#`` tokens are filled from a small form.
   // ``onInsert`` lets the formula editor feed the result into its own field.
   openParamTemplates(onInsert) {
+    if (!isToolEnabled(this, "templates")) return null;
     const modal = new ParamTemplateModal(this.app, this, { onInsert: typeof onInsert === "function" ? onInsert : null });
     modal.open();
     return modal;
   }
 
   openMatrixPaste(onInsert) {
+    if (!isToolEnabled(this, "matrix")) return null;
     const modal = new MatrixPasteModal(this.app, this, { onInsert: typeof onInsert === "function" ? onInsert : null });
     modal.open();
     return modal;
   }
 
   openFunctionPlot() {
+    if (!isToolEnabled(this, "plot")) return null;
     const modal = new PlotFunctionModal(this.app, this, {});
     modal.open();
     return modal;
@@ -274,6 +323,23 @@ class FormulaLibraryPlugin extends obsidian.Plugin {
 
   openFormulaDetails(item) { new FormulaDetailsModal(this.app, this, item).open(); }
   openWorkspaceBackup() { const modal = new WorkspaceBackupModal(this.app, this); modal.open(); return modal; }
+
+  getCoreConversionService() {
+    if (!isToolEnabled(this, "conversion")) throw new CoreConversionError("CORE_DISABLED", "Format conversion is disabled in settings.");
+    if (this._coreUnloaded) throw new CoreConversionError("CORE_DISPOSED", "The plugin has been unloaded.");
+    if (!this._coreService || this._coreService.disposed) {
+      this._coreService = new CoreConversionService({ createSession: createBundledCoreSession });
+    }
+    return this._coreService;
+  }
+
+  openConversion(options = {}) {
+    if (!isToolEnabled(this, "conversion")) return null;
+    if (this._coreUnloaded) return null;
+    const modal = new FormulaConversionModal(this.app, this, options);
+    modal.open();
+    return modal;
+  }
 
   insertPlotSvg(svg, config, plotInfo, editorOverride) {
     const editor = editorOverride || this.findMarkdownEditor();

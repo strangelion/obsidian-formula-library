@@ -1,15 +1,25 @@
 # Development
 
+LaTeXSnipper Core integration, fixed source/assets and platform
+coverage are documented in [CORE-INTEGRATION.md](CORE-INTEGRATION.md).
+Desktop browser and native Windows Obsidian checks have passed;
+Android/iOS are not tested on real devices.
+
 Use Node.js 20+ and `npm ci`. Run `npm run check` before committing. It runs
 regression tests, checks authored CSS guardrails, rebuilds the assets and syntax-checks the generated plugin.
 
 | Source | Responsibility |
 | --- | --- |
 | `src/main.js` | Obsidian CommonJS entry |
+| `src/conversion.js`, `src/styles/conversion.css` | Bilingual source/output form, capabilities, preview and explicit editor confirmation |
+| `src/core-conversion.js` | Host-owned lazy queue, total deadline, cancellation, validation and session cleanup |
+| `src/core-assets.js`, `scripts/build-core-assets.mjs` | Fixed WASM/Worker/client assets, Blob bridge, integrity and lifecycle |
+| `vendor/core/` | Upstream source archive, readable official TS, fixed WASM/glue, checksums and license inventory |
 | `src/plugin.js` | Lifecycle, commands, insertion and view refresh |
 | `src/core.js` | Shared settings, localization, metadata, ranked search and data loading |
 | `src/data/` | Embedded formulas, search aliases and pinyin mappings |
 | `src/settings.js` | Plugin settings and library switches |
+| `src/settings-navigation.js`, `src/tools.js`, `src/styles/settings.css` | Accessible grouped settings, optional tool entry preferences and command availability |
 | `src/custom-library.js` | Custom category CRUD, backup import/export and validation |
 | `src/personal-library.js` | Saving formulas from the editor |
 | `src/parameters.js` | Named-parameter templates and presets |
@@ -56,6 +66,23 @@ keyboard actions, density and MathJax CSS scope. Install its browser with
 `npx playwright install chromium`; in CI use `--with-deps`. No user vault is
 accessed. This harness does not emulate MathLive/MathJax rendering fidelity:
 continue native Obsidian verification for rendering and theme compatibility.
+It now also runs conversion UI lifecycle checks and the actual fixed Core in
+real module Workers via `scripts/verify-core-conversion.cjs`. External HTTP
+traffic is blocked in that harness; system browser-filter injection at initial
+navigation is reported separately from conversion traffic. These tests do not
+prove complete mathematical fidelity or mobile WebView compatibility.
+
+`node scripts/obsidian-conversion-qa.cjs --no-screenshots` checks actual `app://`
+Core loading, Typst→LaTeX MathJax rendering, strict LaTeX→OMML text, over-limit
+source preservation, explicit draft opening, locale and 1280/390 px control
+bounds. It owns its dialogs, cloned settings, dedicated service and in-memory
+editor; it does not write user notes or plugin data. Omit the flag when native
+Electron frames can be captured. Browser screenshots live in `output/playwright/`.
+
+`node scripts/obsidian-settings-qa.cjs --no-screenshots` checks the five settings
+sections, keyboard navigation, six tool switches, live toolbar changes, retained
+content, conversion disposal and save-error rollback with native controls.
+The test uses cloned preferences and an in-memory editor, not real saved settings.
 `npm run lint:css` uses esbuild's CSS parser and project guards against
 `!important` and unknown MathJax type selectors; it is not a full Stylelint ruleset.
 `node scripts/obsidian-workspace-qa.cjs --no-screenshots` verifies backup preview,

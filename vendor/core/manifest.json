@@ -1,0 +1,21 @@
+{
+  "coreVersion": "3.2.1",
+  "sourceCommit": "eeca3421e28afde07f3d5d6fd486a4220e93ebe8",
+  "sourceRepository": "https://github.com/strangelion/latexsnipper-core",
+  "profile": "conversion-only",
+  "license": "AGPL-3.0-only",
+  "builtOn": "2026-10-10",
+  "toolchain": { "rust": "1.96.0", "wasmPack": "0.13.1", "wasmBindgen": "0.2.126" },
+  "buildCommand": "wasm-pack build crates/wasm --target web --release --out-dir ../../target/wasm-conversion-web --locked --no-default-features --features conversion-only",
+  "files": {
+    "latexsnipper_wasm_bg.wasm": "9c6ce4143bee2558ffa254777bdebb081f555fd629af6165c9bffd1b155352fe",
+    "latexsnipper_wasm.js": "96993517ca1cfd0d697b9af213b4914470e8a3e3e01856d669648951d7d0e610",
+    "source-eeca342.tar.gz": "7a5d6a441feb18eaed796e76e346502a2063cda44bd998f733e7fb46cc6f9b7b",
+    "NOTICE": "4aca404bde705e11f3d5f079ce83fcf730c2ed09a08c486845a89a1a833ac02a",
+    "runtime-src/client.ts": "fc98d46465e908f0a0dcea09354219c78c3ef9634748c163a1f5980711298e9e",
+    "runtime-src/formula.ts": "40ab8be890f2a2d74e3ed2be7598a872e319045a3911a102146f72b790cef36d",
+    "runtime-src/types.ts": "42be2691fab0dd8894e109e2788d98312f1df41f6848c9fbced7a1cbb85c68d1",
+    "runtime-src/worker-entry.ts": "03bedeb360036f259fe419a2793178bedd9a6a5b1df66ff983d5e416d3d014c1",
+    "runtime-src/worker-request-validation.ts": "85eeb742552f344e7ea1dd483eeae415511e790ef7578f84ddbd6edd2380092c"
+  }
+}

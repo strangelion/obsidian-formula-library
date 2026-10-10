@@ -2,12 +2,14 @@ import SEARCH_ALIASES from "./data/search-aliases.json";
 import PINYIN_INITIALS from "./data/pinyin.json";
 import * as obsidian from "obsidian";
 import BUNDLED_FALLBACK from "./data/formulas.json";
+import { DEFAULT_ENABLED_TOOLS } from "./tools.js";
 
 let FORMULA_DATA = null;
 const DEFAULT_SETTINGS = {
   locale: "auto",
   insertFormat: "display",
   defaultEditorMode: "visual",
+  enabledTools: { ...DEFAULT_ENABLED_TOOLS },
   mathliveKeyboard: true,
   formulasPath: "formulas",
   previewFontSize: 20,

@@ -1,0 +1,75 @@
+/* Native conversion forms: source text and confirmed output remain separate. */
+.formula-library-modal.formula-conversion-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(1040px, calc(100dvw - 32px));
+  height: auto;
+  max-height: calc(100dvh - 32px);
+  min-width: 0;
+  padding: 20px;
+}
+
+.formula-conversion-modal .modal-title { flex: 0 0 auto; }
+.formula-conversion-modal .modal-content.fc-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+.fc-intro { flex: 0 0 auto; margin: 0; color: var(--text-muted); line-height: 1.5; }
+.fc-body { display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px; }
+.fc-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; }
+.fc-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.fc-field > span,
+.fc-label { color: var(--text-muted); font-size: var(--font-ui-small); line-height: 1.5; }
+.fc-workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 18px; align-items: start; }
+.fc-source-pane,
+.fc-output-pane { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.fc-helper,
+.fc-route-hint { color: var(--text-muted); font-size: var(--font-ui-small); line-height: 1.5; overflow-wrap: anywhere; }
+.fc-route-hint { padding-bottom: 12px; border-bottom: 1px solid var(--background-modifier-border); }
+.formula-conversion-modal .fc-field > select,
+.formula-conversion-modal .fc-field > textarea {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-size: var(--font-ui-medium);
+}
+.formula-conversion-modal .fc-field > select { height: auto; min-height: 38px; padding-block: 4px; }
+.formula-conversion-modal .fc-field > textarea { display: block; height: 220px; min-height: 150px; padding: 12px; line-height: 1.5; font-family: var(--font-monospace); resize: vertical; }
+.formula-conversion-modal .fc-field > textarea.fc-output { height: 170px; }
+.formula-conversion-modal .fc-field > :focus-visible { outline: 2px solid var(--interactive-accent); outline-offset: -2px; }
+.fc-preview-section { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin-top: 6px; }
+.fc-preview-scroll { display: flex; align-items: center; min-width: 0; min-height: 96px; max-width: 100%; overflow: auto; padding: 16px; border: 1px solid var(--background-modifier-border); border-radius: var(--radius-s); }
+.fc-preview { flex: 0 0 auto; width: max-content; margin-inline: auto; font-size: var(--font-text-size, 18px); }
+.fc-diagnostics-section { padding-top: 12px; border-top: 1px solid var(--background-modifier-border); }
+.fc-diagnostics { margin: 6px 0 0; padding-inline-start: 20px; color: var(--text-muted); font-size: var(--font-ui-small); line-height: 1.5; overflow-wrap: anywhere; }
+.fc-footer { display: flex; flex-direction: column; flex: 0 0 auto; gap: 10px; padding-top: 12px; border-top: 1px solid var(--background-modifier-border); }
+.fc-status { min-height: 1.5em; font-size: var(--font-ui-small); line-height: 1.5; overflow-wrap: anywhere; }
+.fc-status[data-state="error"] { color: var(--text-error); }
+.fc-status[data-state="warning"] { color: var(--text-muted); }
+.fc-task-actions,
+.fc-output-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.formula-conversion-modal .fe-btn { min-height: 38px; max-width: 100%; white-space: normal; font-size: var(--font-ui-medium); }
+.formula-conversion-modal .fe-btn:active:not(:disabled) { transform: translateY(1px); }
+.formula-conversion-modal .fc-preview-section[hidden],
+.formula-conversion-modal .fc-diagnostics-section[hidden] { display: none; }
+
+@media (max-width: 768px) {
+  .formula-library-modal.formula-conversion-modal { width: calc(100dvw - 16px); max-height: calc(100dvh - 16px); padding: 16px; }
+  .fc-controls,
+  .fc-workspace { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .formula-conversion-modal .fc-field > select,
+  .formula-conversion-modal .fe-btn { min-height: 40px; }
+  .fc-task-actions,
+  .fc-output-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fc-output-actions .fe-btn:last-child { grid-column: 1 / -1; }
+  .formula-conversion-modal .fc-field > textarea { height: 180px; }
+}

@@ -2,6 +2,19 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.6.0] - 2026-10-10
+
+### Added
+- Grouped settings navigation (General, Appearance, Tools, Libraries, Backups), keyboard tab navigation and live independent switches for editor/sidebar tools and related command availability. Disabling tools retains saved content; disabling conversion releases its engine. Tool preferences are included in full backups.
+- Built-in single-formula conversion powered by the pinned conversion-only LaTeXSnipper Core 3.2.1 WASM and official Worker client; no OCR models, remote conversion service or runtime installer.
+- **Convert Formula Format** command and **Convert format** editor tool, with explicit source/output formats, best-effort default for everyday use, optional strict mode without silent fallback, capabilities, diagnostics, plain-text XML outputs and a checked bare-LaTeX preview.
+- Original-source preservation, explicit editor confirmation, stale-result suppression, bounded queues and total deadlines, hard cancellation and safe Worker/Blob cleanup, including blocked Worker construction and recovery.
+- Responsive, labelled English/Chinese conversion controls and isolated real-Worker/UI regression checks.
+
+### Distribution and documentation
+- New combined distribution is AGPL-3.0-only. Preserved the original MIT notice and existing historical releases, added third-party notices, exact Core source archive, pinned asset checksums and slim dependency license inventory.
+- Documented conversion usage, pinned asset builds, fidelity limitations and platform support. Android/iOS Core loading and interactions remain **not tested** on real devices.
+
 ## [1.5.0] - 2026-10-09
 
 ### Added

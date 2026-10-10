@@ -1,12 +1,15 @@
 {
   "name": "obsidian-formula-library",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test tests/*.test.cjs",
+    "pretest": "node scripts/build-core-assets.mjs",
     "lint:css": "node scripts/lint-css.mjs",
-    "test:ui": "node scripts/verify-workspace-ui.cjs && node scripts/verify-mathjax-css.cjs",
+    "test:ui": "node scripts/verify-workspace-ui.cjs && node scripts/verify-mathjax-css.cjs && node scripts/verify-conversion-ui.cjs && node scripts/verify-core-conversion.cjs && node scripts/verify-settings-ui.cjs",
+    "pretest:ui": "node scripts/build-core-assets.mjs",
     "check": "npm run test && npm run lint:css && npm run build && node --check main.js"
   },
   "devDependencies": {

@@ -2,7 +2,9 @@
 
 [中文文档](README-cn.md) | English Doc
 
-Visual LaTeX editing, a searchable formula library, customizable templates, Mermaid diagrams, and parameter-driven function plotting for Obsidian.
+Core formula conversion requires Formula Library **1.6.0 or later**.
+
+Visual LaTeX editing, local formula format conversion, a searchable formula library, customizable templates, Mermaid diagrams, and parameter-driven function plotting for Obsidian.
 
 Formula Library helps you create, find, and reuse mathematical notation in your notes. It combines MathLive-based visual LaTeX editing with **2,216 built-in formulas across 19 categories**, smart search, and independently configurable built-in and personal libraries.
 
@@ -13,6 +15,7 @@ Favorites, pins, recent items, searchable annotations, full workspace backups, a
 ## Features
 
 - **MathLive Visual Editor**: WYSIWYG formula editing with real-time preview and virtual keyboard
+- **Local Formula Conversion**: A bundled conversion-only Core Worker converts a single LaTeX, Typst, MathML or OMML formula. Best-effort is the default for everyday use; strict mode is optional, with output review and manual use in either mode.
 - **2216 Formulas**: 19 categories, including 95 formulas for algorithms, information theory, machine learning, graphics, signals, and numerical computing
 - **Smart Search**: Pinyin initials, LaTeX command aliases, word-based English matching, abbreviation matching (e.g., "lt" → less than), and fuzzy matching; exact names and exact commands rank first, and search shows the total hit count with load-more instead of truncating later categories
 - **Usage Frequency Sorting**: Formulas you use most appear first — search results and category lists are sorted by insertion count
@@ -57,6 +60,14 @@ The installed plugin does not need Node.js, npm, `src/`, `node_modules/`, or a s
 4. Restart Obsidian after installation
 
 ## Usage
+
+### Settings and tool switches
+
+Open **Settings → Formula Library** and choose **General**, **Appearance**, **Tools**, **Libraries** or **Backups**. Arrow keys and Home/End switch the section tabs; the selected section is retained while the settings page refreshes.
+
+**Tools** has independent switches for format conversion, parameterized templates, matrix data paste, saving to your library, function plotting and Mermaid diagrams. All are enabled by default. Disabled editor/sidebar buttons disappear immediately, and the related commands are unavailable; existing hotkey assignments and saved formulas, templates, presets, drafts and diagrams are retained. Disabling format conversion also stops its tasks and releases the engine. Re-enable a tool here when needed; ordinary formula editing remains available even with every optional tool switched off.
+
+These switches control availability, not installed bundle size. Personal library management remains under **Libraries** even if the editor's save button is hidden. Full backups include these preferences; restoring them requires selecting the option to restore interface/category settings.
 
 ### Formula Editor
 - **Command Palette**: `Ctrl+P` → "Open Formula Editor"
@@ -261,33 +272,41 @@ Each formula is an array: `[label_zh, LaTeX code, label_en (optional)]`
 
 ### Library font size
 
-Formula names, source labels and library controls follow **Settings → Appearance → Font size** by default, in both the editor's right-hand panel and the sidebar. To choose an independent size, open **Settings → Formula Library**, turn off **Follow Obsidian font size**, then adjust **Formula library font size** (14–32 px). Changes apply to open libraries immediately. **Preview font size** only controls the MathLive editing area.
+Formula names, source labels and library controls follow **Settings → Appearance → Font size** by default, in both the editor's right-hand panel and the sidebar. To choose an independent size, open **Settings → Formula Library → Appearance**, turn off **Follow Obsidian font size**, then adjust **Formula library font size** (14–32 px). Changes apply to open libraries immediately. **Preview font size** only controls the MathLive editing area.
 
-## Development
+## Format Support and Limitations
 
-## Future conversion extensions and support boundaries
+LaTeX editing/insertion, Mermaid diagram editing and SVG output remain independent of Core. MathLive/Obsidian rendering is not a general TeX compiler or a promise to preserve arbitrary macros.
 
-**Planning only: version 1.5.0 does not integrate LaTeXSnipper Core, discover conversion providers, or install conversion runtimes.** Its `src/core.js` contains plugin utilities, not the Rust Core. Third-party conversion extensions will be considered separately; existing LaTeX editing does not depend on them.
+### Convert one formula
 
-The preferred direction is an optional, explicitly enabled provider installed independently by the user. Bundling a conversion runtime remains a separate packaging/licensing decision. There is no working Core installation procedure in this version. The official [Obsidian developer policies](https://docs.obsidian.md/community-directory/developer-policies) prohibit plugins from installing/updating themselves or their dependencies; we do not plan an in-plugin runtime installer. An extra `.wasm` release asset alone is not part of this plugin's standard three-file installation.
+1. Run **Convert Formula Format** from the command palette, or choose **Convert format** in the formula editor.
+2. Choose **Source format** and paste one formula. Supported inputs are LaTeX, Typst, MathML and OMML—not complete documents or Office clipboard objects.
+3. Choose an output: **LaTeX fragment** (bare formula), Typst, MathML or OMML. The installed Core capability matrix controls availability.
+4. **Best-effort** is the default so common routes work without switching modes each time. Review the visible syntax/style-loss warning. Choose **Strict** when needed; it supports only the accepted LaTeX → OMML subset and never silently falls back to best-effort on failure.
+5. Click **Convert**, review the text, diagnostics and, for LaTeX, MathJax preview. **Copy output** copies plain text. **Open in formula editor** opens a separate formula draft; **Use in current editor** inserts into the existing draft. Neither action automatically writes or replaces a note. Finish with the editor's normal insert/update confirmation.
 
-| Candidate capability | Boundary for a future provider |
-| --- | --- |
-| Typst, MathML, OMML and LaTeX conversion | Only routes reported available by the installed provider/version; preview reconstructed output before inserting. |
-| Strict conversion | Core currently exposes only a supported LaTeX-to-OMML subset; strict does not mean complete TeX support or visual/round-trip identity. |
-| Best-effort conversion | Explicit opt-in with limitations shown; preserve the original source. |
-| AsciiMath, UnicodeMath, MTEF / MathType | Not available through the evaluated Core registered formula conversion API; experimental source parsers are not a support promise. |
-| Word objects, OCR, PDF / DOCX / PPTX generation | Outside the proposed formula-string provider scope. OMML XML alone does not provide Word clipboard or OLE integration. |
+The original input stays visible. Changing the source/options clears stale output; cancel, close, timeout and failure do not replace it. If initialization is unavailable, **Retry engine** retries explicitly; ordinary LaTeX editing still works. The conversion engine is bundled—no separate Core download, Node installation, model download or remote conversion service is required. Input is limited to 64 KiB UTF-8, serialized output to 256 KiB, and total queue/execution waiting to 30 seconds.
 
-The evaluated complete Core WASM is about 15.1 MiB plus matching generated JavaScript; a smaller conversion-only build is not currently an available feature switch. Its local wrapper package is private, and Actions artifacts must not be advertised as an existing public npm/release installation. The plugin is MIT and Core declares AGPL licensing: manual installation, separate plugins, or dynamic loading do not remove the need to review the actual combination/distribution. No licensing change or Core redistribution is made here.
+Best-effort can lose syntax or style. Neither mode guarantees original-source recovery, identical appearance, complete round trips, or that every accepted Core expression renders in MathLive/MathJax. A failed LaTeX preview disables use in the editor but leaves text available to inspect/copy. OMML is XML, not a Word-native clipboard or OLE object. AsciiMath, UnicodeMath and MTEF are not exposed; no OCR, PDF/DOCX/PPTX generation, TikZ compilation or whole-vault conversion is included.
 
-For future defects, the intended workflow is: show the provider/version and conversion route, retain the input, classify unsupported syntax separately from conversion failure, preview the result, and require confirmation before writing. No silent cloud fallback or lossless-conversion promise. A diagnostic report should contain versions, mode, error code and optional user-reviewed minimal examples—not automatically send notes, clipboard contents, or vault paths. UI/insertion defects belong here; converter accuracy/runtime defects belong upstream, with adapter reproductions and regression cases helping both projects.
+Windows Obsidian desktop loading, conversion, preview and controls have been tested locally. **Android and iOS conversion remain not tested on real devices**; desktop portrait tests are not mobile acceptance. See [integration and platform coverage](docs/CORE-INTEGRATION.md).
 
-See the [conversion extension assessment and proposed support contract](docs/CONVERSION-EXTENSIONS.md) and [Core formula API boundaries](https://github.com/strangelion/latexsnipper-core/blob/main/crates/wasm/js/README.md). These are a roadmap, not an implemented extension API or permission to load arbitrary code.
+### License and source
+
+The new combined distribution is **AGPL-3.0-only**. Historical MIT releases through 1.5.0 are unchanged; the original MIT and third-party notices are retained. See [distribution notices](THIRD-PARTY-NOTICES.md), [LICENSE](LICENSE), and the [exact Core source archive](vendor/core/source-eeca342.tar.gz). Builds use fixed assets, not a moving Core branch. There is no runtime auto-install/update feature.
+
+## Reporting Problems
+
+For editor, layout or insertion defects, include the plugin/Obsidian versions, operating system, theme and a minimal example with expected and actual behavior in a [GitHub issue](https://github.com/strangelion/obsidian-formula-library/issues). Remove private formulas, paths and note content before sharing. There is no automatic diagnostic uploader.
+
+For conversion defects, also include the plugin version, bundled Core version (currently 3.2.1 at `eeca342`), input/output formats, strict/best-effort mode and displayed error code/diagnostics. Keep the original until verified and share only a sanitized single-formula reproduction. Report selection, preview, Worker loading and insertion problems here; confirmed parser/conversion defects can be forwarded to Core with a regression example. A success envelope is not proof of renderer fidelity. There is no general third-party provider interface or automatic diagnostic uploader.
 
 ## Development
 
 Feature source lives in `src/`; do not edit generated `main.js` or `styles.css` directly. See [development](docs/DEVELOPMENT.md) and [UI acceptance rules](docs/UI-GUIDELINES.md).
+
+The [Core integration reference](docs/CORE-INTEGRATION.md) documents adapter modules, pinned assets, Worker lifecycle and platform compatibility.
 
 ```bash
 npm ci
@@ -303,6 +322,8 @@ Personal formulas are stored in your chosen vault folder. Settings, templates, p
 Clipboard access is used for copy/paste features. This is why automated plugin reviews may disclose clipboard access; the new backup and plotting features do not add background clipboard monitoring or an external service. Review results marked unavailable are not security guarantees.
 
 The mathematical editor and diagram features rely on MathLive and Obsidian's rendering environment. A separate account or plotting server is not required, but this is not a guarantee that every host or rendering resource is network-free.
+
+Core conversion runs locally in a dedicated Worker, reading only the text you supply. It does not scan vault files, save conversion input into settings, monitor the clipboard, download OCR models, or upload diagnostics. Copying a result accesses the clipboard only on request. Host and other-plugin network behavior is outside this engine's boundary.
 
 ## Acknowledgments
 

@@ -3,4 +3,5 @@ node_modules/
 *.log
 .learnings/
 output/
+src/generated/
 .playwright-cli/

@@ -72,6 +72,7 @@ const assert = require('node:assert/strict');
       const realTab=app.setting.pluginTabs.find((tab)=>tab.id==='formula-library');
       const tab=new realTab.constructor(app,__wsQaPlugin);tab.containerEl=__wsQaModal.contentEl;await tab.display();window.__wsQaTab=tab;
     });
+    await modal.getByRole('tab',{name:'公式库',exact:true}).click();
     const status=modal.locator('.fl-library-status');await status.scrollIntoViewIfNeeded();
     assert.match(await status.innerText(),/内置数据（无需额外文件夹）/);
     const aligned=await modal.locator('.fl-settings-sources').evaluate((root)=>{

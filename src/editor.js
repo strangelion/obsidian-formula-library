@@ -2,12 +2,10 @@ import * as obsidian from "obsidian";
 import { FORMULA_DATA, MATHLIVE_ZH, log, logWarn, loc, ui, tabName, groupSourceSuffix, itemLabel, itemTags, itemNote, formatTags, trackUsage, getUsageCount, isFavorite, toggleFavorite, sortByUsage, isPinned, formulaMatchesView, createLibraryFilterBar, openFormulaMenu, searchLibrary, searchSummaryText, searchMoreText } from "./core.js";
 import { loadMathLive } from "./mathlive.js";
 import { SaveToLibraryModal } from "./personal-library.js";
-import { ParamTemplateModal } from "./parameters.js";
-import { MatrixPasteModal } from "./matrix.js";
-import { PlotFunctionModal } from "./plot.js";
 import { applyLibraryTypography } from "./typography.js";
 import { keyboardButton, wireSearchNavigation } from "./ui.js";
 import { readDraft, writeDraft, DraftSession } from "./workspace-state.js";
+import { isToolEnabled } from "./tools.js";
 
 // ======================== Editor Modal ========================
 class EditorModal extends obsidian.Modal {
@@ -37,20 +35,33 @@ class EditorModal extends obsidian.Modal {
     this.btnS = tg.createEl("button", { text: ui(this.plugin, "source") });
     const tools = this.contentEl.createDiv({ cls: "fe-tools-bar", attr: { role: "group", "aria-label": loc(this.plugin) === "zh" ? "公式工具" : "Formula tools" } });
     this.toolsBar = tools;
+    this.btnConvert = tools.createEl("button", { cls: "fe-btn", text: loc(this.plugin) === "zh" ? "格式转换" : "Convert format" });
+    this.btnConvert.addEventListener("click", () => {
+      const original = this.currentLatex();
+      this.plugin.openConversion({ source: original, onInsert: (latex) => {
+        if (this._closed || this.currentLatex() !== original) {
+          const error = new Error("The editor changed or closed.");
+          error.code = "EDITOR_CHANGED";
+          throw error;
+        }
+        this.insertIntoEditor(latex);
+      } });
+    });
     this.btnParams = tools.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "paramTemplates") });
     this.btnParams.addEventListener("click", () => {
-      new ParamTemplateModal(this.app, this.plugin, { onInsert: (latex) => this.insertIntoEditor(latex) }).open();
+      this.plugin.openParamTemplates((latex) => this.insertIntoEditor(latex));
     });
     this.btnMatrix = tools.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "matrixPaste") });
     this.btnMatrix.addEventListener("click", () => {
-      new MatrixPasteModal(this.app, this.plugin, { onInsert: (latex) => this.insertIntoEditor(latex) }).open();
+      this.plugin.openMatrixPaste((latex) => this.insertIntoEditor(latex));
     });
     this.btnSave = tools.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "saveToLibrary") });
     this.btnSave.addEventListener("click", () => this.saveToLibrary());
     this.btnPlot = tools.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "plotTitle") });
     this.btnPlot.addEventListener("click", () => {
-      new PlotFunctionModal(this.app, this.plugin, {}).open();
+      this.plugin.openFunctionPlot();
     });
+    this.refreshToolVisibility();
     top.createDiv({ cls: "fe-spacer" });
     this.btnCancel = top.createEl("button", { cls: "fe-btn", text: ui(this.plugin, "cancel") });
     this.btnCancel.addEventListener("click", () => this.close());
@@ -453,6 +464,7 @@ class EditorModal extends obsidian.Modal {
   }
 
   saveToLibrary() {
+    if (!isToolEnabled(this.plugin, "saveToLibrary")) return;
     const latex = this.currentLatex();
     if (!latex) {
       this.statusEl.setText(ui(this.plugin, "saveToLibraryNoLatex"));
@@ -537,6 +549,7 @@ class EditorModal extends obsidian.Modal {
   // Re-applies settings that are read while the modal is already open, so a
   // change in the settings tab shows up without reopening the editor.
   refreshLibrary() {
+    this.refreshToolVisibility();
     if (!FORMULA_DATA) return;
     this.refreshLocalization();
     this.libCurG = FORMULA_DATA.GROUPS.find((g) => this.libCurG && g.id === this.libCurG.id && g.source === this.libCurG.source) || FORMULA_DATA.GROUPS[0] || null;
@@ -558,6 +571,13 @@ class EditorModal extends obsidian.Modal {
     this.mf.mathVirtualKeyboardPolicy = s.mathliveKeyboard ? "auto" : "manual";
   }
 
+  refreshToolVisibility() {
+    const buttons = { conversion: this.btnConvert, templates: this.btnParams, matrix: this.btnMatrix,
+      saveToLibrary: this.btnSave, plot: this.btnPlot };
+    for (const [tool, button] of Object.entries(buttons)) if (button) button.hidden = !isToolEnabled(this.plugin, tool);
+    if (this.toolsBar) this.toolsBar.hidden = !Object.values(buttons).some((button) => button && !button.hidden);
+  }
+
   refreshLocalization() {
     this.titleEl.setText(ui(this.plugin, "title"));
     const labels = [
@@ -566,6 +586,7 @@ class EditorModal extends obsidian.Modal {
       [this.btnCancel, "cancel"], [this.btnAccept, this.initMode === "update" ? "acceptUpdate" : "acceptInsert"],
     ];
     for (const [button, key] of labels) button?.setText(ui(this.plugin, key));
+    this.btnConvert?.setText(loc(this.plugin) === "zh" ? "格式转换" : "Convert format");
     this.libSI.placeholder = ui(this.plugin,"search");
     this.libSI.setAttribute("aria-label",ui(this.plugin,"search"));
     this.libHint?.setText(loc(this.plugin) === "zh" ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy");

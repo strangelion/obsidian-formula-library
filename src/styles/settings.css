@@ -1,0 +1,43 @@
+/* Native settings sections: one active panel, persistent accessible navigation. */
+.formula-library-settings .fl-settings-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--background-primary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 20px;
+  padding: 4px;
+}
+.formula-library-settings .fl-settings-nav button {
+  min-height: 38px;
+  padding: 7px 14px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: var(--font-ui-medium);
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+.formula-library-settings .fl-settings-nav button[aria-selected="true"] {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+  font-weight: var(--font-semibold);
+}
+.formula-library-settings .fl-settings-nav button:focus-visible { outline: 2px solid var(--interactive-accent); outline-offset: -2px; }
+.formula-library-settings .fl-settings-panel { min-width: 0; padding: 4px; }
+.formula-library-settings .fl-settings-panel[hidden],
+.formula-library-modal .fe-tools-bar[hidden],
+.formula-library-modal .fe-tools-bar button[hidden],
+.formula-library-sidebar .fl-action-bar button[hidden] { display: none; }
+.formula-library-settings .fl-settings-error { color: var(--text-error); overflow-wrap: anywhere; margin-bottom: 12px; }
+.formula-library-settings .fl-settings-error:empty { display: none; }
+.formula-library-settings .fl-settings-panel .setting-item-info { min-width: 0; }
+.formula-library-settings .fl-settings-panel .setting-item-name,
+.formula-library-settings .fl-settings-panel .setting-item-description { overflow-wrap: anywhere; }
+@media (max-width: 520px) {
+  .formula-library-settings .fl-settings-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .formula-library-settings .fl-settings-nav button { min-height: 40px; min-width: 0; }
+  .formula-library-settings .fl-settings-panel .setting-item { flex-wrap: wrap; gap: 10px; }
+}

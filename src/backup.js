@@ -4,6 +4,7 @@ import { customFolderFor, readCustomGroup, ensureCustomFolder, sanitizeImportedE
 import { validateCustomParamTemplate } from "./parameters.js";
 import { safeJson, clone, validatePlotConfig } from "./workspace-state.js";
 import { labelControl, runModalAction } from "./ui.js";
+import { DEFAULT_ENABLED_TOOLS } from "./tools.js";
 
 const PATH_KEYS = ["formulasPath", "customFormulasPath", "plotFolder"];
 const CONTENT_KEYS = ["favorites", "pinnedFormulas", "hiddenFormulas", "recentFormulas", "usageCounts", "paramPresets", "customParamTemplates", "plotPresets", "formulaDraft", "plotDraft", "drawingDraft"];
@@ -48,6 +49,7 @@ function parseWorkspaceBackup(text) {
   for (const [key, choices] of Object.entries(enums)) if (key in settings && !choices.includes(settings[key])) throw new Error("Invalid setting: " + key);
   for (const [key, min, max] of [["previewFontSize", 12, 40], ["libraryFontSize", 14, 32], ["searchResultLimit", 1, 10000]]) if (key in settings && (settings[key] < min || settings[key] > max)) throw new Error("Invalid setting: " + key);
   for (const key of ["enabledGroups", "customEnabledGroups"]) if (Object.values(settings[key] || {}).some((value) => typeof value !== "boolean")) throw new Error("Invalid category switches");
+  if (Object.entries(settings.enabledTools || {}).some(([key, value]) => !Object.hasOwn(DEFAULT_ENABLED_TOOLS, key) || typeof value !== "boolean")) throw new Error("Invalid tool switches");
   if (Object.values(settings.usageCounts || {}).some((value) => typeof value !== "number" || value < 0)) throw new Error("Invalid usage counts");
   if (Object.values(settings.shortcuts || {}).some((value) => typeof value !== "string")) throw new Error("Invalid shortcuts");
   for (const list of Object.values(settings.paramPresets || {})) {

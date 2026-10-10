@@ -2,6 +2,8 @@ import * as obsidian from "obsidian";
 import { log, loc, ui, groupDisplayName, FORMULA_INDEX, normalizeFolderPath } from "./core.js";
 import { customFolderFor, ImportFormulasModal, ExportFormulasModal, CustomFormulasModal } from "./custom-library.js";
 import { LIBRARY_FONT_MIN, LIBRARY_FONT_MAX, normalizeLibraryFontSize } from "./typography.js";
+import { TOOL_DEFINITIONS, isToolEnabled } from "./tools.js";
+import { createSettingsNavigation } from "./settings-navigation.js";
 
 // ======================== Settings Tab ========================
 class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
@@ -17,11 +19,14 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
     const p = this.plugin;
     containerEl.createEl("h2", { text: ui(p, "settingsTitle") });
     const t = (zh, en) => loc(p) === "zh" ? zh : en;
-    new obsidian.Setting(containerEl)
+    const panels = createSettingsNavigation(containerEl, { locale: loc(p), active: this.activeSection,
+      onSelect: (id) => { this.activeSection = id; } });
+    const { general, appearance, tools, library, backup } = panels;
+    new obsidian.Setting(backup)
       .setName(t("备份与恢复", "Backup and restore"))
       .setDesc(t("备份个人公式、模板、预设、收藏、草稿和设置；恢复前检查并选择冲突策略。", "Back up personal formulas, templates, presets, favorites, drafts and settings; preview before restoring."))
       .addButton((button) => button.setButtonText(t("打开备份管理", "Manage backups")).onClick(() => p.openWorkspaceBackup()));
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(backup)
       .setName(t("保留未完成草稿", "Keep unfinished drafts"))
       .setDesc(t("关闭编辑器时保留公式、函数绘图和 Mermaid 草稿。重新打开时可恢复；关闭此开关会清除草稿。", "Keep formula, function plot and Mermaid drafts when closing. Restore them on reopen; disabling clears saved drafts."))
       .addToggle((toggle) => toggle.setValue(p.settings.rememberDrafts !== false).onChange(async (value) => {
@@ -30,7 +35,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         await p.saveSettings();
       }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(general)
       .setName(ui(p, "language"))
       .setDesc(ui(p, "languageDesc"))
       .addDropdown((d) => d
@@ -40,7 +45,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.locale)
         .onChange(async (v) => { p.settings.locale = v; await p.saveSettings(); p.refreshViews(); this.display(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(general)
       .setName(ui(p, "insertFormat"))
       .setDesc(ui(p, "insertFormatDesc"))
       .addDropdown((d) => d
@@ -49,7 +54,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.insertFormat)
         .onChange(async (v) => { p.settings.insertFormat = v; await p.saveSettings(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(general)
       .setName(ui(p, "defaultMode"))
       .setDesc(ui(p, "defaultModeDesc"))
       .addDropdown((d) => d
@@ -58,14 +63,14 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.defaultEditorMode)
         .onChange(async (v) => { p.settings.defaultEditorMode = v; await p.saveSettings(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "mathliveKbd"))
       .setDesc(ui(p, "mathliveKbdDesc"))
       .addToggle((t) => t
         .setValue(p.settings.mathliveKeyboard)
         .onChange(async (v) => { p.settings.mathliveKeyboard = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(library)
       .setName(ui(p, "formulasFolder"))
       .setDesc(ui(p, "formulasFolderDesc"))
       .addText((t) => t
@@ -73,7 +78,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.formulasPath)
         .onChange(async (v) => { p.settings.formulasPath = v; await p.saveSettings(); p.debouncedReload(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "fontSize"))
       .setDesc(ui(p, "fontSizeDesc"))
       .addSlider((s) => s
@@ -83,7 +88,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .onChange(async (v) => { p.settings.previewFontSize = v; await p.saveSettings(); p.refreshViews(); }));
 
     let libraryFontSlider;
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "libraryFontFollow"))
       .setDesc(ui(p, "libraryFontFollowDesc"))
       .addToggle((toggle) => toggle
@@ -95,7 +100,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
           p.refreshViews();
         }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "libraryFontSize"))
       .setDesc(ui(p, "libraryFontSizeDesc"))
       .addSlider((slider) => {
@@ -112,7 +117,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
           });
       });
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "fontStyle"))
       .setDesc(ui(p, "fontStyleDesc"))
       .addDropdown((d) => d
@@ -121,7 +126,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.mathFontStyle)
         .onChange(async (v) => { p.settings.mathFontStyle = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "fontFamily"))
       .setDesc(ui(p, "fontFamilyDesc"))
       .addText((t) => t
@@ -129,7 +134,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.mathFontFamily)
         .onChange(async (v) => { p.settings.mathFontFamily = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "density"))
       .setDesc(ui(p, "densityDesc"))
       .addDropdown((d) => d
@@ -139,7 +144,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.libraryDensity || "comfortable")
         .onChange(async (v) => { p.settings.libraryDensity = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "sortMode"))
       .setDesc(ui(p, "sortModeDesc"))
       .addDropdown((d) => d
@@ -150,7 +155,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(p.settings.librarySort || "smart")
         .onChange(async (v) => { p.settings.librarySort = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "resultLimit"))
       .setDesc(ui(p, "resultLimitDesc"))
       .addDropdown((d) => d
@@ -160,14 +165,14 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
         .setValue(String(p.settings.searchResultLimit || 160))
         .onChange(async (v) => { p.settings.searchResultLimit = Number(v); await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "showLatexLabels"))
       .setDesc(ui(p, "showLatexLabelsDesc"))
       .addToggle((t) => t
         .setValue(p.settings.showLatexLabels !== false)
         .onChange(async (v) => { p.settings.showLatexLabels = v; await p.saveSettings(); p.refreshViews(); }));
 
-    new obsidian.Setting(containerEl)
+    new obsidian.Setting(appearance)
       .setName(ui(p, "resetHidden"))
       .setDesc(ui(p, "resetHiddenDesc"))
       .addButton((button) => button
@@ -179,8 +184,8 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
           new obsidian.Notice(loc(p) === "zh" ? "已恢复全部隐藏公式" : "All hidden formulas restored");
         }));
 
-    containerEl.createEl("h3", { text: ui(p, "shortcuts") });
-    containerEl.createEl("p", { text: ui(p, "shortcutsDesc"), cls: "setting-item-description" });
+    general.createEl("h3", { text: ui(p, "shortcuts") });
+    general.createEl("p", { text: ui(p, "shortcutsDesc"), cls: "setting-item-description" });
 
     const sc = p.settings.shortcuts || {};
     const shortcutDefs = [
@@ -192,7 +197,7 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
     ];
 
     for (const def of shortcutDefs) {
-      new obsidian.Setting(containerEl)
+      new obsidian.Setting(general)
         .setName(def.label)
         .setDesc(sc[def.key] || (loc(p) === "zh" ? "未绑定" : "Unbound"))
         .addText((t) => t
@@ -204,7 +209,33 @@ class FormulaLibrarySettingTab extends obsidian.PluginSettingTab {
           }));
     }
 
-    await this.renderGroupToggles(containerEl);
+    this.renderToolToggles(tools);
+    await this.renderGroupToggles(library);
+  }
+
+  renderToolToggles(container) {
+    const p = this.plugin, language = loc(p);
+    container.createEl("p", { cls: "fl-settings-section-description", text: language === "zh"
+      ? "选择要显示的编辑器工具和命令。关闭入口不会删除已有公式、模板、预设或绘图。"
+      : "Choose which editor tools and commands are available. Disabling entries does not delete formulas, templates, presets or drawings." });
+    const status = container.createDiv({ cls: "fl-settings-error", attr: { role: "alert" } });
+    for (const tool of TOOL_DEFINITIONS) {
+      const title = tool[language] || tool.en;
+      new obsidian.Setting(container).setName(title).setDesc(tool[language + "Desc"] || tool.enDesc)
+        .addToggle((toggle) => {
+          toggle.toggleEl?.setAttribute("aria-label", title);
+          return toggle.setValue(isToolEnabled(p, tool.id)).onChange(async (value) => {
+            status.setText("");
+            toggle.setDisabled(true);
+            try { await p.setToolEnabled(tool.id, value); }
+            catch {
+              toggle.setValue(isToolEnabled(p, tool.id));
+              status.setText(language === "zh" ? "保存开关失败，已恢复原设置，请重试。" : "Saving failed. The previous setting was restored; try again.");
+            }
+            finally { toggle.setDisabled(false); }
+          });
+        });
+    }
   }
 
   async renderGroupToggles(parentEl) {

@@ -1,6 +1,7 @@
 import * as obsidian from "obsidian";
 import { applyLibraryTypography } from "./typography.js";
 import { keyboardButton, wireSearchNavigation } from "./ui.js";
+import { isToolEnabled } from "./tools.js";
 import { FORMULA_DATA, log, logErr, loc, ui, tabName, groupSourceSuffix, itemLabel, itemTags, itemNote, formatTags, trackUsage, getUsageCount, isFavorite, toggleFavorite, sortByUsage, isPinned, formulaMatchesView, createLibraryFilterBar, openFormulaMenu, searchLibrary, searchSummaryText, searchMoreText } from "./core.js";
 
 // ======================== Sidebar (simplified) ========================
@@ -43,6 +44,8 @@ class SidebarView extends obsidian.ItemView {
         this.plugin.openEditor("insert");
       });
     const drawingButton = bar.createEl("button", { cls: "fl-btn", attr: { type: "button" } });
+    this.drawingButton = drawingButton;
+    drawingButton.hidden = !isToolEnabled(this.plugin, "mermaid");
     obsidian.setIcon(drawingButton, "workflow");
     this.drawingLabel = drawingButton.createSpan({ text: ui(this.plugin, "drawing") });
     drawingButton.addEventListener("click", () => this.plugin.openDrawing());
@@ -69,6 +72,7 @@ class SidebarView extends obsidian.ItemView {
   }
 
   refreshLocalization() {
+    if (this.drawingButton) this.drawingButton.hidden = !isToolEnabled(this.plugin, "mermaid");
     if (this.searchInput) { this.searchInput.placeholder = ui(this.plugin, "search"); this.searchInput.setAttribute("aria-label", ui(this.plugin, "search")); }
     if (this.hintEl) this.hintEl.setText(loc(this.plugin) === "zh" ? "支持: 拼音首字母 · LaTeX命令( frac sqrt lim ) · 模糊匹配" : "Smart: pinyin initials · LaTeX commands (frac sqrt lim) · fuzzy match");
     this.filterBar?.refreshLabels(this.plugin);
