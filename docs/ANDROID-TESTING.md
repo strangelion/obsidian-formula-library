@@ -40,6 +40,13 @@ performed by these scripts. Saved plugin preferences were preserved. Native
 keyboard/IME behavior, persistence across restarts, Office-native formula paste,
 all possible expressions and iOS are **not certified** by these checks.
 
+The matrix regression script now additionally covers triangular 3 × 3 data
+(`1 1 1`, `1 1`, `1`), for 16 cases per run. Post-release desktop checks on
+2026-10-11 passed all 16 cases in both light and dark themes with MathJax 4.1.3
+and the 1.6.1 release assets. The script waits for glyph-specific CHTML CSS to
+load before measuring fixed-size delimiters; missing or misaligned delimiters
+still fail the check.
+
 OMML copying currently produces XML text, not a native Office clipboard object.
 A successful Core conversion does not establish editable equation pasting into
 Word, PowerPoint, WPS or mobile Office.

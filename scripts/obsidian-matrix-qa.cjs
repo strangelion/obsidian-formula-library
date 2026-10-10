@@ -41,7 +41,7 @@ const fs = require('node:fs');
     }
     await root.locator('.mt-input').waitFor();
     for (const [fixture, input] of [['ragged', '1 1\n1\n1'], ['regular', '1 2 3\n4 5 6'],
-      ['tall', '1 2\n3 4\n5 6\n7 8\n9 10']]) {
+      ['tall', '1 2\n3 4\n5 6\n7 8\n9 10'], ['triangular', '1 1 1\n1 1\n1']]) {
       for (const environment of ['bmatrix', 'pmatrix', 'vmatrix', 'Vmatrix']) {
         await root.locator('.mt-input').fill(input);
         await root.locator('.mt-controls select').first().selectOption(environment);
@@ -50,6 +50,14 @@ const fs = require('node:fs');
           const math = modal?.previewEl.querySelector('mjx-math');
           return math && (math.getAttribute('data-latex') === modal.currentLatex() ||
             (!math.hasAttribute('data-latex') && math.querySelectorAll('mjx-mtr').length === modal.grid.height));
+        }, null, { timeout: 15000 });
+        // New CHTML installs glyph-specific CSS asynchronously. A fixed-size
+        // delimiter has zero height before that stylesheet is ready.
+        await page.waitForFunction(() => {
+          const preview = __matrixQaModal.previewEl;
+          const stretch = [...preview.querySelectorAll('mjx-stretchy-v')];
+          const delimiters = stretch.length ? stretch : [...preview.querySelectorAll('mjx-math > mjx-mrow > mjx-mo')];
+          return delimiters.length === 2 && delimiters.every(e => e.getBoundingClientRect().height > 0);
         }, null, { timeout: 15000 });
         await root.locator('.ft-preview').scrollIntoViewIfNeeded();
         const metrics = await root.locator('.ft-preview').evaluate(preview => {
@@ -73,9 +81,9 @@ const fs = require('node:fs');
           assert.ok(metrics.glyphs.every(g => g.top >= bracket.top - 3 && g.bottom <= bracket.bottom + 3), 'every row must be enclosed');
         }
         results.push({ fixture, environment, metrics });
-        if (fixture === 'ragged' && environment === 'bmatrix') {
+        if (['ragged', 'triangular'].includes(fixture) && environment === 'bmatrix') {
           const size = await page.evaluate(() => `${innerWidth}x${innerHeight}`);
-          await root.screenshot({ path: `output/playwright/native-matrix-ragged-${size}-${process.env.OBSIDIAN_QA_THEME || 'current'}.png` });
+          await root.screenshot({ path: `output/playwright/native-matrix-${fixture}-${size}-${process.env.OBSIDIAN_QA_THEME || 'current'}.png` });
         }
       }
     }
@@ -83,7 +91,7 @@ const fs = require('node:fs');
     assert.deepEqual(errors, []);
     const host = await page.evaluate(() => ({ width: innerWidth, height: innerHeight, userAgent: navigator.userAgent,
       mathjax: window.MathJax?.version, theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light' }));
-    const report = { status: 'passed', host, results, scope: '12 CHTML delimiter/table/glyph geometry cases; no note or clipboard writes; native IME not tested' };
+    const report = { status: 'passed', host, results, scope: '16 CHTML delimiter/table/glyph geometry cases; no note or clipboard writes; native IME not tested' };
     fs.writeFileSync(`output/playwright/native-matrix-${host.width}x${host.height}-${host.theme}.json`, JSON.stringify(report, null, 2));
     console.log(JSON.stringify({ status: report.status, host, cases: results.length, scope: report.scope }));
   } finally {
