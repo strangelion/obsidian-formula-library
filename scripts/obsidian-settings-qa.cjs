@@ -4,10 +4,15 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
 (async () => {
-  const browser = await chromium.connectOverCDP('http://127.0.0.1:9223');
-  const page = browser.contexts().flatMap((context) => context.pages()).find((entry) => entry.url().startsWith('app://obsidian'));
+  const realDevice = process.env.OBSIDIAN_QA_REAL_DEVICE === '1';
+  const browser = await chromium.connectOverCDP(process.env.OBSIDIAN_QA_CDP_URL || 'http://127.0.0.1:9223');
+  let page;
+  for (const candidate of browser.contexts().flatMap((context) => context.pages())) {
+    if (await candidate.evaluate(() => !!window.app?.plugins?.getPlugin('formula-library')).catch(() => false)) { page = candidate; break; }
+  }
   if (!page) throw Error('Obsidian page not available');
   const viewport = await page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
+  const widths = realDevice ? [viewport.width] : [1280, 390];
   const errors = []; page.on('pageerror', (error) => errors.push(error.message));
   const noScreenshots = process.argv.includes('--no-screenshots');
   fs.mkdirSync('output/playwright', { recursive: true });
@@ -36,6 +41,7 @@ const fs = require('node:fs');
     });
     const settings = page.locator('[data-tools-settings-qa="true"]');
     const editor = page.locator('[data-tools-editor-qa="true"]');
+    await page.evaluate(() => { if (__toolsQaEditor.toolsSection) __toolsQaEditor.toolsSection.open = true; });
     assert.equal(await settings.getByRole('tab').count(), 5);
     assert.equal(await settings.getByRole('tabpanel').filter({ visible: true }).count(), 1);
     await settings.getByRole('tab', { name: 'Tools', exact: true }).click();
@@ -64,8 +70,8 @@ const fs = require('node:fs');
     assert.equal(await settings.getByRole('tab', { name: 'General', exact: true }).getAttribute('aria-selected'), 'true');
     await page.evaluate(async () => { __toolsQaPlugin.settings.locale = 'zh'; await __toolsQaTab.display(); });
     await settings.getByRole('tab', { name: '工具', exact: true }).click();
-    for (const width of [1280, 390]) {
-      await page.setViewportSize({ width, height: 900 });
+    for (const width of widths) {
+      if (!realDevice) await page.setViewportSize({ width, height: 900 });
       const clipped = await settings.evaluate((root) => {
         const bounds = root.getBoundingClientRect();
         return [...root.querySelectorAll('button,input,select,.checkbox-container')].filter((el) => {
@@ -75,7 +81,7 @@ const fs = require('node:fs');
       });
       assert.deepEqual(clipped, [], `settings controls clipped at ${width}px`);
       assert.equal(await settings.getByRole('tabpanel').filter({ visible: true }).count(), 1);
-      if (!noScreenshots) await page.screenshot({ path: `output/playwright/native-settings-tools-${width}.png`, timeout: 12000 });
+      if (!noScreenshots) await settings.screenshot({ path: `output/playwright/${realDevice ? 'android' : 'native'}-settings-tools-${width}.png`, timeout: 12000 });
     }
     // Simulated write failure restores the toggle and produces a visible error.
     await page.evaluate(() => { __toolsQaPlugin.saveSettings = async () => { throw Error('Test write failure'); }; });
@@ -84,7 +90,7 @@ const fs = require('node:fs');
     assert.equal(await page.evaluate(() => __toolsQaPlugin.settings.enabledTools.plot), false);
     assert.equal(await page.evaluate(() => JSON.stringify(app.plugins.getPlugin('formula-library').settings) === __toolsQaSaved), true);
     assert.deepEqual(errors, []);
-    console.log('PASS native settings: five en/zh sections, one visible panel, keyboard navigation, six switches, live toolbar hiding/re-enable, no content deletion, Core disposal, active-section preservation and save-error rollback at1280/390px; real settings unchanged.');
+    console.log(`PASS ${realDevice ? 'real Android WebView' : 'native'} settings: five en/zh sections, one visible panel, keyboard navigation, six switches, live toolbar hiding/re-enable, no content deletion, Core disposal, active-section preservation and save-error rollback at ${widths.join('/')}px; real settings unchanged.${realDevice ? ' Actual viewport; no desktop size emulation.' : ''}`);
   } finally {
     await page.evaluate(async () => {
       window.__toolsQaModal?.close(); window.__toolsQaEditor?.close();
@@ -92,7 +98,7 @@ const fs = require('node:fs');
       if (window.MathfieldElement && window.__toolsQaMathLocale !== undefined) window.MathfieldElement.locale = __toolsQaMathLocale;
       for (const key of ['__toolsQaSaved', '__toolsQaMathLocale', '__toolsQaPlugin', '__toolsQaEditor', '__toolsQaModal', '__toolsQaTab', '__toolsQaContent']) delete window[key];
     }).catch(() => {});
-    await page.setViewportSize(viewport).catch(() => {});
+    if (!realDevice) await page.setViewportSize(viewport).catch(() => {});
     await browser.close();
   }
 })().catch((error) => { console.error(error); process.exitCode = 1; });

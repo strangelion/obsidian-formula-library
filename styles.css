@@ -948,9 +948,9 @@
 .formula-library-sidebar,
 .formula-library-modal,
 .formula-drawing-modal,
-.formula-library-sidebar *,
-.formula-library-modal *,
-.formula-drawing-modal * {
+.formula-library-sidebar *:not([jax], [jax] *),
+.formula-library-modal *:not([jax], [jax] *),
+.formula-drawing-modal *:not([jax], [jax] *) {
   box-sizing: border-box;
 }
 .formula-library-sidebar {
@@ -2221,6 +2221,16 @@
   gap: 6px;
   padding-bottom: 12px;
 }
+.formula-editor-modal > .fe-tools-section {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.formula-editor-modal > .fe-tools-section > summary {
+  display: none;
+}
+.formula-editor-modal > .fe-tools-section[hidden] {
+  display: none;
+}
 .formula-library-modal .fe-top-bar {
   flex-wrap: wrap;
   margin-bottom: 8px;
@@ -2393,13 +2403,30 @@
   font-size: 12px;
   line-height: 1;
 }
-.formula-drawing-modal .fd-zoom-icon {
+.formula-drawing-modal .fd-zoom-bar button.fd-zoom-icon,
+.formula-drawing-modal .fd-visual-row button.fd-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   width: 36px;
+  min-width: 36px;
+  min-height: 36px;
   padding: 0;
 }
-.formula-drawing-modal .fd-zoom-icon svg {
+.formula-drawing-modal .fd-zoom-bar button.fd-zoom-icon > svg,
+.formula-drawing-modal .fd-visual-row button.fd-icon-button > svg {
+  flex: 0 0 auto;
   width: 16px;
   height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+}
+.is-mobile .formula-drawing-modal .fd-zoom-bar button.fd-zoom-icon,
+.is-mobile .formula-drawing-modal .fd-visual-row button.fd-icon-button {
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
 }
 .formula-drawing-modal .fd-zoom-value {
   font-size: 12px;
@@ -2554,10 +2581,7 @@
 .formula-custom-modal .fl-manage-item-label {
   min-width: 0;
 }
-.formula-library-modal [jax],
-.formula-library-modal [jax] *,
-.formula-custom-modal [jax],
-.formula-custom-modal [jax] * {
+:where(.formula-library-sidebar [jax], .formula-library-sidebar [jax] *, .formula-library-modal [jax], .formula-library-modal [jax] *, .formula-custom-modal [jax], .formula-custom-modal [jax] *) {
   box-sizing: content-box;
 }
 .formula-library-modal .ft-preview-wrap,
@@ -2678,6 +2702,68 @@
   .formula-library-sidebar .fl-fav-star,
   .formula-library-sidebar .fl-item-menu {
     min-height: 40px;
+  }
+}
+@media (max-width: 520px), (max-height: 520px) {
+  .formula-library-modal > .formula-editor-modal {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 6px;
+    scroll-padding-top: 76px;
+  }
+  .formula-editor-modal > .fe-top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--background-primary);
+    margin-bottom: 8px;
+    padding-block: 6px;
+  }
+  .formula-editor-modal > .fe-tools-section {
+    margin-bottom: 8px;
+  }
+  .formula-editor-modal > .fe-tools-section > summary {
+    display: list-item;
+    min-height: 40px;
+    padding: 8px 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .formula-editor-modal .fe-main-layout {
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    overflow: visible;
+    gap: 12px;
+  }
+  .formula-editor-modal .fe-editor-pane,
+  .formula-editor-modal .fe-visual-pane,
+  .formula-editor-modal .fe-source-pane {
+    flex: none;
+    min-height: 0;
+  }
+  .formula-library-modal .formula-editor-modal .fe-source-pane .fe-textarea {
+    flex: none;
+    height: clamp(100px, 18dvh, 160px);
+    min-height: 100px;
+    resize: vertical;
+  }
+  .formula-editor-modal .fe-preview-area {
+    min-height: 100px;
+    max-height: 180px;
+  }
+  .formula-editor-modal .fe-library-panel {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+    max-height: none;
+    padding-left: 0;
+    overflow: visible;
+  }
+  .formula-editor-modal .fl-grid-scroll {
+    flex: none;
+    overflow: visible;
   }
 }
 

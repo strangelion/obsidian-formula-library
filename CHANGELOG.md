@@ -2,6 +2,21 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.6.1] - 2026-10-10
+
+### Added
+- Windows-only **Copy for Word** action in the conversion dialog for OMML and MathML outputs. It converts OMML to standalone MathML text and copies that text by itself, without an HTML clipboard format, so Word's own equation import can create an editable equation. Verified against Windows Word only; not a serialized OLE object and not PowerPoint, WPS or mobile Office acceptance. See [platform coverage](docs/CORE-INTEGRATION.md).
+
+### Fixed
+- Fixed matrix delimiter alignment in newer MathJax CHTML renderers by preserving their native box-model exceptions, including matrices with blank cells.
+- Prevented theme padding and flex compression from hiding Mermaid zoom/delete SVG icons on Android; icon-only controls retain 44 px mobile touch targets.
+- Small/short-screen formula editors collapse auxiliary tools by default and scroll editor/library content together, keeping insert/cancel reachable without confining the library to a tiny viewport.
+- Formula previews explicitly load MathJax, use one render-finalization call, reject obsolete renders and stop waiting after 10 seconds; a stalled preview no longer leaves successful text conversion busy indefinitely.
+
+### Documentation and verification
+- Added English/Chinese security disclosures and scoped real Android device coverage, plus reusable WebView and native ADB touch checks without writes to real notes.
+- Documented the Windows Word clipboard action, its limits and its acceptance scripts in both READMEs, `docs/CORE-INTEGRATION.md` and `docs/DEVELOPMENT.md`.
+
 ## [1.6.0] - 2026-10-10
 
 ### Added

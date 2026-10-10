@@ -3,6 +3,7 @@ import { loc } from "./core.js";
 import { findConversionRoute } from "./core-conversion.js";
 import { renderLatexInto } from "./parameters.js";
 import { writeClipboard } from "./custom-library.js";
+import { wordClipboardMathML } from "./office-clipboard.js";
 
 const STRINGS = {
   en: {
@@ -27,6 +28,10 @@ const STRINGS = {
     reconstruction: "Reconstructed LaTeX is not the original author source.", lossy: "Unsupported syntax or style may be lost.", roundtrip: "Complete round-trip fidelity is not guaranteed.",
     strictParity: "Strict source validation does not guarantee identical appearance or lossless conversion.", strictMacros: "Custom macros and unsupported environments are rejected.",
     ommlHint: "OMML output is XML for exchange with an Office adapter, not an OLE object or a guaranteed editable Word paste.",
+    copyWord: "Copy for Word", wordPreparing: "Preparing Word clipboard using best-effort MathML…",
+    wordCopied: "MathML copied for Word. Paste normally to create an editable equation; appearance may change. Not an OLE object.",
+    wordFailed: "Word clipboard preparation failed. The original and converted output are kept; ordinary text copying is still available.",
+    wordHint: "Copy for Word uses standalone MathML text, with an additional best-effort conversion for OMML. Verified on Windows Word; not a general Office/OLE clipboard object.",
   },
   zh: {
     title: "转换单个公式", intro: "在本地转换一个公式。只有明确使用结果时才会填入编辑器，原始内容不会自动更改。",
@@ -50,6 +55,10 @@ const STRINGS = {
     reconstruction: "重建的 LaTeX 不是作者原始源码。", lossy: "不支持的语法或样式可能丢失。", roundtrip: "不保证完整的往返保真。",
     strictParity: "严格源码验证不保证外观一致或无损转换。", strictMacros: "自定义宏和不支持的环境会被拒绝。",
     ommlHint: "OMML 是供 Office 适配器交换的 XML，不是 OLE 对象，也不保证普通粘贴即可得到可编辑 Word 公式。",
+    copyWord: "复制为 Word 公式", wordPreparing: "正在以尽力转换的 MathML 准备 Word 剪贴板…",
+    wordCopied: "已复制供 Word 导入的 MathML，普通粘贴可生成可编辑公式；外观可能变化。这不是 OLE 对象。",
+    wordFailed: "准备 Word 剪贴板失败。原文和转换结果仍保留，可继续使用普通文本复制。",
+    wordHint: "“复制为 Word 公式”使用独立 MathML 文本；OMML 会额外进行尽力转换。已在 Windows Word 验证，不是通用 Office/OLE 剪贴板对象。",
   },
 };
 const SOURCE_FORMATS = ["latex", "typst", "mathml", "omml"];
@@ -161,6 +170,7 @@ export class FormulaConversionModal extends obsidian.Modal {
     this.retryButton = button(taskActions, "retry", () => this.loadCapabilities());
     const outputActions = footer.createDiv({ cls: "fc-output-actions" });
     this.copyButton = button(outputActions, "copy", () => this.copyOutput());
+    this.wordCopyButton = button(outputActions, "copyWord", () => this.copyForWord());
     this.useButton = button(outputActions, this.options.onInsert ? "use" : "openEditor", () => this.useOutput());
     button(outputActions, "close", () => this.close());
     this.refreshLocalization();
@@ -210,6 +220,9 @@ export class FormulaConversionModal extends obsidian.Modal {
     this._revision += 1;
     this._conversionController?.abort();
     this._conversionController = null;
+    this._wordCopyController?.abort();
+    this._wordCopyController = null;
+    this._applying = false;
     this._busy = false;
     this.clearOutput();
     this.setStatus("changed");
@@ -263,12 +276,16 @@ export class FormulaConversionModal extends obsidian.Modal {
     const route = this._capabilities?.ok ? findConversionRoute(this._capabilities, snapshot) : null;
     this.routeHint.setText(snapshot.mode === "strict" ? this.text("strictHint") : this.text("bestEffortHint"));
     if (snapshot.outputFormat === "omml") this.routeHint.setText(this.routeHint.textContent + " " + this.text("ommlHint"));
+    const wordAvailable = !!obsidian.Platform?.isWin && ["omml", "mathml"].includes(snapshot.outputFormat);
+    if (wordAvailable) this.routeHint.setText(this.routeHint.textContent + " " + this.text("wordHint"));
     if (this._capabilities?.ok && !route?.available) this.routeHint.setText(this.routeHint.textContent + " " + this.text("routeUnavailable"));
     this.convertButton.disabled = !!(this._loading || this._busy || this._applying || !route?.available || !snapshot.content.trim());
-    this.cancelButton.disabled = !(this._loading || this._busy);
+    this.cancelButton.disabled = !(this._loading || this._busy || this._wordCopyController);
     this.retryButton.disabled = !!(this._loading || this._busy || this._applying);
     const current = this._result?.ok && this.matches(this._resultSnapshot);
     this.copyButton.disabled = !!(!current || this._busy || this._applying);
+    this.wordCopyButton.hidden = !wordAvailable;
+    this.wordCopyButton.disabled = !!(!wordAvailable || !current || this._busy || this._applying);
     this.useButton.disabled = !!(!current || this._busy || this._applying || !this._previewReady || snapshot.outputFormat !== "latex-fragment");
     for (const control of [this.inputSelect, this.outputSelect, this.modeSelect, this.sourceInput]) control.disabled = !!this._applying;
     this.contentEl.setAttribute("aria-busy", String(!!(this._loading || this._busy || this._applying)));
@@ -297,13 +314,14 @@ export class FormulaConversionModal extends obsidian.Modal {
       this.showDiagnostics(envelope);
       if (snapshot.outputFormat === "latex-fragment") {
         this.previewWrap.hidden = false;
-        renderLatexInto(this.previewEl, envelope.data.content);
         try {
-          if (typeof obsidian.finishRenderMath === "function") await obsidian.finishRenderMath();
+          const rendered = await renderLatexInto(this.previewEl, envelope.data.content, {
+            isCurrent: () => this.matches(snapshot) && revision === this._revision && !controller.signal.aborted,
+          });
           if (!this.matches(snapshot) || revision !== this._revision || controller.signal.aborted) return;
           const child = this.previewEl.firstElementChild;
           const bounds = child?.getBoundingClientRect();
-          this._previewReady = !!child && bounds.width > 0 && bounds.height > 0
+          this._previewReady = rendered && !!child && bounds.width > 0 && bounds.height > 0
             && !this.previewEl.querySelector("[data-mjx-error], [data-mml-node='merror'], .mjx-merror, .MathJax_Error, mjx-merror, merror");
         } catch {
           if (!this.matches(snapshot) || revision !== this._revision || controller.signal.aborted) return;
@@ -344,6 +362,9 @@ export class FormulaConversionModal extends obsidian.Modal {
     this._loadRevision += 1;
     this._conversionController?.abort();
     this._loadController?.abort();
+    this._wordCopyController?.abort();
+    this._wordCopyController = null;
+    this._applying = false;
     this._conversionController = this._loadController = null;
     this._busy = this._loading = false;
     this.clearOutput();
@@ -356,6 +377,40 @@ export class FormulaConversionModal extends obsidian.Modal {
     const result = this._result;
     const copied = await writeClipboard(result.data.content);
     if (!this._closed && this._result === result) this.setStatus(copied ? "copied" : "copyFailed", copied ? "normal" : "error");
+  }
+
+  async copyForWord() {
+    if (this._closed || this.wordCopyButton.hidden || this.wordCopyButton.disabled || !this.matches(this._resultSnapshot)) return;
+    const result = this._result, snapshot = this._resultSnapshot;
+    const controller = this._wordCopyController = new AbortController();
+    const current = () => !controller.signal.aborted && !this._closed && this._result === result && this.matches(snapshot);
+    this._applying = true;
+    this.setStatus("wordPreparing");
+    this.syncControls();
+    try {
+      let mathml = result.data.content;
+      if (snapshot.outputFormat === "omml") {
+        const converted = await this.plugin.getCoreConversionService().convert({ inputFormat: "omml", content: mathml,
+          outputFormat: "mathml", mode: "best-effort" }, { signal: controller.signal, streamKey: this._streamKey + ":word-copy" });
+        if (!current()) return;
+        if (!converted.ok) throw new Error(converted.error?.code || "WORD_CONVERSION_FAILED");
+        mathml = converted.data.content;
+        this.showDiagnostics(converted);
+      }
+      const payload = wordClipboardMathML(mathml);
+      if (!current()) return;
+      // Deliberately omit HTML: older Word chooses it first and flattens MathML.
+      const copied = await writeClipboard(payload);
+      if (current()) this.setStatus(copied ? "wordCopied" : "wordFailed", copied ? "normal" : "error");
+    } catch (error) {
+      if (current()) this.setStatus("wordFailed", "error", error?.message || "WORD_COPY_FAILED");
+    } finally {
+      if (this._wordCopyController === controller) {
+        this._wordCopyController = null;
+        this._applying = false;
+        this.syncControls();
+      }
+    }
   }
 
   async useOutput() {
@@ -393,6 +448,8 @@ export class FormulaConversionModal extends obsidian.Modal {
     this._loadRevision += 1;
     this._conversionController?.abort();
     this._loadController?.abort();
+    this._wordCopyController?.abort();
+    this._wordCopyController = null;
     this._conversionController = this._loadController = null;
     this.plugin._conversionModals?.delete(this);
     this.contentEl.empty();

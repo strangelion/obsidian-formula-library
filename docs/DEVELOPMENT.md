@@ -3,7 +3,8 @@
 LaTeXSnipper Core integration, fixed source/assets and platform
 coverage are documented in [CORE-INTEGRATION.md](CORE-INTEGRATION.md).
 Desktop browser and native Windows Obsidian checks have passed;
-Android/iOS are not tested on real devices.
+Android phone/tablet checks and their build/device boundaries are recorded in
+[ANDROID-TESTING.md](ANDROID-TESTING.md). iOS is not tested on a real device.
 
 Use Node.js 20+ and `npm ci`. Run `npm run check` before committing. It runs
 regression tests, checks authored CSS guardrails, rebuilds the assets and syntax-checks the generated plugin.
@@ -56,8 +57,8 @@ independent sizing, live Appearance font changes and 18/32 px layouts.
 `verify-locale` checks language changes in existing library views and all English
 diagram samples while preserving user-authored Chinese content. These checks use
 isolated plugin settings; temporary host font preferences are restored afterwards.
-`verify-mathjax-css.cjs` checks CHTML/SVG container selector equivalence and the
-box model in an isolated browser. It accepts `FORMULA_TEST_BROWSER_PATH` when
+`verify-mathjax-css.cjs` checks CHTML/SVG baseline scope and native CHTML
+border-box extender exceptions in both stylesheet orders. It accepts `FORMULA_TEST_BROWSER_PATH` when
 using an already installed Chromium browser rather than Playwright's default.
 
 `npm run test:ui` runs an isolated Chromium harness with an in-memory adapter:
@@ -90,6 +91,21 @@ plot presets/ranges/drafts, configuration insertion, formula draft recovery,
 keyboard navigation and source-settings alignment using owned native dialogs,
 cloned settings and an in-memory editor. It asserts that real user settings are
 unchanged. Omit the switch for screenshot capture when Electron frames are available.
+
+Native Android runs use a user-approved ADB WebView forward, not desktop viewport
+emulation. Set `OBSIDIAN_QA_CDP_URL` and `OBSIDIAN_QA_REAL_DEVICE=1` for the
+conversion/settings checks. `obsidian-android-qa.cjs` also needs explicit ADB
+executable/device variables for native taps. `obsidian-matrix-qa.cjs` measures
+delimiter, table and every glyph bounds, including ragged rows and MathJax 3/4.
+Use only one native QA script at a time per WebView. See
+[ANDROID-TESTING.md](ANDROID-TESTING.md) for commands and cleanup.
+
+Windows-only Word clipboard acceptance needs a user-approved Word installation:
+`node scripts/obsidian-word-clipboard-qa.cjs` drives the dialog's **Copy for
+Word** action and calls `scripts/verify-word-clipboard.ps1
+-UseCurrentClipboard`, which checks the MathML payload in newly created, unsaved
+Word documents. Both replace the clipboard with test equations and never read or
+modify user documents; they are not part of `npm run test:ui`.
 
 The release workflow installs the lockfile, runs the checks, rebuilds the assets,
 synchronizes versions, attests the assets, and publishes a version tag without `v`.

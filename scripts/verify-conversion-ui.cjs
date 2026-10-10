@@ -13,13 +13,15 @@ HTMLElement.prototype.empty=function(){this.replaceChildren();};HTMLElement.prot
 export class Modal{constructor(app){this.app=app;this.containerEl=make('div',{cls:'modal-container'});this.modalEl=this.containerEl.createDiv({cls:'modal'});this.titleEl=this.modalEl.createDiv({cls:'modal-title'});this.contentEl=this.modalEl.createDiv({cls:'modal-content'});}open(){document.body.appendChild(this.containerEl);this.onOpen();}close(){this.onClose?.();this.containerEl.remove();}}
 export class Plugin{} export class PluginSettingTab{} export class ItemView{} export class MarkdownView{} export class Notice{} export class Menu{} export class Component{}
 export const getLanguage=()=> 'en';export const setIcon=()=>{};
-export const renderMath=(latex)=>{if(window.renderState==='empty')return null;const el=make('span');el.textContent=latex;if(window.renderState==='error')el.setAttribute('data-mml-node','merror');return el;};
-export const finishRenderMath=()=>window.finishPromise || Promise.resolve();
+export const Platform={get isWin(){return window.qaWindows!==false;}};
+export const loadMathJax=()=>window.mathLoadPromise || Promise.resolve().then(()=>{window.mathLoaded=true;});
+export const renderMath=(latex)=>{if(window.mathLoaded===false)throw Error('MathJax not loaded');if(window.renderState==='empty')return null;const el=make('span');el.textContent=latex;if(window.renderState==='error')el.setAttribute('data-mml-node','merror');return el;};
+export const finishRenderMath=()=>{window.finishCalls=(window.finishCalls||0)+1;return window.finishPromise || Promise.resolve();};
 `;
 
 async function verify() {
   const bundle = (await build({
-    entryPoints: ["src/conversion.js"], bundle: true, write: false, format: "iife", globalName: "conversionQA", platform: "browser",
+    stdin: { contents: "export * from './src/conversion.js'; export { renderLatexInto } from './src/parameters.js'; export { wordClipboardMathML } from './src/office-clipboard.js';", resolveDir: process.cwd() }, bundle: true, write: false, format: "iife", globalName: "conversionQA", platform: "browser",
     plugins: [{ name: "in-memory-obsidian", setup(builder) {
       builder.onResolve({ filter: /^obsidian$/ }, () => ({ path: "obsidian", namespace: "qa" }));
       builder.onLoad({ filter: /.*/, namespace: "qa" }, () => ({ contents: stub, loader: "js" }));
@@ -46,6 +48,7 @@ async function verify() {
         for (const mode of ["strict", "best-effort"]) rows.push({ input, output, mode,
           available: mode === "best-effort" || input === "latex" && output === "omml" });
       }
+      window.mathLoaded = false;
       window.calls = [];
       window.failLoad = false;
       window.service = {
@@ -93,6 +96,8 @@ async function verify() {
     await page.evaluate(() => respond(1));
     await page.getByText("Conversion finished. Review the output and diagnostics before using it.", { exact: true }).waitFor();
     assert.equal(await use.isDisabled(), false);
+    assert.equal(await page.evaluate(() => window.mathLoaded), true);
+    assert.equal(await page.evaluate(() => window.finishCalls), 1, 'one preview must finalize MathJax only once');
     assert.equal(await page.evaluate(() => p.inserted.length), 0);
     await page.getByRole("button", { name: "Copy output", exact: true }).click();
     assert.equal(await page.evaluate(() => copied), "x^2 + 1");
@@ -212,6 +217,46 @@ async function verify() {
     await page.getByText(/The formula editor changed or closed/).waitFor();
     assert.equal(await output.inputValue(), 'confirmed but stale target');
     assert.equal(await source.inputValue(), 'x^2 + 1');
+    await page.evaluate(() => m.close());
+    const timeout = await page.evaluate(async () => {
+      const probe = document.body.appendChild(document.createElement('div'));
+      let resolveLoad;
+      window.mathLoadPromise = new Promise((resolve) => { resolveLoad = resolve; });
+      const result = await conversionQA.renderLatexInto(probe, 'late formula', { timeoutMillis: 30 });
+      resolveLoad();
+      await Promise.resolve(); await Promise.resolve();
+      const children = probe.childElementCount;
+      probe.remove(); window.mathLoadPromise = undefined;
+      return { result, children };
+    });
+    assert.deepEqual(timeout, { result: false, children: 0 }, 'timed-out MathJax loading must not paint later');
+    const mathml = '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>α</mi><mi>β</mi></mfrac></math>';
+    await page.evaluate(() => openModal());
+    await page.getByLabel('Output format', { exact: true }).selectOption('omml');
+    await convert.click();
+    await page.evaluate(() => respond(12, '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"/>'));
+    const copyWord = page.getByRole('button', { name: 'Copy for Word', exact: true });
+    await copyWord.click();
+    assert.equal(await page.evaluate(() => calls[13].request.outputFormat), 'mathml');
+    assert.equal(await page.evaluate(() => calls[13].request.mode), 'best-effort');
+    await page.evaluate(content => respond(13, content), mathml);
+    await page.getByText(/MathML copied for Word/).waitFor();
+    assert.equal(await page.evaluate(() => copied), mathml);
+    assert.match(await output.inputValue(), /oMath/);
+    assert.equal(await source.inputValue(), 'x^2 + 1');
+    await copyWord.click();
+    await page.getByRole('button', { name: 'Cancel task', exact: true }).click();
+    assert.equal(await page.evaluate(() => calls[14].options.signal.aborted), true);
+    await page.evaluate(content => respond(14, content), mathml.replace('α', 'obsolete'));
+    assert.equal(await page.evaluate(() => copied), mathml, 'cancelled Word preparation must not overwrite clipboard');
+    await page.evaluate(() => { window.qaWindows = false; m.syncControls(); });
+    assert.equal(await copyWord.isVisible(), false, 'Word-only entry must not appear on mobile/non-Windows');
+    const rejected = await page.evaluate(() => [
+      '<math/>', '<!DOCTYPE math><math xmlns="http://www.w3.org/1998/Math/MathML"/>',
+      '<math xmlns="http://www.w3.org/1998/Math/MathML"><mi href="file:///x">x</mi></math>',
+      '<math xmlns="http://www.w3.org/1998/Math/MathML"><svg xmlns="http://www.w3.org/2000/svg"/></math>',
+    ].every(xml => { try { conversionQA.wordClipboardMathML(xml); return false; } catch { return true; } }));
+    assert.equal(rejected, true, 'Word clipboard must reject malformed/DTD/foreign/link payloads');
     await page.evaluate(() => m.close());
     assert.deepEqual(errors, []);
     assert.deepEqual(failedRequests, []);

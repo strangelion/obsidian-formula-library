@@ -289,17 +289,32 @@ function paramValueError(value) {
   return error === "latexRequired" ? "" : error;
 }
 
-function renderLatexInto(el, latex) {
-  if (!el) return;
+const mathPreviewGenerations = new WeakMap();
+
+function renderLatexInto(el, latex, options = {}) {
+  if (!el) return Promise.resolve(false);
+  const generation = (mathPreviewGenerations.get(el) || 0) + 1;
+  mathPreviewGenerations.set(el, generation);
   if (el.empty) el.empty();
-  if (!latex) return;
-  try {
-    const rendered = obsidian.renderMath(latex, true);
-    if (rendered && el.appendChild) el.appendChild(rendered);
-    if (obsidian.finishRenderMath) Promise.resolve(obsidian.finishRenderMath()).catch((error) => logWarn("math preview failed:", error.message));
-  } catch (error) {
-    logWarn("renderLatexInto failed:", error.message);
-  }
+  if (!latex) return Promise.resolve(false);
+  let expired = false, timer;
+  const current = () => !expired && mathPreviewGenerations.get(el) === generation
+    && el.isConnected !== false && (!options.isCurrent || options.isCurrent());
+  const timeoutMillis = Number.isSafeInteger(options.timeoutMillis) && options.timeoutMillis > 0
+    ? Math.min(options.timeoutMillis, 10_000) : 10_000;
+  const render = (async () => {
+    if (typeof obsidian.loadMathJax === "function") await obsidian.loadMathJax();
+    if (!current()) return false;
+    const rendered = await obsidian.renderMath(latex, true);
+    if (!current() || !rendered || !el.appendChild) return false;
+    el.appendChild(rendered);
+    if (typeof obsidian.finishRenderMath === "function") await obsidian.finishRenderMath();
+    return current();
+  })().catch((error) => { logWarn("math preview failed:", error.message); return false; });
+  const timeout = new Promise((resolve) => {
+    timer = setTimeout(() => { expired = true; resolve(false); }, timeoutMillis);
+  });
+  return Promise.race([render, timeout]).finally(() => clearTimeout(timer));
 }
 
 class ParamTemplateModal extends obsidian.Modal {

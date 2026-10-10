@@ -18,6 +18,7 @@ export class Modal { constructor(app){this.app=app;this.containerEl=make('div',{
 export class Plugin {} export class PluginSettingTab {} export class ItemView {} export class MarkdownView {} export class Component {load(){}unload(){}}
 export class Notice {constructor(text){console.log(text);}} export const getLanguage=()=> 'en'; export const setIcon=(el,icon)=>el.setAttribute('data-icon',icon);
 export class Menu {addItem(){return this;}addSeparator(){}showAtMouseEvent(){}showAtPosition(){}}
+export const loadMathJax=async()=>{};
 export const renderMath=(latex)=>{const el=make('span');el.textContent=latex;return el;}; export const finishRenderMath=()=>{};
 `;
 const bundleOptions = { stdin: { contents: ['core','plot','backup','ui','typography','workspace-state','formula-details'].map((name)=>`export * from './src/${name}.js';`).join('\n'), resolveDir: process.cwd() }, bundle:true,write:false,format:'iife',globalName:'qa', platform:'browser',plugins:[{name:'obsidian-stub',setup(build){build.onResolve({filter:/^obsidian$/},()=>({path:'obsidian',namespace:'qa'}));build.onLoad({filter:/.*/,namespace:'qa'},()=>({contents:obsidianStub,loader:'js'}));}}]};

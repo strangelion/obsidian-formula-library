@@ -68,7 +68,10 @@ never silently falls back. Conversion and output use remain manual.
 and bounded bare-formula projection, not regex document stripping. Full-document
 `latex` output is not sent to MathLive. Neither mode guarantees source recovery,
 visual identity or lossless round trips. Renderer support is independent.
-OMML XML is not Word-native clipboard/OLE.
+OMML XML is not Word-native clipboard/OLE. On Windows only, the optional
+**Copy for Word** action copies standalone MathML text built from the OMML or
+MathML result (OMML is converted first) for Word's own importer; it is not an
+OLE object and is verified against Windows Word only.
 
 No OCR/models, whole-document/vault conversion, third-party provider API,
 native Node addon, UnicodeMath/AsciiMath/MTEF import, TikZ compilation, or
@@ -81,12 +84,17 @@ Office/PDF document generation is included.
 | Node | 63 regressions, including 19 service lifecycle/validation checks, plugin unload protection and tool preferences |
 | Real Chrome Worker | Simple samples across all 16 exposed best-effort combinations, strict rejection/OMML, DTD rejection, UTF-8 bounds, blocked-constructor cleanup; test-only infinite WASM loop hard cancel/timeout and real Core recovery |
 | Isolated browser UI | Manual modes, stale output, plain XML, preview error gate, retry, en/zh, 1280/390 px and large-text bounds; mocked host/MathJax |
-| Windows Obsidian app:// | Actual Core loading, Typst→LaTeX MathJax preview, strict LaTeX→OMML text, limits/original protection, explicit draft opening without note writes, en/zh and 1280/390 px geometry |
-| Android / iOS | **Not tested on real devices**; desktop portrait is not mobile acceptance |
+| Windows Obsidian app:// | Actual Core loading, Typst→LaTeX MathJax preview, strict LaTeX→OMML text, limits/original protection, explicit draft opening without note writes, en/zh and 1280/390 px geometry; Windows-only Copy for Word creates editable Word OMath from the MathML text payload. Not OLE, PowerPoint, WPS or mobile Office acceptance |
+| Android phone / tablet | Real Android 16 WebViews on 2211133C / Obsidian 1.14.4 and 24018RPACC / Obsidian 1.13.8: simple samples across all 16 exposed best-effort combinations, conversion UI/settings, native touch controls, editor/library layout, matrix/parameter previews, Mermaid navigation/history and plots. New development fixes additionally passed 12 matrix geometry cases per tested orientation/theme with MathJax 3.2.2 / 4.1.3. See [Android verification](ANDROID-TESTING.md) for scope |
+| iOS and other mobile hosts | Not tested; Android results and desktop portrait checks are not universal mobile acceptance |
 | General formula fidelity | Not certified; simple examples do not prove all syntax or complete round trips |
 
 Run `npm run check`, then `npm run test:ui` with installed Playwright Chromium
-or `FORMULA_TEST_BROWSER_PATH`. `scripts/obsidian-conversion-qa.cjs` attaches to
+or `FORMULA_TEST_BROWSER_PATH`. `scripts/verify-conversion-ui.cjs` also covers
+the Word clipboard payload builder with mocked host/MathJax; the real Windows
+Word import is checked separately by `scripts/obsidian-word-clipboard-qa.cjs`,
+which needs a user-opened Obsidian and an installed Word.
+`scripts/obsidian-conversion-qa.cjs` attaches to
 a user-approved local Obsidian debug endpoint on port 9223. It owns its dialogs,
 cloned settings, service and in-memory note. `--no-screenshots` skips native
 Electron frame capture, not interaction checks. Browser screenshots are under

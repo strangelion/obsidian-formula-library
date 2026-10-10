@@ -605,9 +605,9 @@
 .formula-library-sidebar,
 .formula-library-modal,
 .formula-drawing-modal,
-.formula-library-sidebar *,
-.formula-library-modal *,
-.formula-drawing-modal * {
+.formula-library-sidebar *:not([jax], [jax] *),
+.formula-library-modal *:not([jax], [jax] *),
+.formula-drawing-modal *:not([jax], [jax] *) {
   box-sizing: border-box;
 }
 

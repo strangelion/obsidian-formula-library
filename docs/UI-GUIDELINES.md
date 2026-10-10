@@ -12,7 +12,7 @@ These rules apply the useful form, state, and responsive requirements from
 - At narrow widths, use one column and contained scrolling rather than hiding overflowing content.
 - Leave padding around scrolling form edges and draw focus indicators inward.
 - Do not reset MathJax's internal box model. Long equations must be scrollable from their first symbol.
-- Scope MathJax CSS through its `[jax]` container attribute rather than unknown custom-element type selectors; keep the content-box protection intact.
+- Scope MathJax CSS through its `[jax]` container attribute rather than unknown custom-element type selectors. Keep the content-box baseline at zero specificity so native CHTML border-box extenders can override it; never blanket-reset the renderer's box model.
 - A chart has one coordinate grid. Mermaid's decorative canvas background does not belong behind plots.
 - Zoom acceptance checks must measure the displayed SVG, not just the percentage text.
 - Undo snapshots must restore source, template type and editing mode together; validate compatibility before rebuilding a visual form.

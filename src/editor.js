@@ -68,6 +68,15 @@ class EditorModal extends obsidian.Modal {
     this.btnAccept = top.createEl("button", { cls: "fe-btn fe-btn-primary", text: ui(this.plugin, "acceptInsert") });
     this.btnAccept.addEventListener("click", () => this.accept());
 
+    this.toolsSection = this.contentEl.createEl("details", { cls: "fe-tools-section" });
+    this.toolsSummary = this.toolsSection.createEl("summary", { text: loc(this.plugin) === "zh" ? "更多工具" : "More tools" });
+    this.toolsSection.appendChild(tools);
+    this.compactQuery = window.matchMedia("(max-width: 520px), (max-height: 520px)");
+    this.compactListener = () => { this.toolsSection.open = !this.compactQuery.matches; };
+    this.compactListener();
+    this.compactQuery.addEventListener("change", this.compactListener);
+    this.refreshToolVisibility();
+
     const ml = this.contentEl.createDiv({ cls: "fe-main-layout" });
     const ep = ml.createDiv({ cls: "fe-editor-pane" });
 
@@ -540,6 +549,7 @@ class EditorModal extends obsidian.Modal {
   onClose() {
     log("Modal onClose");
     this._closed = true;
+    this.compactQuery?.removeEventListener("change", this.compactListener);
     clearTimeout(this.draftTimer);
     if (this.sourceTA && this.btnS) this.persistDraft();
     if (this.plugin.untrackOpenModal) this.plugin.untrackOpenModal(this);
@@ -576,6 +586,7 @@ class EditorModal extends obsidian.Modal {
       saveToLibrary: this.btnSave, plot: this.btnPlot };
     for (const [tool, button] of Object.entries(buttons)) if (button) button.hidden = !isToolEnabled(this.plugin, tool);
     if (this.toolsBar) this.toolsBar.hidden = !Object.values(buttons).some((button) => button && !button.hidden);
+    if (this.toolsSection) this.toolsSection.hidden = !!this.toolsBar?.hidden;
   }
 
   refreshLocalization() {
@@ -587,6 +598,7 @@ class EditorModal extends obsidian.Modal {
     ];
     for (const [button, key] of labels) button?.setText(ui(this.plugin, key));
     this.btnConvert?.setText(loc(this.plugin) === "zh" ? "格式转换" : "Convert format");
+    this.toolsSummary?.setText(loc(this.plugin) === "zh" ? "更多工具" : "More tools");
     this.libSI.placeholder = ui(this.plugin,"search");
     this.libSI.setAttribute("aria-label",ui(this.plugin,"search"));
     this.libHint?.setText(loc(this.plugin) === "zh" ? "拼音首字母 · frac sqrt lim · 模糊" : "pinyin · frac sqrt lim · fuzzy");

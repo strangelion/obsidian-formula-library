@@ -428,7 +428,7 @@ class DrawingModal extends obsidian.Modal {
     this.previewViewport = previewPane.createDiv({ cls: "fd-preview-viewport" });
     this.preview = this.previewViewport.createDiv({ cls: "fd-preview" });
     this.previewObserver = new MutationObserver(() => {
-      const svg = this.preview.querySelector("svg");
+      const svg = this.preview.querySelector(".mermaid svg[viewBox], svg[aria-roledescription]");
       if (svg !== this.previewSvg) this.applyZoom();
     });
     this.previewObserver.observe(this.preview, { childList: true, subtree: true });
@@ -851,7 +851,7 @@ class DrawingModal extends obsidian.Modal {
       if (this.previewComponent) this.previewComponent.unload();
       this.previewComponent = component;
       this.preview.replaceChildren(...stage.childNodes);
-      const svg = this.preview.querySelector("svg");
+      const svg = this.preview.querySelector(".mermaid svg[viewBox], svg[aria-roledescription]");
       this.previewSvg = svg;
       if (svg) {
         svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
@@ -860,7 +860,8 @@ class DrawingModal extends obsidian.Modal {
       }
       // A render replaces the SVG element, so re-apply the current zoom/pan.
       this.applyZoom();
-      this.status.setText(loc(this.plugin) === "zh" ? "预览已更新" : "Preview updated");
+      this.status.setText(svg ? (loc(this.plugin) === "zh" ? "预览已更新" : "Preview updated")
+        : (loc(this.plugin) === "zh" ? "等待宿主渲染图表；如出现信任提示，请自行确认" : "Waiting for the host to render; review any trust prompt manually"));
     } catch (error) {
       component.unload();
       if (version !== this.renderVersion) return;
@@ -875,8 +876,9 @@ class DrawingModal extends obsidian.Modal {
   applyZoom() {
     if (this.zoomValueEl) this.zoomValueEl.setText(Math.round(this.zoom * 100) + "%");
     // MarkdownRenderer can resolve before Mermaid installs/replaces its SVG.
-    this.previewSvg = this.preview ? this.preview.querySelector("svg") : null;
+    this.previewSvg = this.preview ? this.preview.querySelector(".mermaid svg[viewBox], svg[aria-roledescription]") : null;
     if (!this.previewSvg) return;
+    this.status?.setText(loc(this.plugin) === "zh" ? "预览已更新" : "Preview updated");
     this.previewSvg.style.transformOrigin = "50% 50%";
     this.previewSvg.style.transform = "translate(" + this.panX + "px, " + this.panY + "px) scale(" + this.zoom + ")";
   }
@@ -900,7 +902,7 @@ class DrawingModal extends obsidian.Modal {
   // Scale the drawing so its content fills the preview pane. Mermaid letterboxes
   // the drawing inside a 100%-wide SVG, so the inner group is what gets measured.
   fitPreview() {
-    this.previewSvg = this.preview ? this.preview.querySelector("svg") : null;
+    this.previewSvg = this.preview ? this.preview.querySelector(".mermaid svg[viewBox], svg[aria-roledescription]") : null;
     const content = this.previewSvg ? (this.previewSvg.querySelector("g") || this.previewSvg) : null;
     if (!content || !this.previewViewport) {
       this.resetZoom();
@@ -924,7 +926,7 @@ class DrawingModal extends obsidian.Modal {
   }
 
   exportSvg() {
-    const svg = this.preview ? this.preview.querySelector("svg") : null;
+    const svg = this.preview ? this.preview.querySelector(".mermaid svg[viewBox], svg[aria-roledescription]") : null;
     if (!svg) {
       this.status.setText(ui(this.plugin, "drawingExportSvgFailed"));
       new obsidian.Notice(ui(this.plugin, "drawingExportSvgFailed"));
