@@ -131,7 +131,10 @@ self.onmessage = (event) => {
     assert.equal(result.blockedCleaned, true, 'Worker constructor failure must not leak asset URLs');
     assert.equal(result.afterBlocked.ok, true, 'Worker constructor failure must not poison retry');
     assert.equal(result.hardCancelCode, 'CANCELLED');
-    assert.equal(result.hardTimeoutCode, 'CORE_TIMEOUT');
+    // The total deadline and official task timer share the remaining budget.
+    // Either may fire first; both must still hard-stop and permit clean recovery.
+    assert.ok(['CORE_TIMEOUT', 'WORKER_TASK_TIMEOUT'].includes(result.hardTimeoutCode),
+      `Expected a hard deadline failure, received ${result.hardTimeoutCode}`);
     assert.equal(result.afterHardCancel.ok, true);
     assert.equal(result.afterHardTimeout.ok, true);
     assert.equal(result.metrics.loopsStarted, 2, 'the WASM loop must actually begin before hard cancel/timeout');
