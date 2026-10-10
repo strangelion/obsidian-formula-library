@@ -1,7 +1,7 @@
 {
   "id": "formula-library",
   "name": "Formula Library",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "minAppVersion": "1.0.0",
   "description": "Visual LaTeX editing, searchable formulas, local formula format conversion, custom templates, Mermaid diagrams, and function plotting.",
   "author": "strangelion",
