@@ -5,3 +5,4 @@ node_modules/
 output/
 src/generated/
 .playwright-cli/
+.codegraph/
