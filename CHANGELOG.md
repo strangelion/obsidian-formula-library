@@ -2,6 +2,15 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.6.3] - 2026-10-16
+
+### Added
+- AsciiMath and UnicodeMath input and output in the conversion dialog, using the existing pinned Core. The six input/output choices expose 36 best-effort combinations; strict mode remains limited to LaTeX → OMML.
+- Localized linear-grammar limitations, input examples and canonical-output diagnostics. Linear output is copied as text; only checked LaTeX fragments with a successful preview can be used in the formula editor. MTEF remains unavailable because Core provides an inspector, not a registered semantic converter.
+
+### Verification
+- Passed 70 Node tests, all 36 best-effort combinations through real browser Workers and responsive English/Chinese UI checks. Native Windows Obsidian checks cover 12 linear-input routes, preview/manual use, unsupported-syntax rejection, strict gating, source protection and Core metadata. Android/iOS acceptance of the new formats has not been verified.
+
 ## [1.6.2] - 2026-10-16
 
 ### Added

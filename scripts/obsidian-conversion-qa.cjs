@@ -114,6 +114,29 @@ const fs = require('node:fs');
     assert.equal(await modal.getByLabel('Converted output', { exact: true }).inputValue(), '');
     await page.evaluate(() => { __coreQaModal.close(); __coreQaPlugin.settings.locale = 'zh'; __coreQaOpen({ source: 'x+2', inputFormat: 'latex' }); });
     await modal.locator('.fc-status').filter({ hasText: '引擎已就绪' }).waitFor();
+    for (const inputFormat of ['ascii-math', 'unicode-math']) {
+      await modal.getByLabel('来源格式', { exact: true }).selectOption(inputFormat);
+      await modal.getByLabel('原始内容', { exact: true }).fill('(a+b)/c');
+      for (const outputFormat of ['latex-fragment', 'typst', 'mathml', 'omml', 'ascii-math', 'unicode-math']) {
+        await modal.getByLabel('输出格式', { exact: true }).selectOption(outputFormat);
+        assert.match(await modal.locator('.fc-route-hint').innerText(), /有限的线性语法/);
+        await modal.getByRole('button', { name: '转换', exact: true }).click();
+        await modal.locator('.fc-status').filter({ hasText: '转换完成' }).waitFor();
+        assert.ok((await modal.getByLabel('转换结果', { exact: true }).inputValue()).trim());
+        assert.equal(await modal.getByRole('button', { name: '打开公式编辑器', exact: true }).isDisabled(), outputFormat !== 'latex-fragment');
+        assert.equal(await modal.getByLabel('原始内容', { exact: true }).inputValue(), '(a+b)/c');
+      }
+      await modal.getByLabel('输出格式', { exact: true }).selectOption('latex-fragment');
+      await modal.getByLabel('转换模式', { exact: true }).selectOption('strict');
+      assert.equal(await modal.getByRole('button', { name: '转换', exact: true }).isDisabled(), true);
+      await modal.getByLabel('转换模式', { exact: true }).selectOption('best-effort');
+      await modal.getByLabel('原始内容', { exact: true }).fill(inputFormat === 'ascii-math' ? 'a nnn b' : 'a⁄b');
+      await modal.getByRole('button', { name: '转换', exact: true }).click();
+      await modal.locator('.fc-status[data-state="error"]').waitFor();
+      assert.equal(await modal.getByLabel('转换结果', { exact: true }).inputValue(), '');
+    }
+    await modal.getByLabel('来源格式', { exact: true }).selectOption('latex');
+    await modal.getByLabel('原始内容', { exact: true }).fill('x+2');
     await modal.getByLabel('转换模式', { exact: true }).selectOption('best-effort');
     await modal.getByRole('button', { name: '转换', exact: true }).click();
     await modal.locator('.fc-status').filter({ hasText: '转换完成' }).waitFor();
@@ -121,7 +144,7 @@ const fs = require('node:fs');
     assert.equal(await page.evaluate(() => JSON.stringify(app.plugins.getPlugin('formula-library').settings) === __coreQaOriginalSettings), true);
     assert.equal(await page.evaluate(() => __coreQaEditor.text), 'original note');
     assert.deepEqual(errors, []);
-    console.log(`PASS ${realDevice ? 'real Android WebView' : 'native Obsidian app://'}: Core Worker initialization, Typst→LaTeX MathJax preview, explicit formula draft opening without note writes, strict LaTeX→OMML text, UTF-8 limit/original protection, en/zh, ${widths.join('/')}px bounds. ${realDevice ? 'Actual viewport; no desktop size emulation. Clipboard and physical keyboard interactions are not covered.' : 'No real mobile acceptance.'}`);
+    console.log(`PASS ${realDevice ? 'real Android WebView' : 'native Obsidian app://'}: Core initialization, Typst→LaTeX preview, 12 linear-input routes, unsupported syntax and strict rejection, explicit draft opening without note writes, strict LaTeX→OMML, UTF-8 limit/original protection, en/zh, ${widths.join('/')}px bounds. ${realDevice ? 'Actual viewport; no desktop size emulation. Clipboard and physical keyboard interactions are not covered.' : 'No real mobile acceptance.'}`);
   } catch (error) {
     const state = await modal.evaluate((root) => ({
       status: root.querySelector('.fc-status')?.textContent,

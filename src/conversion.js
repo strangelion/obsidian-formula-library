@@ -9,6 +9,11 @@ import { CORE_ASSET_INFO } from "./core-assets.js";
 const STRINGS = {
   en: {
     coreInfo: "Core information", coreCommit: "Source commit", coreBuild: "Build date", coreProfile: "Build profile", coreHash: "WASM SHA-256",
+    linearHint: "AsciiMath and UnicodeMath support a limited linear grammar, not every dialect or Word's full equation syntax. Unsupported structures may be rejected; review the output.",
+    linearExample: "Example: (a+b)/c",
+    linearGrammar: "Only a limited linear grammar is supported; structures that cannot be represented are rejected.",
+    linearCanonical: "The output uses canonical syntax and token boundaries, not the original source spelling.",
+    linearParity: "Rich text, fonts, spacing and Word equation build-up are not preserved or guaranteed.",
     title: "Convert a formula", intro: "Convert one formula locally. The original stays unchanged until you explicitly use the result.",
     inputFormat: "Source format", outputFormat: "Output format", mode: "Conversion mode", source: "Original source", output: "Converted output",
     sourceHint: "Paste a single formula, not a complete document. XML is treated as text.", outputHint: "Review this text before copying or using it. Conversion does not guarantee identical appearance.",
@@ -37,6 +42,11 @@ const STRINGS = {
   },
   zh: {
     coreInfo: "Core 信息", coreCommit: "源码提交", coreBuild: "构建日期", coreProfile: "构建配置", coreHash: "WASM SHA-256",
+    linearHint: "AsciiMath 和 UnicodeMath 仅支持有限的线性语法，不涵盖所有方言或 Word 的完整公式语法。不支持的结构可能被拒绝，请检查转换结果。",
+    linearExample: "例如：(a+b)/c",
+    linearGrammar: "仅支持有限的线性语法，无法表示的结构会被拒绝。",
+    linearCanonical: "输出使用规范化语法和词元边界，不保留原始源码的写法。",
+    linearParity: "不保留或保证富文本、字体、间距和 Word 公式构建效果。",
     title: "转换单个公式", intro: "在本地转换一个公式。只有明确使用结果时才会填入编辑器，原始内容不会自动更改。",
     inputFormat: "来源格式", outputFormat: "输出格式", mode: "转换模式", source: "原始内容", output: "转换结果",
     sourceHint: "粘贴单个公式，不是完整文档。XML 仅作为文本处理。", outputHint: "复制或使用前请检查文本。转换不保证外观完全一致。",
@@ -64,15 +74,20 @@ const STRINGS = {
     wordHint: "“复制为 Word 公式”使用独立 MathML 文本；OMML 会额外进行尽力转换。已在 Windows Word 验证，不是通用 Office/OLE 剪贴板对象。",
   },
 };
-const SOURCE_FORMATS = ["latex", "typst", "mathml", "omml"];
-const TARGET_FORMATS = ["latex-fragment", "typst", "mathml", "omml"];
-const FORMAT_LABELS = { latex: "LaTeX", typst: "Typst", mathml: "MathML", omml: "OMML" };
+const SOURCE_FORMATS = ["latex", "typst", "mathml", "omml", "ascii-math", "unicode-math"];
+const TARGET_FORMATS = ["latex-fragment", "typst", "mathml", "omml", "ascii-math", "unicode-math"];
+const FORMAT_LABELS = { latex: "LaTeX", typst: "Typst", mathml: "MathML", omml: "OMML", "ascii-math": "AsciiMath", "unicode-math": "UnicodeMath" };
+const isLinear = (format) => format === "ascii-math" || format === "unicode-math";
 const LIMITATION_KEYS = {
   "accepted-input-may-lose-unsupported-syntax-or-style": "lossy",
   "reconstructed-latex-is-not-the-original-author-source": "reconstruction",
   "no-complete-round-trip-guarantee": "roundtrip",
   "source-validation-is-not-a-lossless-or-visual-parity-guarantee": "strictParity",
   "custom-macros-and-unsupported-environments-are-rejected": "strictMacros",
+  "finite-linear-grammar-only-unrepresentable-ast-is-rejected": "linearGrammar",
+  "source-reconstruction-may-lose-syntax-or-style": "lossy",
+  "canonical-syntax-and-token-boundaries-not-original-source": "linearCanonical",
+  "no-rich-text-font-spacing-or-word-buildup-parity": "linearParity",
 };
 let modalSequence = 0;
 
@@ -288,6 +303,8 @@ export class FormulaConversionModal extends obsidian.Modal {
     }
     const route = this._capabilities?.ok ? findConversionRoute(this._capabilities, snapshot) : null;
     this.routeHint.setText(snapshot.mode === "strict" ? this.text("strictHint") : this.text("bestEffortHint"));
+    if (isLinear(snapshot.inputFormat) || isLinear(snapshot.outputFormat)) this.routeHint.setText(this.routeHint.textContent + " " + this.text("linearHint"));
+    this.sourceInput.placeholder = isLinear(snapshot.inputFormat) ? this.text("linearExample") : "";
     if (snapshot.outputFormat === "omml") this.routeHint.setText(this.routeHint.textContent + " " + this.text("ommlHint"));
     const wordAvailable = !!obsidian.Platform?.isWin && ["omml", "mathml"].includes(snapshot.outputFormat);
     if (wordAvailable) this.routeHint.setText(this.routeHint.textContent + " " + this.text("wordHint"));

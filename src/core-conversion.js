@@ -11,7 +11,7 @@ export const CORE_INPUT_FORMATS = Object.freeze([
 ]);
 export const CORE_OUTPUT_FORMATS = Object.freeze([
   "latex-fragment", "latex", "latex_display", "latex_equation", "typst",
-  "markdown_inline", "markdown_block", "mathml", "omml", "html",
+  "markdown_inline", "markdown_block", "mathml", "omml", "html", "unicode-math", "ascii-math",
 ]);
 
 const encoder = new TextEncoder();

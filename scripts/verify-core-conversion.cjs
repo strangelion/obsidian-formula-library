@@ -63,14 +63,24 @@ self.onmessage = (event) => {
       const conversions = [];
       for (const [inputFormat, content] of [ ['latex', '\\frac{a}{b}'], ['typst', 'frac(a,b)'],
         ['mathml', '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>a</mi><mi>b</mi></mfrac></math>'],
-        ['omml', '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><m:r><m:t>x</m:t></m:r></m:oMath>'] ]) {
-        for (const outputFormat of ['latex-fragment', 'typst', 'mathml', 'omml']) {
+        ['omml', '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><m:r><m:t>x</m:t></m:r></m:oMath>'],
+        ['ascii-math', '(a+b)/c'], ['unicode-math', '(a+b)/c'] ]) {
+        for (const outputFormat of ['latex-fragment', 'typst', 'mathml', 'omml', 'ascii-math', 'unicode-math']) {
           const envelope = await service.convert({ inputFormat, content, outputFormat, mode: 'best-effort' });
           conversions.push({ inputFormat, outputFormat, envelope });
         }
       }
       let strict;
       try { await service.convert({ content: 'frac(a,b)', inputFormat: 'typst' }); } catch (error) { strict = error.code; }
+      const rejectedRoutes = [];
+      for (const request of [
+        { inputFormat: 'ascii-math', outputFormat: 'latex-fragment', mode: 'strict', content: '(a+b)/c' },
+        { inputFormat: 'latex', outputFormat: 'unicode-math', mode: 'strict', content: 'x^2' },
+        { inputFormat: 'mtef', outputFormat: 'latex-fragment', mode: 'best-effort', content: 'not a semantic converter' },
+      ]) {
+        try { await service.convert(request); rejectedRoutes.push('unexpected-success'); }
+        catch (error) { rejectedRoutes.push(error.code); }
+      }
       const strictOmml = await service.convert({ content: 'x^2', inputFormat: 'latex', outputFormat: 'omml' });
       const regressions = [];
       for (const request of [
@@ -115,7 +125,7 @@ self.onmessage = (event) => {
       const afterHardTimeout = await hanging.convert({ content: 'x+4', inputFormat: 'latex', mode: 'best-effort' });
       await hanging.dispose();
       window.coreQaBlockWorkers = false;
-      return { caps, conversions, strict, strictOmml, regressions, sourceCommit: coreQa.CORE_ASSET_INFO.sourceCommit,
+      return { caps, conversions, strict, rejectedRoutes, strictOmml, regressions, sourceCommit: coreQa.CORE_ASSET_INFO.sourceCommit,
         oversized, dtd, cancelCode, recovered, blockedCode, blockedCleaned, afterBlocked,
         hardCancelCode, hardTimeoutCode, afterHardCancel, afterHardTimeout, metrics };
     });
@@ -130,6 +140,8 @@ self.onmessage = (event) => {
       }
     }
     assert.equal(result.strict, 'UNSUPPORTED_FORMAT');
+    assert.equal(result.conversions.length, 36);
+    assert.deepEqual(result.rejectedRoutes, ['UNSUPPORTED_FORMAT', 'UNSUPPORTED_FORMAT', 'UNSUPPORTED_FORMAT']);
     assert.equal(result.strictOmml.ok, true);
     assert.equal(result.sourceCommit, require('../vendor/core/manifest.json').sourceCommit);
     for (const regression of result.regressions) assert.equal(regression.ok, true, JSON.stringify(regression));

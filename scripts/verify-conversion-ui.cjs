@@ -44,7 +44,7 @@ async function verify() {
     await page.evaluate(() => {
       const versions = { apiEnvelopeVersion: 3, coreVersion: "3.2.1" };
       const rows = [];
-      for (const input of ["latex", "typst", "mathml", "omml"]) for (const output of ["latex_display", "typst", "mathml", "omml"]) {
+      for (const input of ["latex", "typst", "mathml", "omml", "ascii-math", "unicode-math"]) for (const output of ["latex_display", "typst", "mathml", "omml", "ascii-math", "unicode-math"]) {
         for (const mode of ["strict", "best-effort"]) rows.push({ input, output, mode,
           available: mode === "best-effort" || input === "latex" && output === "omml" });
       }
@@ -272,6 +272,56 @@ async function verify() {
       '<math xmlns="http://www.w3.org/1998/Math/MathML"><svg xmlns="http://www.w3.org/2000/svg"/></math>',
     ].every(xml => { try { conversionQA.wordClipboardMathML(xml); return false; } catch { return true; } }));
     assert.equal(rejected, true, 'Word clipboard must reject malformed/DTD/foreign/link payloads');
+    await page.evaluate(() => m.close());
+    await page.evaluate(() => { window.qaWindows = true; openModal(); });
+    await page.getByText('Engine ready. Choose a route and convert explicitly.', { exact: true }).waitFor();
+    const input = page.getByLabel('Source format', { exact: true });
+    const target = page.getByLabel('Output format', { exact: true });
+    assert.equal(await input.locator('option[value="mtef"]').count(), 0);
+    for (const inputFormat of ['latex', 'typst', 'mathml', 'omml', 'ascii-math', 'unicode-math']) {
+      for (const outputFormat of ['ascii-math', 'unicode-math']) {
+        await input.selectOption(inputFormat);
+        await target.selectOption(outputFormat);
+        await source.fill('(a+b)/c');
+        assert.equal(await output.inputValue(), '', 'format changes must clear stale output');
+        assert.match(await page.locator('.fc-route-hint').innerText(), /limited linear grammar/);
+        const index = await page.evaluate(() => calls.length);
+        await convert.click();
+        await page.evaluate(({ index, content }) => respond(index, content), { index, content: '(a+b)/c' });
+        await page.getByText('Conversion finished. Review the output and diagnostics before using it.', { exact: true }).waitFor();
+        assert.equal(await use.isDisabled(), true, 'linear output is text, not a LaTeX editor draft');
+        assert.equal(await copyWord.isVisible(), false, 'linear output is not a native Office clipboard object');
+        await page.getByRole('button', { name: 'Copy output', exact: true }).click();
+        assert.equal(await page.evaluate(() => copied), '(a+b)/c');
+      }
+    }
+    for (const inputFormat of ['ascii-math', 'unicode-math']) {
+      await input.selectOption(inputFormat);
+      await target.selectOption('latex-fragment');
+      assert.equal(await source.getAttribute('placeholder'), 'Example: (a+b)/c');
+      const index = await page.evaluate(() => calls.length);
+      await convert.click();
+      await page.evaluate(index => respond(index, '\\frac{a+b}{c}'), index);
+      await page.getByText('Conversion finished. Review the output and diagnostics before using it.', { exact: true }).waitFor();
+      assert.equal(await use.isDisabled(), false, 'checked bare LaTeX output can be explicitly used');
+    }
+    await mode.selectOption('strict');
+    assert.equal(await convert.isDisabled(), true);
+    await mode.selectOption('best-effort');
+    await target.selectOption('unicode-math');
+    await page.evaluate(() => { p.settings.locale = 'zh'; m.refreshLocalization(); });
+    assert.match(await page.locator('.fc-route-hint').innerText(), /有限的线性语法/);
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+      await page.screenshot({ path: `output/playwright/conversion-linear-${width}.png` });
+    }
+    await page.evaluate(() => {
+      m._capabilities.data.forEach(row => { if (row.output === 'unicode-math') row.available = false; });
+      m.syncControls();
+    });
+    assert.equal(await page.getByLabel('输出格式', { exact: true }).locator('option[value="unicode-math"]').evaluate(el => el.disabled), true);
+    assert.equal(await page.getByRole('button', { name: '转换', exact: true }).isDisabled(), true);
     await page.evaluate(() => m.close());
     assert.deepEqual(errors, []);
     assert.deepEqual(failedRequests, []);

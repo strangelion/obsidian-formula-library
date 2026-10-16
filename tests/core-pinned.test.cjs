@@ -58,3 +58,31 @@ test('pinned WASM preserves every OMML run in a bounded formula fragment', async
     assert.equal(result.data.content, 'xy');
   }
 });
+
+test('pinned WASM imports and exports both bounded linear formats', async () => {
+  const core = await initialized;
+  for (const format of ['ascii-math', 'unicode-math']) {
+    const imported = core.convert_formula_fragment_v3('(a+b)/c', format, 'best-effort');
+    assert.equal(imported.ok, true, JSON.stringify(imported));
+    assert.equal(imported.data.content.trim(), '\\frac{a+b}{c}');
+    const exported = core.convert_formula_v3('\\frac{a+b}{c}', 'latex', format, 'best-effort');
+    assert.equal(exported.ok, true, JSON.stringify(exported));
+    assert.equal(exported.data.capability.output, format);
+    const readback = core.convert_formula_fragment_v3(exported.data.content, format, 'best-effort');
+    assert.equal(readback.ok, true, JSON.stringify(readback));
+    // AsciiMath canonical output retains an explicit grouping node and spacing.
+    assert.equal(readback.data.content.trim(), format === 'ascii-math' ? '\\frac{{a + b}}{c}' : '\\frac{a+b}{c}');
+  }
+});
+
+test('pinned WASM rejects unsupported linear syntax and keeps MTEF unavailable', async () => {
+  const core = await initialized;
+  for (const [format, content] of [['ascii-math', 'a nnn b'], ['unicode-math', 'a⁄b']]) {
+    const result = core.convert_formula_fragment_v3(content, format, 'best-effort');
+    assert.equal(result.ok, false, JSON.stringify(result));
+    assert.ok(result.error?.code);
+  }
+  const mtef = core.formula_capabilities_v3().data.filter(row => row.input === 'mtef');
+  assert.ok(mtef.length > 0);
+  assert.ok(mtef.every(row => row.available === false));
+});

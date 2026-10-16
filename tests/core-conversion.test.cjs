@@ -96,6 +96,25 @@ test("strict is the default and unsupported strict never falls back to best-effo
   await h.service.dispose();
 });
 
+test("adapter accepts linear output routes only when the Core capability enables them", async () => {
+  const caps = capabilities();
+  for (const input of ['latex', 'ascii-math', 'unicode-math']) {
+    for (const output of ['ascii-math', 'unicode-math']) caps.data.push(route(input, output));
+  }
+  const h = harness({ capabilities: caps });
+  for (const inputFormat of ['latex', 'ascii-math', 'unicode-math']) {
+    for (const outputFormat of ['ascii-math', 'unicode-math']) {
+      const converted = await h.service.convert({ content: 'x+1', inputFormat, outputFormat, mode: 'best-effort' });
+      assert.equal(converted.ok, true);
+      assert.equal(converted.data.capability.output, outputFormat);
+    }
+  }
+  await assert.rejects(h.service.convert({ content: 'x+1', inputFormat: 'latex', outputFormat: 'unicode-math' }), errorCode('UNSUPPORTED_FORMAT'));
+  await assert.rejects(h.service.convert({ content: 'bytes', inputFormat: 'mtef', mode: 'best-effort' }), errorCode('UNSUPPORTED_FORMAT'));
+  assert.equal(h.calls.length, 6, 'unavailable routes must not dispatch or silently fall back');
+  await h.service.dispose();
+});
+
 test("conversion returns the original Core envelope, not stripped document text or dropped diagnostics", async () => {
   let original;
   const h = harness({ convert: async (req) => { original = result(req); return original; } });

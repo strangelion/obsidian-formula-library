@@ -16,7 +16,7 @@ Formula Library 帮助你在笔记中创建、查找和复用数学表达式。�
 
 - **MathLive 可视化编辑器**：WYSIWYG 公式编辑，实时预览 + 虚拟键盘
 - **设置分组与工具开关**：常规、界面、工具、公式库、备份分组；可独立关闭格式转换、参数模板、矩阵粘贴、保存到个人库、函数绘图与 Mermaid 入口，保留已有内容。
-- **本地公式格式转换**：内置精简 Core Worker，处理单个 LaTeX、Typst、MathML、OMML 公式；默认尽力转换，可手动选择严格模式，两者都需检查结果并确认使用。在 Windows 上，OMML 或 MathML 结果还能以独立的 MathML 文本复制，由 Word 导入为可编辑公式。
+- **本地公式格式转换**：内置精简 Core Worker，处理单个 LaTeX、Typst、MathML、OMML、AsciiMath、UnicodeMath 公式；默认尽力转换，可手动选择严格模式，两者都需检查结果并确认使用。在 Windows 上，OMML 或 MathML 结果还能以独立的 MathML 文本复制，由 Word 导入为可编辑公式。
 - **2216 条公式**：19 个分类，新增 95 条算法、图论、信息论、机器学习、图形学、信号和数值计算公式
 - **智能搜索**：拼音首字母、LaTeX 命令别名、英文单词匹配、缩写匹配（如 `lt` → less than）、模糊匹配；精确名称与精确命令优先，显示命中总数并可继续加载
 - **公式库控制**：内置公式库总开关 + 19 个分类独立开关 + 一键全部开启/关闭；即使没有 `formulas/` 文件夹也能在设置中管理分类，关闭只影响是否使用，不删除收藏、置顶和历史
@@ -282,8 +282,8 @@ formulas/
 ### 转换单个公式
 
 1. 从命令面板运行 **Convert Formula Format**，或点击公式编辑器的 **格式转换**。
-2. 选择 **来源格式** 并粘贴一个公式。可选 LaTeX、Typst、MathML、OMML，不是完整文档或 Office 剪贴板对象。
-3. 选择 **LaTeX（裸公式）**、Typst、MathML 或 OMML 输出。可用性由内置 Core 的实际能力矩阵决定。
+2. 选择 **来源格式** 并粘贴一个公式。可选 LaTeX、Typst、MathML、OMML、AsciiMath、UnicodeMath，不是完整文档或 Office 剪贴板对象。
+3. 选择 **LaTeX（裸公式）**、Typst、MathML、OMML、AsciiMath 或 UnicodeMath 输出。可用性由内置 Core 的实际能力矩阵决定。
 4. 默认 **尽力转换**，常用路线不必每次切换模式，请留意界面上的语法/样式损失提示。需要时可手动选择 **严格**，它仅支持有限的 LaTeX → OMML 子集；选中严格后失败不会自动降级。
 5. 点击 **转换**，检查文本、诊断及 LaTeX 的 MathJax 预览。**复制结果** 复制纯文本；**打开公式编辑器** 打开独立公式草稿；**填入当前编辑器** 插入已有草稿。不会直接写入或替换笔记，最终仍需使用编辑器的插入/更新确认。
 
@@ -291,13 +291,15 @@ formulas/
 
 原始内容始终保留在窗口中。修改原文/选项会清除旧结果；取消、关闭、超时或失败不会替换原文。加载失败时可 **重试引擎**，普通 LaTeX 编辑仍可使用。引擎随插件内置，无需另行下载 Core、安装 Node、下载识别模型或连接转换服务器。输入上限为 64 KiB UTF-8，序列化结果上限为 256 KiB，排队与执行总等待上限为 30 秒。
 
-尽力转换可能丢失语法或样式。两种模式都不保证恢复作者原始源码、外观一致、完整往返，或全部 Core 语法都能被 MathLive/MathJax 渲染。LaTeX 预览失败时禁止填入编辑器，但文本仍可检查/复制。OMML 输出是 XML 文本，本身不等于 Word 原生剪贴板内容或可直接编辑的粘贴；仅 Windows 的 **复制为 Word 公式** 提供尽力而为的 MathML 文本导入：只验证过 Windows Word，不涵盖 PowerPoint、WPS、移动版 Office 或 OLE 嵌入。未开放 AsciiMath、UnicodeMath、MTEF，也不包含 OCR、PDF/DOCX/PPTX 生成、TikZ 编译或全 Vault 转换。
+**AsciiMath 和 UnicodeMath 需要 1.6.3 及以上版本。** 两者仅支持有限的线性语法，不涵盖所有方言或 Word 的完整公式语法。例如，`(a+b)/c` 可导入为分数；导出使用规范化的写法、分组和间距。即使路线可用，不支持的语法或结构仍可能被拒绝。线性输出是纯文本，不是 Word 原生剪贴板对象，也不能直接填入 LaTeX 编辑器；请先转换为 **LaTeX（裸公式）** 并检查预览。MTEF 仍不可用：上游的原始字节检查器不等于语义转换器或 OLE 导入功能。
 
-1.6.2 已在本机 Windows Obsidian 复测加载、转换、预览、Core 信息与控件布局，并验证分数、上标和矩阵可导入为 Word 可编辑公式。Android 真机检查属于此前的 1.6.1 Core 构建，覆盖小米手机（2211133C，Android 16，Obsidian 1.14.4，MathJax 4.1.3）和平板（24018RPACC，Android 16，Obsidian 1.13.8，MathJax 3.2.2），包括界面公开的 16 组尽力转换简单示例、原生控件和矩阵预览；本次新 Core 尚未在 Android 复测。这些检查不代表所有公式、设备或 iOS 均兼容。详见 [平台覆盖](docs/CORE-INTEGRATION.md) 和 [Android 验证记录](docs/ANDROID-TESTING.md)。
+尽力转换可能丢失语法或样式。两种模式都不保证恢复作者原始源码、外观一致、完整往返，或全部 Core 语法都能被 MathLive/MathJax 渲染。LaTeX 预览失败时禁止填入编辑器，但文本仍可检查/复制。OMML 输出是 XML 文本，本身不等于 Word 原生剪贴板内容或可直接编辑的粘贴；仅 Windows 的 **复制为 Word 公式** 提供尽力而为的 MathML 文本导入：只验证过 Windows Word，不涵盖 PowerPoint、WPS、移动版 Office 或 OLE 嵌入。不包含 OCR、PDF/DOCX/PPTX 生成、TikZ 编译或全 Vault 转换。
+
+1.6.3 已在本机 Windows Obsidian 复测加载、转换、预览、Core 信息与控件布局，包括 12 组线性格式来源路线及不支持语法的拒绝处理。分数、上标和矩阵导入为 Word 可编辑公式的验收完成于使用相同 Core 二进制的 1.6.2。Android 真机检查属于此前的 1.6.1 Core 构建，覆盖小米手机（2211133C，Android 16，Obsidian 1.14.4，MathJax 4.1.3）和平板（24018RPACC，Android 16，Obsidian 1.13.8，MathJax 3.2.2），包括原有的 16 组尽力转换简单示例、原生控件和矩阵预览；本次新 Core 和线性格式尚未在 Android 复测。这些检查不代表所有公式、设备或 iOS 均兼容。详见 [平台覆盖](docs/CORE-INTEGRATION.md) 和 [Android 验证记录](docs/ANDROID-TESTING.md)。
 
 ### 许可证与源码
 
-Formula Library 1.6.2 内置的 Core 版本为 3.2.1，源码固定于 `d31ae02`；提交号可区分使用相同 Core 版本号的不同构建。展开转换窗口中的 **Core 信息**，即可查看完整源码提交、构建日期、conversion-only 配置和 WASM SHA-256。信息默认折叠，小屏幕中随表单滚动。
+Formula Library 1.6.3 沿用 1.6.2 固定于 `d31ae02` 的 Core 3.2.1 二进制；提交号可区分使用相同 Core 版本号的不同构建。展开转换窗口中的 **Core 信息**，即可查看完整源码提交、构建日期、conversion-only 配置和 WASM SHA-256。信息默认折叠，小屏幕中随表单滚动。
 
 新的组合发行版采用 **AGPL-3.0-only**；1.5.0 及以前的历史 MIT 发行版不变，原 MIT 和第三方声明保留。参见 [发行声明](THIRD-PARTY-NOTICES.md)、[LICENSE](LICENSE) 和 [精确 Core 源码归档](vendor/core/source-d31ae02.tar.gz)。构建使用固定产物，不追随浮动分支，也没有自动安装/更新运行时的功能。
 
