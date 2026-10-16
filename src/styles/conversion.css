@@ -21,6 +21,13 @@
 }
 .fc-intro { flex: 0 0 auto; margin: 0; color: var(--text-muted); line-height: 1.5; }
 .fc-body { display: flex; flex-direction: column; gap: 14px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px; }
+.fc-core-info { flex: 0 0 auto; min-width: 0; border-bottom: 1px solid var(--background-modifier-border); padding-bottom: 8px; }
+.fc-core-info > summary { min-height: 40px; padding: 8px 4px; cursor: pointer; color: var(--text-muted); line-height: 1.5; overflow-wrap: anywhere; }
+.fc-core-info > summary:focus-visible { outline: 2px solid var(--interactive-accent); outline-offset: -2px; }
+.fc-core-fields { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 12px; margin: 8px 4px; font-size: var(--font-ui-small); line-height: 1.5; }
+.fc-core-fields dt { color: var(--text-muted); }
+.fc-core-fields dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.fc-core-fields code { white-space: normal; }
 .fc-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; }
 .fc-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .fc-field > span,
@@ -63,6 +70,8 @@
 .formula-conversion-modal .fc-diagnostics-section[hidden] { display: none; }
 
 @media (max-width: 768px) {
+  .fc-core-fields { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .fc-core-fields dd { margin-bottom: 8px; }
   .formula-library-modal.formula-conversion-modal { width: calc(100dvw - 16px); max-height: calc(100dvh - 16px); padding: 16px; }
   .fc-controls,
   .fc-workspace { grid-template-columns: minmax(0, 1fr); gap: 12px; }

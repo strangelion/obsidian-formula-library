@@ -4,9 +4,11 @@ import { findConversionRoute } from "./core-conversion.js";
 import { renderLatexInto } from "./parameters.js";
 import { writeClipboard } from "./custom-library.js";
 import { wordClipboardMathML } from "./office-clipboard.js";
+import { CORE_ASSET_INFO } from "./core-assets.js";
 
 const STRINGS = {
   en: {
+    coreInfo: "Core information", coreCommit: "Source commit", coreBuild: "Build date", coreProfile: "Build profile", coreHash: "WASM SHA-256",
     title: "Convert a formula", intro: "Convert one formula locally. The original stays unchanged until you explicitly use the result.",
     inputFormat: "Source format", outputFormat: "Output format", mode: "Conversion mode", source: "Original source", output: "Converted output",
     sourceHint: "Paste a single formula, not a complete document. XML is treated as text.", outputHint: "Review this text before copying or using it. Conversion does not guarantee identical appearance.",
@@ -34,6 +36,7 @@ const STRINGS = {
     wordHint: "Copy for Word uses standalone MathML text, with an additional best-effort conversion for OMML. Verified on Windows Word; not a general Office/OLE clipboard object.",
   },
   zh: {
+    coreInfo: "Core 信息", coreCommit: "源码提交", coreBuild: "构建日期", coreProfile: "构建配置", coreHash: "WASM SHA-256",
     title: "转换单个公式", intro: "在本地转换一个公式。只有明确使用结果时才会填入编辑器，原始内容不会自动更改。",
     inputFormat: "来源格式", outputFormat: "输出格式", mode: "转换模式", source: "原始内容", output: "转换结果",
     sourceHint: "粘贴单个公式，不是完整文档。XML 仅作为文本处理。", outputHint: "复制或使用前请检查文本。转换不保证外观完全一致。",
@@ -109,6 +112,16 @@ export class FormulaConversionModal extends obsidian.Modal {
 
     this.caption(this.contentEl.createEl("p", { cls: "fc-intro" }), "intro");
     const body = this.contentEl.createDiv({ cls: "fc-body" });
+    const coreInfo = body.createEl("details", { cls: "fc-core-info" });
+    this.coreSummary = coreInfo.createEl("summary");
+    const fields = coreInfo.createEl("dl", { cls: "fc-core-fields" });
+    for (const [key, value] of [
+      ["coreCommit", CORE_ASSET_INFO.sourceCommit], ["coreBuild", CORE_ASSET_INFO.builtOn],
+      ["coreProfile", CORE_ASSET_INFO.profile], ["coreHash", CORE_ASSET_INFO.files["latexsnipper_wasm_bg.wasm"]],
+    ]) {
+      this.caption(fields.createEl("dt"), key);
+      fields.createEl("dd").createEl("code", { text: value });
+    }
     const controls = body.createDiv({ cls: "fc-controls" });
     const select = (key) => {
       const field = controls.createEl("label", { cls: "fc-field" });
@@ -432,6 +445,7 @@ export class FormulaConversionModal extends obsidian.Modal {
   refreshLocalization() {
     if (this._closed) return;
     this._texts.forEach(([el, key]) => el.setText(this.text(key)));
+    this.coreSummary.setText(`${this.text("coreInfo")}: ${CORE_ASSET_INFO.coreVersion} · ${CORE_ASSET_INFO.sourceCommit.slice(0, 7)}`);
     for (const [control, key] of [[this.inputSelect, "inputFormat"], [this.outputSelect, "outputFormat"],
       [this.modeSelect, "mode"], [this.sourceInput, "source"], [this.outputInput, "output"]]) control.setAttribute("aria-label", this.text(key));
     this.modeSelect.options[0].textContent = this.text("strict");

@@ -12,16 +12,25 @@ import {
   type WorkerResponse,
 } from "./types.js";
 import { validateWorkerRequest } from "./worker-request-validation.js";
+import { MAX_COMPLETION_ENVELOPE_BYTES, type FormulaCompletionRequest, type FormulaCompletionApplyRequest, type FormulaCompletionReply, type AppliedFormulaCompletion } from "./completion.js";
+import type { ApiEnvelopeV3 } from "./types.js";
+import type { ScopedFormulaCompletionRequest, ScopedFormulaCompletionApplyRequest, ScopedFormulaCompletion } from "./completion.js";
+import type { FormulaFragmentCompletionRequest, FormulaFragmentCompletionApplyRequest, FormulaFragmentCompletion } from "./completion.js";
+import { WorkerFormulaRegistry, type RegistryWorkerCommand } from "./worker-registry.js";
+import { WorkerFormulaPreferences } from "./worker-preferences.js";
+import type { FormulaPreferenceConfiguration, FormulaPreferenceRestoreConfiguration } from "./preferences.js";
 
 interface PendingCall {
   resolve(value: unknown): void;
   reject(error: WorkerRuntimeError): void;
 }
 
+type CompletionTaskRequest = Extract<WorkerRequest, { type: "complete-formula" | "apply-formula-completion" | "complete-formula-scoped" | "apply-formula-completion-scoped" | "complete-formula-fragments" | "apply-formula-completion-fragments" }>;
+
 interface WorkerTask extends PendingCall {
   requestId: string;
   wireRequestId: string;
-  request: Extract<WorkerRequest, { type: "recognize" | "convert-formula" }>;
+  request: Extract<WorkerRequest, { type: "recognize" | "convert-formula" | "formula-registry-create" | "formula-registry-command" | "formula-preferences-create" | "formula-preferences-restore" | "formula-preferences-command" }> | CompletionTaskRequest;
   durationMillis: number;
   resultBytes: number;
   onProgress?: (event: ProgressEvent) => void;
@@ -51,6 +60,7 @@ export interface WasmWorkerClientOptions extends WorkerInitOptions {
   maxFormulaInputBytes?: number;
   maxFormulaResultBytes?: number;
   maxFormulaDurationMillis?: number;
+  maxCompletionResultBytes?: number;
 }
 
 export interface WorkerCallOptions {
@@ -80,6 +90,7 @@ export class WasmWorkerClient {
   private readonly maxFormulaInputBytes: number;
   private readonly maxFormulaResultBytes: number;
   private readonly maxFormulaDurationMillis: number;
+  private readonly maxCompletionResultBytes: number;
   private restarting?: Promise<void>;
 
   constructor(private readonly options: WasmWorkerClientOptions) {
@@ -95,6 +106,7 @@ export class WasmWorkerClient {
     this.maxFormulaInputBytes = options.maxFormulaInputBytes ?? 64 * 1024;
     this.maxFormulaResultBytes = options.maxFormulaResultBytes ?? 256 * 1024;
     this.maxFormulaDurationMillis = options.maxFormulaDurationMillis ?? 30_000;
+    this.maxCompletionResultBytes = options.maxCompletionResultBytes ?? MAX_COMPLETION_ENVELOPE_BYTES;
     positiveInteger("maxQueueLength", this.maxQueueLength);
     positiveInteger("rpcTimeoutMillis", this.rpcTimeoutMillis);
     positiveInteger("maxTaskDurationMillis", this.maxTaskDurationMillis);
@@ -107,6 +119,8 @@ export class WasmWorkerClient {
     positiveInteger("maxFormulaInputBytes", this.maxFormulaInputBytes);
     positiveInteger("maxFormulaResultBytes", this.maxFormulaResultBytes);
     positiveInteger("maxFormulaDurationMillis", this.maxFormulaDurationMillis);
+    positiveInteger("maxCompletionResultBytes", this.maxCompletionResultBytes);
+    if (this.maxCompletionResultBytes > MAX_COMPLETION_ENVELOPE_BYTES) throw new RangeError("maxCompletionResultBytes exceeds the worker limit");
     if (this.maxFormulaInputBytes > 64 * 1024) throw new RangeError("maxFormulaInputBytes must not exceed Core's 64 KiB limit");
     if (this.maxFormulaResultBytes > 256 * 1024) throw new RangeError("maxFormulaResultBytes must not exceed the worker's 256 KiB envelope limit");
     if (this.maxModelBytes > this.maxTotalModelBytes) {
@@ -199,6 +213,123 @@ export class WasmWorkerClient {
       });
       signal?.addEventListener("abort", abort, { once: true });
       if (signal?.aborted) abort();
+      void this.pump();
+    });
+  }
+
+  completeFormula(input: FormulaCompletionRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<FormulaCompletionReply>> {
+    return this.completionTask("complete-formula", input, options) as Promise<ApiEnvelopeV3<FormulaCompletionReply>>;
+  }
+
+  applyFormulaCompletion(input: FormulaCompletionApplyRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<AppliedFormulaCompletion>> {
+    return this.completionTask("apply-formula-completion", input, options) as Promise<ApiEnvelopeV3<AppliedFormulaCompletion>>;
+  }
+
+  completeFormulaScoped(input: ScopedFormulaCompletionRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<ScopedFormulaCompletion>> {
+    return this.completionTask("complete-formula-scoped", input, options) as Promise<ApiEnvelopeV3<ScopedFormulaCompletion>>;
+  }
+
+  applyFormulaCompletionScoped(input: ScopedFormulaCompletionApplyRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<AppliedFormulaCompletion>> {
+    return this.completionTask("apply-formula-completion-scoped", input, options) as Promise<ApiEnvelopeV3<AppliedFormulaCompletion>>;
+  }
+
+  completeFormulaFragments(input: FormulaFragmentCompletionRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<FormulaFragmentCompletion>> {
+    return this.completionTask("complete-formula-fragments", input, options) as Promise<ApiEnvelopeV3<FormulaFragmentCompletion>>;
+  }
+
+  applyFormulaCompletionFragments(input: FormulaFragmentCompletionApplyRequest & { requestId?: string }, options: WorkerCallOptions = {}): Promise<ApiEnvelopeV3<AppliedFormulaCompletion>> {
+    return this.completionTask("apply-formula-completion-fragments", input, options) as Promise<ApiEnvelopeV3<AppliedFormulaCompletion>>;
+  }
+
+  private completionTask(type: CompletionTaskRequest["type"], input: (FormulaCompletionRequest | FormulaCompletionApplyRequest | ScopedFormulaCompletionRequest | ScopedFormulaCompletionApplyRequest | FormulaFragmentCompletionRequest | FormulaFragmentCompletionApplyRequest) & { requestId?: string }, options: WorkerCallOptions): Promise<unknown> {
+    if (this.terminated) return Promise.reject(this.runtimeError("WORKER_TERMINATED", "Worker client is terminated"));
+    if (options.signal?.aborted) return Promise.reject(this.runtimeError("CANCELLED", "Completion was aborted"));
+    const { requestId: suppliedId, ...parameters } = input;
+    const requestId = suppliedId ?? this.nextId("completion");
+    const wireRequestId = this.nextId("completion");
+    const request = { protocolVersion: WORKER_PROTOCOL_VERSION, type, requestId: wireRequestId, input: parameters };
+    const validation = validateWorkerRequest({ ...request, requestId });
+    if (!validation.ok) return Promise.reject(this.runtimeError(validation.code, validation.message));
+    if (new TextEncoder().encode(input.source).byteLength > this.maxFormulaInputBytes) return Promise.reject(this.runtimeError("WORKER_FORMULA_INPUT_LIMIT", "Completion source exceeds the configured budget"));
+    const durationMillis = options.timeoutMillis ?? this.maxFormulaDurationMillis;
+    if (!Number.isSafeInteger(durationMillis) || durationMillis <= 0) return Promise.reject(this.runtimeError("WORKER_RPC_INVALID_TIMEOUT", "Completion duration must be a positive safe integer"));
+    if (this.hasRequest(requestId)) return Promise.reject(this.runtimeError("DUPLICATE_REQUEST_ID", "Duplicate completion request ID"));
+    if (this.queue.length >= this.maxQueueLength) return Promise.reject(this.runtimeError("WORKER_QUEUE_FULL", "Worker task queue is full"));
+    const owned = structuredClone(request) as CompletionTaskRequest;
+    return new Promise((resolve, reject) => {
+      const abort = (): void => { this.cancel(requestId); };
+      const cleanup = (): void => { options.signal?.removeEventListener("abort", abort); };
+      this.queue.push({ requestId, wireRequestId, request: owned, durationMillis, resultBytes: this.maxCompletionResultBytes,
+        generation: this.generation, resolve: (value) => { cleanup(); resolve(value); }, reject: (value) => { cleanup(); reject(value); } });
+      options.signal?.addEventListener("abort", abort, { once: true });
+      if (options.signal?.aborted) abort();
+      void this.pump();
+    });
+  }
+
+  /** Uses only an explicitly loaded app-owned factory, never a request-supplied URL. */
+  async createFormulaRegistry(configurationKey?: string, callOptions: WorkerCallOptions = {}): Promise<WorkerFormulaRegistry> {
+    const generation = this.generation;
+    const created = await this.registryTask({ protocolVersion: 1, type: "formula-registry-create",
+      requestId: this.nextId("registry"), configurationKey }, generation, callOptions);
+    if (generation !== this.generation || typeof created !== "object" || created === null ||
+        typeof (created as { registryId?: unknown }).registryId !== "string" ||
+        !/^registry:[1-9][0-9]{0,15}$/.test((created as { registryId: string }).registryId)) {
+      throw this.runtimeError("WORKER_REGISTRY_STALE", "Registry creation did not produce a current handle");
+    }
+    const registryId = (created as { registryId: string }).registryId;
+    return new WorkerFormulaRegistry((command, options) => this.registryTask({ protocolVersion: 1,
+      type: "formula-registry-command", requestId: this.nextId("registry"), registryId, command }, generation, options));
+  }
+
+  /** Opt-in memory only. The caller retains consent, fresh keys and edit/undo ownership. */
+  async createFormulaPreferences(configuration: FormulaPreferenceConfiguration, options: WorkerCallOptions = {}): Promise<WorkerFormulaPreferences> {
+    const generation = this.generation;
+    const created = await this.registryTask({ protocolVersion: 1, type: "formula-preferences-create",
+      requestId: this.nextId("preferences"), configuration }, generation, options);
+    return this.preferenceOwner(created, generation);
+  }
+
+  /** Explicit trusted-host restore, never automatic on restart or failed response. */
+  async restoreFormulaPreferences(configuration: FormulaPreferenceRestoreConfiguration, options: WorkerCallOptions = {}): Promise<WorkerFormulaPreferences> {
+    const generation = this.generation;
+    const created = await this.registryTask({ protocolVersion: 1, type: "formula-preferences-restore",
+      requestId: this.nextId("preferences"), configuration }, generation, options);
+    return this.preferenceOwner(created, generation);
+  }
+
+  private preferenceOwner(created: unknown, generation: number): WorkerFormulaPreferences {
+    if (generation !== this.generation || typeof created !== "object" || created === null ||
+        typeof (created as { ownerId?: unknown }).ownerId !== "string" ||
+        !/^preferences:[1-9][0-9]{0,15}$/.test((created as { ownerId: string }).ownerId)) {
+      if (generation === this.generation) this.restartWorker("WORKER_PREFERENCES_STALE", "Invalid preference creation result; unknown state discarded");
+      throw this.runtimeError("WORKER_PREFERENCES_STALE", "Preference creation did not produce a current handle");
+    }
+    const ownerId = (created as { ownerId: string }).ownerId;
+    return new WorkerFormulaPreferences((command, options) => this.registryTask({ protocolVersion: 1,
+      type: "formula-preferences-command", requestId: this.nextId("preferences"), ownerId, command }, generation, options));
+  }
+
+  private registryTask(request: Extract<WorkerRequest, { type: "formula-registry-create" | "formula-registry-command" | "formula-preferences-create" | "formula-preferences-restore" | "formula-preferences-command" }>,
+    generation: number, options: WorkerCallOptions): Promise<unknown> {
+    const preferences = request.type.startsWith("formula-preferences-");
+    if (this.terminated) return Promise.reject(this.runtimeError("WORKER_TERMINATED", "Worker client is terminated"));
+    if (generation !== this.generation) return Promise.reject(this.runtimeError(preferences ? "WORKER_PREFERENCES_STALE" : "WORKER_REGISTRY_STALE", "Owned state was invalidated by a worker restart"));
+    if (options.signal?.aborted) return Promise.reject(this.runtimeError("CANCELLED", "Registry request was aborted"));
+    const validation = validateWorkerRequest(request);
+    if (!validation.ok) return Promise.reject(this.runtimeError(validation.code, validation.message));
+    if (this.queue.length >= this.maxQueueLength) return Promise.reject(this.runtimeError("WORKER_QUEUE_FULL", "Worker task queue is full"));
+    const durationMillis = options.timeoutMillis ?? this.maxFormulaDurationMillis;
+    if (!Number.isSafeInteger(durationMillis) || durationMillis <= 0) return Promise.reject(this.runtimeError("WORKER_RPC_INVALID_TIMEOUT", "Invalid registry duration"));
+    const owned = structuredClone(request);
+    return new Promise((resolve, reject) => {
+      const abort = (): void => { this.cancel(owned.requestId); };
+      const cleanup = (): void => { options.signal?.removeEventListener("abort", abort); };
+      this.queue.push({ requestId: owned.requestId, wireRequestId: owned.requestId, request: owned,
+        generation, durationMillis, resultBytes: preferences ? (request.type === "formula-preferences-create" || request.type === "formula-preferences-restore" ? 4096 : this.maxCompletionResultBytes) : 2 * 1024 * 1024 + 64 * 1024,
+        resolve: (value) => { cleanup(); resolve(value); }, reject: (error) => { cleanup(); reject(error); } });
+      options.signal?.addEventListener("abort", abort, { once: true });
+      if (options.signal?.aborted) abort();
       void this.pump();
     });
   }
@@ -328,7 +459,14 @@ export class WasmWorkerClient {
     this.active = undefined;
     if (task.timeout) clearTimeout(task.timeout);
     if (response.type === "result" && serializedBytes(response.data) > task.resultBytes) {
-      task.reject(this.runtimeError("WORKER_RESULT_LIMIT", "Worker result exceeds the configured byte limit"));
+      const preferences = task.request.type.startsWith("formula-preferences-");
+      task.reject(this.runtimeError("WORKER_RESULT_LIMIT", "Worker result exceeds the configured byte limit", { workerRestarted: preferences }));
+      if (preferences) {
+        // A lost creation/capture/receipt response must not leave unknown state
+        // reusable by a later command. Never replay the interrupted feedback.
+        this.restartWorker("WORKER_PREFERENCES_STALE", "Preference result was lost; owned state discarded");
+        return;
+      }
     } else {
       response.type === "result" ? task.resolve(response.data) : task.reject(new WorkerRuntimeError(response.error));
     }
@@ -400,6 +538,15 @@ export class WasmWorkerClient {
     this.active = undefined;
     if (active?.timeout) clearTimeout(active.timeout);
     this.generation += 1;
+    // Registry instances and queued commands cannot be recreated/replayed after
+    // termination. Existing pure legacy tasks retain their recovery behavior.
+    for (let index = this.queue.length - 1; index >= 0; index -= 1) {
+      if (this.queue[index]!.request.type.startsWith("formula-preferences-")) {
+        this.queue.splice(index, 1)[0]!.reject(this.runtimeError("WORKER_PREFERENCES_STALE", "Worker restart invalidated preference state", { workerRestarted: true }));
+      } else if (this.queue[index]!.request.type.startsWith("formula-registry-")) {
+        this.queue.splice(index, 1)[0]!.reject(this.runtimeError("WORKER_REGISTRY_STALE", "Worker restart invalidated the registry", { workerRestarted: true }));
+      }
+    }
     this.worker.terminate();
     this.rejectAllCalls(code, message);
     active?.reject(activeError ?? this.runtimeError(code, message, { workerRestarted: true }));

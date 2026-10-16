@@ -17,6 +17,9 @@ export interface WorkerRequestValidationOptions {
   assetBaseUrl?: string;
 }
 
+import { completionInputError, scopedCompletionInputError, fragmentCompletionInputError } from "./completion.js";
+import { preferenceConfigurationError, preferenceRestoreConfigurationError, preferenceCommandError, preferenceCommandBudget, preferenceJson, type PreferenceWorkerCommand } from "./preferences.js";
+
 const MAX_REQUEST_ID_LENGTH = 256;
 const MAX_NAME_LENGTH = 256;
 const MAX_URL_LENGTH = 8_192;
@@ -159,13 +162,73 @@ function validateFormula(value: Record<string, unknown>): WorkerRequestValidatio
   if (typeof input.inputFormat !== "string" || !["latex", "typst", "mathml", "omml", "markdown", "unicode-math", "ascii-math", "mtef"].includes(input.inputFormat)) {
     return invalid(value, "Unknown formula input format");
   }
-  if (typeof input.outputFormat !== "string" || !["latex", "latex_display", "latex_equation", "typst", "markdown_inline", "markdown_block", "mathml", "omml", "html", "latex-fragment"].includes(input.outputFormat)) {
+  if (typeof input.outputFormat !== "string" || !["latex", "latex_display", "latex_equation", "typst", "markdown_inline", "markdown_block", "mathml", "omml", "html", "latex-fragment", "unicode-math", "ascii-math"].includes(input.outputFormat)) {
     return invalid(value, "Unknown formula output format");
   }
   if (input.mode !== undefined && input.mode !== "strict" && input.mode !== "best-effort") {
     return invalid(value, "Formula conversion mode must be strict or best-effort");
   }
   return { ok: true, request: value as unknown as WorkerRequest };
+}
+
+function closed(value: Record<string, unknown>, keys: string[]): boolean {
+  return Object.keys(value).every((key) => keys.includes(key));
+}
+
+function validateRegistry(value: Record<string, unknown>): WorkerRequestValidationResult {
+  if (value.type === "formula-registry-create") {
+    if (!closed(value, ["type", "protocolVersion", "requestId", "configurationKey"]) ||
+        !isOptionalString(value.configurationKey, 96) || (typeof value.configurationKey === "string" && !/^[a-z][a-z0-9._:-]*$/.test(value.configurationKey))) {
+      return invalid(value, "Invalid closed registry creation request");
+    }
+    return { ok: true, request: value as unknown as WorkerRequest };
+  }
+  if (!closed(value, ["type", "protocolVersion", "requestId", "registryId", "command"]) ||
+      !isNonEmptyString(value.registryId, 96) || !isRecord(value.command)) return invalid(value, "Invalid registry command");
+  const command = value.command;
+  if (command.kind === "capabilities" || command.kind === "close") {
+    if (!closed(command, ["kind"])) return invalid(value, "Unknown registry command fields");
+  } else if (command.kind === "set-enabled") {
+    if (!closed(command, ["kind", "backend", "enabled"]) || !isNonEmptyString(command.backend, 96) || typeof command.enabled !== "boolean") {
+      return invalid(value, "Invalid backend enablement");
+    }
+  } else if (command.kind === "convert") {
+    const request = command.request;
+    const policy = command.policy;
+    if (!closed(command, ["kind", "request", "policy"]) || !isRecord(request) || !isRecord(policy) ||
+        !closed(request, ["schemaVersion", "input", "output", "mode", "backend", "content", "contextSha256"]) ||
+        !closed(policy, ["schemaVersion", "backends"]) || request.schemaVersion !== 1 || policy.schemaVersion !== 1 ||
+        !isNonEmptyString(request.input, 96) || !isNonEmptyString(request.output, 96) ||
+        (request.mode !== "strict" && request.mode !== "best-effort") ||
+        (request.backend !== null && !isNonEmptyString(request.backend, 96)) ||
+        typeof request.content !== "string" || request.content.length > 65536 ||
+        new TextEncoder().encode(request.content).byteLength > 65536 || request.content.trim() === "" ||
+        typeof request.contextSha256 !== "string" || !/^[a-f0-9]{64}$/.test(request.contextSha256) ||
+        !Array.isArray(policy.backends) || policy.backends.length > 3 || !policy.backends.every((id) => isNonEmptyString(id, 96))) {
+      return invalid(value, "Invalid closed registered formula request or policy");
+    }
+  } else return invalid(value, "Unknown registry command kind");
+  return { ok: true, request: value as unknown as WorkerRequest };
+}
+
+function validatePreferences(value: Record<string, unknown>): WorkerRequestValidationResult {
+  try {
+    if (value.type === "formula-preferences-create" || value.type === "formula-preferences-restore") {
+      const restore = value.type === "formula-preferences-restore";
+      if (!closed(value, ["protocolVersion", "type", "requestId", "configuration"]) ||
+          (restore ? preferenceRestoreConfigurationError : preferenceConfigurationError)(value.configuration)) {
+        return invalid(value, "Invalid preference creation request");
+      }
+      if (restore) preferenceJson(value, 1024 * 1024);
+      else preferenceJson(value.configuration);
+    } else {
+      if (!closed(value, ["protocolVersion", "type", "requestId", "ownerId", "command"]) || !isNonEmptyString(value.ownerId, 96) || preferenceCommandError(value.command)) {
+        return invalid(value, "Invalid preference command request");
+      }
+      preferenceJson(value.command, preferenceCommandBudget(value.command as PreferenceWorkerCommand));
+    }
+    return { ok: true, request: value as unknown as WorkerRequest };
+  } catch { return invalid(value, "Preference transfer budget or JSON encoding is invalid"); }
 }
 
 export function validateWorkerRequest(
@@ -195,6 +258,26 @@ export function validateWorkerRequest(
       return validateRecognize(value);
     case "convert-formula":
       return validateFormula(value);
+    case "complete-formula":
+    case "apply-formula-completion":
+    case "complete-formula-scoped":
+    case "apply-formula-completion-scoped":
+    case "complete-formula-fragments":
+    case "apply-formula-completion-fragments": {
+      if (!closed(value, ["type", "protocolVersion", "requestId", "input"])) return invalid(value, "Unknown completion message fields");
+      const scoped = value.type === "complete-formula-scoped" || value.type === "apply-formula-completion-scoped";
+      const fragments = value.type === "complete-formula-fragments" || value.type === "apply-formula-completion-fragments";
+      const cause = (fragments ? fragmentCompletionInputError : scoped ? scopedCompletionInputError : completionInputError)(value.input,
+        value.type === "apply-formula-completion" || value.type === "apply-formula-completion-scoped" || value.type === "apply-formula-completion-fragments");
+      return cause ? invalid(value, cause) : { ok: true, request: value as unknown as WorkerRequest };
+    }
+    case "formula-preferences-create":
+    case "formula-preferences-restore":
+    case "formula-preferences-command":
+      return validatePreferences(value);
+    case "formula-registry-create":
+    case "formula-registry-command":
+      return validateRegistry(value);
     case "cooperative-cancel":
     case "clear-models":
       return { ok: true, request: value as unknown as WorkerRequest };

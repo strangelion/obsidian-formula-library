@@ -127,6 +127,28 @@ export interface ProgressEvent {
 }
 
 export type WorkerRequest =
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "formula-preferences-create"; requestId: string; configuration: import("./preferences.js").FormulaPreferenceConfiguration }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "formula-preferences-restore"; requestId: string; configuration: import("./preferences.js").FormulaPreferenceRestoreConfiguration }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "formula-preferences-command"; requestId: string; ownerId: string; command: import("./preferences.js").PreferenceWorkerCommand }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "complete-formula-fragments"; requestId: string; input: import("./completion.js").FormulaFragmentCompletionRequest }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "apply-formula-completion-fragments"; requestId: string; input: import("./completion.js").FormulaFragmentCompletionApplyRequest }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "complete-formula-scoped"; requestId: string; input: import("./completion.js").ScopedFormulaCompletionRequest }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "apply-formula-completion-scoped"; requestId: string; input: import("./completion.js").ScopedFormulaCompletionApplyRequest }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "complete-formula"; requestId: string; input: import("./completion.js").FormulaCompletionRequest }
+  | { protocolVersion: typeof WORKER_PROTOCOL_VERSION; type: "apply-formula-completion"; requestId: string; input: import("./completion.js").FormulaCompletionApplyRequest }
+  | {
+      protocolVersion: typeof WORKER_PROTOCOL_VERSION;
+      type: "formula-registry-create";
+      requestId: string;
+      configurationKey?: string;
+    }
+  | {
+      protocolVersion: typeof WORKER_PROTOCOL_VERSION;
+      type: "formula-registry-command";
+      requestId: string;
+      registryId: string;
+      command: import("./registry.js").RegistryWorkerCommand;
+    }
   | {
       protocolVersion: typeof WORKER_PROTOCOL_VERSION;
       type: "convert-formula";

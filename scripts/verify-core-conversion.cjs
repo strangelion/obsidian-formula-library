@@ -72,6 +72,13 @@ self.onmessage = (event) => {
       let strict;
       try { await service.convert({ content: 'frac(a,b)', inputFormat: 'typst' }); } catch (error) { strict = error.code; }
       const strictOmml = await service.convert({ content: 'x^2', inputFormat: 'latex', outputFormat: 'omml' });
+      const regressions = [];
+      for (const request of [
+        { content: 'frac(a+b,c)+z', inputFormat: 'typst', outputFormat: 'latex-fragment' },
+        { content: '\\min\\limits_{i}^{n}', inputFormat: 'latex', outputFormat: 'mathml' },
+        { content: '\\left(a\\middle|b\\right)', inputFormat: 'latex', outputFormat: 'mathml' },
+        { content: '<r><t>x</t></r><r><t>y</t></r>', inputFormat: 'omml', outputFormat: 'latex-fragment' },
+      ]) regressions.push(await service.convert({ ...request, mode: 'best-effort' }));
       let oversized;
       try { await service.convert({ content: '汉'.repeat(24000), inputFormat: 'latex', mode: 'best-effort' }); } catch (error) { oversized = error.code; }
       const dtd = await service.convert({ content: '<!DOCTYPE math [<!ENTITY x SYSTEM "file:///private">]><math>&x;</math>', inputFormat: 'mathml', mode: 'best-effort' });
@@ -108,7 +115,8 @@ self.onmessage = (event) => {
       const afterHardTimeout = await hanging.convert({ content: 'x+4', inputFormat: 'latex', mode: 'best-effort' });
       await hanging.dispose();
       window.coreQaBlockWorkers = false;
-      return { caps, conversions, strict, strictOmml, oversized, dtd, cancelCode, recovered, blockedCode, blockedCleaned, afterBlocked,
+      return { caps, conversions, strict, strictOmml, regressions, sourceCommit: coreQa.CORE_ASSET_INFO.sourceCommit,
+        oversized, dtd, cancelCode, recovered, blockedCode, blockedCleaned, afterBlocked,
         hardCancelCode, hardTimeoutCode, afterHardCancel, afterHardTimeout, metrics };
     });
     assert.equal(result.caps.ok, true);
@@ -123,6 +131,13 @@ self.onmessage = (event) => {
     }
     assert.equal(result.strict, 'UNSUPPORTED_FORMAT');
     assert.equal(result.strictOmml.ok, true);
+    assert.equal(result.sourceCommit, require('../vendor/core/manifest.json').sourceCommit);
+    for (const regression of result.regressions) assert.equal(regression.ok, true, JSON.stringify(regression));
+    assert.equal(result.regressions[0].data.content.trim(), '\\frac{a+b}{c}+z');
+    assert.match(result.regressions[1].data.content, /<munderover>/);
+    assert.match(result.regressions[2].data.content, /separator="true"/);
+    assert.ok(!result.regressions[2].data.content.includes('\\middle'));
+    assert.equal(result.regressions[3].data.content, 'xy');
     assert.equal(result.oversized, 'INPUT_TOO_LARGE');
     assert.equal(result.dtd.ok, false);
     assert.equal(result.cancelCode, 'CANCELLED');
@@ -144,7 +159,8 @@ self.onmessage = (event) => {
     assert.deepEqual(failed, []);
     assert.deepEqual(remote, []);
     console.log(JSON.stringify({ status: 'passed', directions: result.conversions.map((entry) => `${entry.inputFormat}→${entry.outputFormat}`),
-      capabilityRows: result.caps.data.length, metrics: result.metrics, remoteRequests: remote.length, blockedHostRequests }));
+      capabilityRows: result.caps.data.length, sourceCommit: result.sourceCommit,
+      regressionCases: result.regressions.length, metrics: result.metrics, remoteRequests: remote.length, blockedHostRequests }));
   } finally {
     await browser?.close();
     await new Promise((resolve) => server.close(resolve));

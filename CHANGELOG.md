@@ -2,6 +2,19 @@
 
 All notable changes to Formula Library will be documented in this file.
 
+## [1.6.2] - 2026-10-16
+
+### Added
+- Expandable Core information in the conversion dialog: version, full source commit, build date, conversion profile and WASM SHA-256. The information stays inside the scrollable body and is collapsed by default on all screen sizes.
+
+### Fixed
+- Updated the pinned conversion-only Core 3.2.1 source from `eeca342` to `d31ae02`. Preserves Typst trailing operands/nested calls, explicit min/max limit placement, middle delimiters, OMML fragment tails, modern MathML fences and structured formula readback.
+- Synchronized the generated WASM/glue and official Worker/client dependencies, exact source archive, dependency licenses and integrity hashes. No OCR runtime, additional conversion-format UI, completion or preference-storage integration is enabled.
+- Added regressions against both the exact vendored binary and real browser Workers. Source/output review, explicit modes, cancellation, deadlines and manual insertion remain unchanged.
+
+### Verification
+- Passed 67 Node tests, isolated responsive UI checks and real Chrome Worker conversion/lifecycle regressions. Retested native Windows Obsidian conversion, preview, source protection and expanded Core information at 1280/390 px; Word 16.0 imported fraction, superscript and matrix samples as editable equations. Android acceptance remains historical 1.6.1 evidence; this new Core binary has not been retested on mobile.
+
 ## [1.6.1] - 2026-10-10
 
 ### Added

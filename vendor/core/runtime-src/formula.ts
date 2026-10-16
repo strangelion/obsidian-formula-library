@@ -5,7 +5,8 @@ export type FormulaInputFormat =
   | "unicode-math" | "ascii-math" | "mtef";
 export type FormulaOutputFormat =
   | "latex" | "latex_display" | "latex_equation" | "typst"
-  | "markdown_inline" | "markdown_block" | "mathml" | "omml" | "html";
+  | "markdown_inline" | "markdown_block" | "mathml" | "omml" | "html"
+  | "unicode-math" | "ascii-math";
 export type FormulaConversionMode = "strict" | "best-effort";
 
 export interface FormulaConversionCapability {

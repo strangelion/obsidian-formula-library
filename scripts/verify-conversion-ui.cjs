@@ -1,4 +1,4 @@
-// In-memory UI acceptance: no Core assets, vault files or system clipboard are used.
+// In-memory UI acceptance: bundled metadata only; no Core execution, vault files or system clipboard.
 const { chromium } = require(process.env.PLAYWRIGHT_PACKAGE_PATH || "playwright");
 const { build } = require("esbuild");
 const fs = require("node:fs");
@@ -76,6 +76,20 @@ async function verify() {
     const output = page.getByLabel("Converted output", { exact: true });
     const use = page.getByRole("button", { name: "Open in formula editor", exact: true });
     await page.getByText("Engine ready. Choose a route and convert explicitly.", { exact: true }).waitFor();
+    const coreInfo = require('../vendor/core/manifest.json');
+    const details = page.locator('.fc-core-info');
+    assert.equal(await details.evaluate(el => el.open), false);
+    assert.match(await details.locator('summary').innerText(), new RegExp(`${coreInfo.coreVersion.replaceAll('.', '\\.')}.*${coreInfo.sourceCommit.slice(0, 7)}`));
+    await details.locator('summary').click();
+    for (const value of [coreInfo.sourceCommit, coreInfo.builtOn, coreInfo.profile, coreInfo.files['latexsnipper_wasm_bg.wasm']]) {
+      assert.equal(await details.getByText(value, { exact: true }).isVisible(), true);
+    }
+    for (const width of [1280, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await details.evaluate(el => el.scrollWidth > el.clientWidth + 1), false, `Core information overflow at ${width}px`);
+    }
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await details.locator('summary').click();
     assert.equal(await mode.inputValue(), "best-effort");
     assert.equal(await convert.isDisabled(), false);
     await mode.selectOption("strict");
@@ -174,6 +188,7 @@ async function verify() {
     await page.getByRole("button", { name: "Retry engine", exact: true }).click();
     await page.getByText("Engine ready. Choose a route and convert explicitly.", { exact: true }).waitFor();
     await page.evaluate(() => { p.settings.locale = "zh"; m.refreshLocalization(); });
+    assert.match(await page.locator('.fc-core-info summary').innerText(), /Core 信息/);
     await page.getByText("转换单个公式", { exact: true }).waitFor();
     assert.equal(await page.getByLabel("转换模式", { exact: true }).inputValue(), "best-effort");
     await page.getByLabel("转换模式", { exact: true }).selectOption("best-effort");

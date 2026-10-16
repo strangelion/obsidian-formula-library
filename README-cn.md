@@ -293,17 +293,19 @@ formulas/
 
 尽力转换可能丢失语法或样式。两种模式都不保证恢复作者原始源码、外观一致、完整往返，或全部 Core 语法都能被 MathLive/MathJax 渲染。LaTeX 预览失败时禁止填入编辑器，但文本仍可检查/复制。OMML 输出是 XML 文本，本身不等于 Word 原生剪贴板内容或可直接编辑的粘贴；仅 Windows 的 **复制为 Word 公式** 提供尽力而为的 MathML 文本导入：只验证过 Windows Word，不涵盖 PowerPoint、WPS、移动版 Office 或 OLE 嵌入。未开放 AsciiMath、UnicodeMath、MTEF，也不包含 OCR、PDF/DOCX/PPTX 生成、TikZ 编译或全 Vault 转换。
 
-已在本机 Windows Obsidian 验证加载、转换、预览与控件布局。Android 真机检查覆盖小米手机（2211133C，Android 16，Obsidian 1.14.4，MathJax 4.1.3）和平板（24018RPACC，Android 16，Obsidian 1.13.8，MathJax 3.2.2），包括界面公开的 16 组尽力转换简单示例、原生控件和矩阵预览。这些检查不代表所有公式、设备或 iOS 均兼容。详见 [平台覆盖](docs/CORE-INTEGRATION.md) 和 [Android 验证记录](docs/ANDROID-TESTING.md)。
+1.6.2 已在本机 Windows Obsidian 复测加载、转换、预览、Core 信息与控件布局，并验证分数、上标和矩阵可导入为 Word 可编辑公式。Android 真机检查属于此前的 1.6.1 Core 构建，覆盖小米手机（2211133C，Android 16，Obsidian 1.14.4，MathJax 4.1.3）和平板（24018RPACC，Android 16，Obsidian 1.13.8，MathJax 3.2.2），包括界面公开的 16 组尽力转换简单示例、原生控件和矩阵预览；本次新 Core 尚未在 Android 复测。这些检查不代表所有公式、设备或 iOS 均兼容。详见 [平台覆盖](docs/CORE-INTEGRATION.md) 和 [Android 验证记录](docs/ANDROID-TESTING.md)。
 
 ### 许可证与源码
 
-新的组合发行版采用 **AGPL-3.0-only**；1.5.0 及以前的历史 MIT 发行版不变，原 MIT 和第三方声明保留。参见 [发行声明](THIRD-PARTY-NOTICES.md)、[LICENSE](LICENSE) 和 [精确 Core 源码归档](vendor/core/source-eeca342.tar.gz)。构建使用固定产物，不追随浮动分支，也没有自动安装/更新运行时的功能。
+Formula Library 1.6.2 内置的 Core 版本为 3.2.1，源码固定于 `d31ae02`；提交号可区分使用相同 Core 版本号的不同构建。展开转换窗口中的 **Core 信息**，即可查看完整源码提交、构建日期、conversion-only 配置和 WASM SHA-256。信息默认折叠，小屏幕中随表单滚动。
+
+新的组合发行版采用 **AGPL-3.0-only**；1.5.0 及以前的历史 MIT 发行版不变，原 MIT 和第三方声明保留。参见 [发行声明](THIRD-PARTY-NOTICES.md)、[LICENSE](LICENSE) 和 [精确 Core 源码归档](vendor/core/source-d31ae02.tar.gz)。构建使用固定产物，不追随浮动分支，也没有自动安装/更新运行时的功能。
 
 ## 问题反馈
 
 编辑器、布局或插入缺陷可在 [GitHub 议题](https://github.com/strangelion/obsidian-formula-library/issues) 中反馈，附上插件/Obsidian 版本、操作系统、主题、脱敏后的最小样例及预期/实际行为。分享前请移除私人公式、路径和笔记内容；插件没有自动诊断上传功能。
 
-转换缺陷还应附插件版本、内置 Core 版本（当前为 3.2.1、`eeca342`）、来源/目标格式、strict/best-effort 模式及界面错误码/诊断。核对结果前保留原文，只分享脱敏的单公式最小样例。选择、预览、Worker 加载与写入问题在本项目处理；确认属于解析/转换逻辑的缺陷，可附回归样例转交 Core。成功 envelope 不等于渲染保真；当前没有通用第三方提供者接口或自动诊断上传。
+转换缺陷还应附转换窗口中展示的 **Core 信息**、来源/目标格式、strict/best-effort 模式及界面错误码/诊断。核对结果前保留原文，只分享脱敏的单公式最小样例。选择、预览、Worker 加载与写入问题在本项目处理；确认属于解析/转换逻辑的缺陷，可附回归样例转交 Core。成功 envelope 不等于渲染保真；当前没有通用第三方提供者接口或自动诊断上传。
 
 ## 开发
 
@@ -331,7 +333,7 @@ Core 在本地独立 Worker 中处理你提供的文本，不扫描 Vault、不�
 ## 安全披露
 
 - **许可证与对应源码**：组合发行版采用具有 copyleft 要求的 AGPL-3.0-only。项目保留 [许可证与源码说明](#许可证与源码)、原 MIT 声明及第三方声明；已发布版本的源码下载包含适配层、固定 Core 源码归档和构建说明。
-- **内置 WASM 与 Base64**：Core 3.2.1 固定于源码版本 `eeca3421e28afde07f3d5d6fd486a4220e93ebe8`。仅转换功能的二进制以 Base64 内嵌在 `main.js` 中，以保持 Obsidian 三文件安装方式。首次使用转换时在本地解码，并校验 SHA-256 `9c6ce4143bee2558ffa254777bdebb081f555fd629af6165c9bffd1b155352fe`。Base64 是打包方式，不是加密，也不能代替源码审查。详见 [资产清单](vendor/core/manifest.json) 与 [重建说明](docs/CORE-INTEGRATION.md#reproduce-or-upgrade-deliberately)；不会远程下载 WASM，也不接受用户提供的模块地址。
+- **内置 WASM 与 Base64**：Core 3.2.1 固定于源码版本 `d31ae028c44ad39be44ecb73abe3f2e15b339b6a`。仅转换功能的二进制以 Base64 内嵌在 `main.js` 中，以保持 Obsidian 三文件安装方式。首次使用转换时在本地解码，并校验 SHA-256 `d6ec2397f0c5ec762f24d109e660527e1375c97ccbd72411dd08eee690429c1a`。Base64 是打包方式，不是加密，也不能代替源码审查。详见 [资产清单](vendor/core/manifest.json) 与 [重建说明](docs/CORE-INTEGRATION.md#reproduce-or-upgrade-deliberately)；不会远程下载 WASM，也不接受用户提供的模块地址。
 - **内存与执行边界**：WASM 导出自身的线性内存，供生成的 JavaScript 绑定交换公式文本和结果，不意味着可以读取设备或 Vault 的任意内存。转换在独立 Worker 中运行，具有字节限制、取消和超时控制；Worker 隔离不是运行不可信插件或脚本的安全沙箱。XML 结果保持为纯文本，不作为 HTML 执行。
 - **网络与二进制内的网址**：Core 加载器中的 `fetch()` 读取本地创建的 `blob:` 地址，不连接转换服务器。已测试的 Core 转换流程没有外部请求。二进制中的非 CDN 地址包括 MathML/OMML XML 命名空间标识，含有这些字符串不意味着发起 HTTP 请求。Core 的 HTML 导出模板还包含 MathJax CDN 引用，但插件未开放或执行该输出。MathLive JavaScript 与字体 CSS 资产随插件提供，渲染时也可能复用宿主已有的 MathLive。插件未配置远程转换、遥测或诊断上传服务；Core 专项网络测试不覆盖宿主、渲染器或其他插件的资源行为。
 - **剪贴板与存储内容**：复制/粘贴功能可能在用户操作时访问系统剪贴板，包括从 Obsidian 外部复制的内容；**复制为 Word 公式** 仅在点击时替换剪贴板并写入独立 MathML 文本。没有后台剪贴板监控。个人公式库、设置、已保存草稿及备份可能含有私人内容，详见 [数据与隐私](#数据与隐私)。请勿在公开反馈中上传原始备份或私人公式。

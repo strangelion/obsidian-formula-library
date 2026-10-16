@@ -1,20 +1,22 @@
 # Core integration reference
 
-Single-formula conversion in Formula Library 1.6.0 uses the conversion-only
-LaTeXSnipper Core 3.2.1 package. Verification date: 2026-10-10.
+Formula Library 1.6.2 uses conversion-only LaTeXSnipper Core 3.2.1
+at `d31ae02`, replacing the `eeca342` pin in Formula Library 1.6.1.
+Current binary/Worker verification date: 2026-10-16. The upstream version string
+is unchanged; the source commit and hashes identify this upgrade.
 
 ## Fixed source and distribution
 
-- Core 3.2.1 at `eeca3421e28afde07f3d5d6fd486a4220e93ebe8`.
-- Conversion-only web profile, Rust 1.96.0, wasm-pack 0.13.1 and its matched
+- Core 3.2.1 at `d31ae028c44ad39be44ecb73abe3f2e15b339b6a`.
+- Conversion-only web profile, Rust 1.99.1, wasm-pack 0.13.1 and its matched
   wasm-bindgen 0.2.126. No OCR models or recognition runtime.
-- WASM: 1,752,764 bytes; SHA-256
-  `9c6ce4143bee2558ffa254777bdebb081f555fd629af6165c9bffd1b155352fe`.
-- Glue: 11,238 bytes; SHA-256
-  `96993517ca1cfd0d697b9af213b4914470e8a3e3e01856d669648951d7d0e610`.
+- WASM: 2,584,487 bytes; SHA-256
+  `d6ec2397f0c5ec762f24d109e660527e1375c97ccbd72411dd08eee690429c1a`.
+- Glue: 24,544 bytes; SHA-256
+  `f3b406954deec72f1615663fce4a5e2f9bcaa5f630f6432db968231c021c1b1e`.
 - [Asset manifest](../vendor/core/manifest.json) fixes all vendored hashes.
-  [Exact source archive](../vendor/core/source-eeca342.tar.gz) contains preferred
-  Rust/TS source, Cargo/npm locks and build scripts. Five readable TS files
+  [Exact source archive](../vendor/core/source-d31ae02.tar.gz) contains preferred
+  Rust/TS source, Cargo/npm locks and build scripts. Ten readable TS files
   preserve the unmodified official client/Worker and protocol helpers.
 - Combined distribution: AGPL-3.0-only, retaining original MIT and dependency
   notices. See [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md).
@@ -23,9 +25,14 @@ LaTeXSnipper Core 3.2.1 package. Verification date: 2026-10-10.
 bundles the official Worker, and writes ignored `src/generated/core-payload.js`.
 The build embeds Worker/glue/WASM and license texts into `main.js`; only
 `obsidian` is external. Installation still needs just `main.js`, `manifest.json`
-and `styles.css`. The 6.34 MB source archive is not embedded in the runtime.
-Generated main.js is about 3.73 MiB including base64 WASM, existing MathLive/data
+and `styles.css`. The 6.87 MB source archive is not embedded in the runtime.
+Generated main.js is about 4.83 MiB including base64 WASM, existing MathLive/data
 and license texts; the raw WASM size is not the installed JavaScript size.
+The normal dependency inventory has 55 entries. The current upstream slim build
+also contains additive completion, registry and preference exports; their official
+JS dependencies are retained unmodified, but this adapter exposes only conversion.
+No completion/preference UI, persistence, host consent or third-party backend is
+enabled by this upgrade. New formats remain hidden in the existing four-format UI.
 
 ## Modules, protocol and lifecycle
 
@@ -57,9 +64,10 @@ main-thread conversion fallback, remote service or runtime downloader.
 
 Inputs: one LaTeX, Typst, MathML or OMML formula. Outputs: checked bare LaTeX,
 Typst, MathML or OMML text. Capability `available` and `mode`, not enum
-membership, control availability. The pinned registry has 144 rows but only
-46 available routes overall; the narrower UI exposes 16 best-effort combinations
-and one strict route, not 144 supported conversions.
+membership, control availability. The pinned registry has 176 rows but only
+78 available routes overall; the narrower UI still exposes 16 best-effort combinations
+and one strict route, not 176 supported conversions. UnicodeMath/AsciiMath routes
+in the newer Core are not enabled in this plugin's UI.
 
 The UI defaults to best-effort and always sends the displayed mode explicitly.
 Strict is user-selectable, supports only the accepted LaTeX→OMML subset and
@@ -79,13 +87,21 @@ Office/PDF document generation is included.
 
 ## Verification and known limitations
 
+The Node/Chrome, Windows Obsidian conversion and Word checks below were rerun
+with the `d31ae02` binary on 2026-10-16. Android checks remain historical
+1.6.1 / `eeca342` evidence, not acceptance of the new Core on mobile.
+Expand **Core information** in the conversion dialog for the bundled version,
+full source commit, build date, profile and WASM SHA-256. These are bundled
+build metadata, not a claim that initialization or a conversion has succeeded;
+the task status and diagnostics report runtime outcomes separately.
+
 | Environment | Evidence / boundary |
 | --- | --- |
-| Node | 63 regressions, including 19 service lifecycle/validation checks, plugin unload protection and tool preferences |
-| Real Chrome Worker | Simple samples across all 16 exposed best-effort combinations, strict rejection/OMML, DTD rejection, UTF-8 bounds, blocked-constructor cleanup; test-only infinite WASM loop hard cancel/timeout and real Core recovery |
+| Node | 67 regressions, including four checks executing the hash-verified vendored WASM: Typst adjacent/nested operands, explicit min/max limits, structural middle delimiters and OMML fragment tails; service lifecycle/validation checks, plugin unload protection and tool preferences |
+| Real Chrome Worker | All 16 exposed best-effort combinations and four conversion regression cases, strict rejection/OMML, DTD rejection, UTF-8 bounds, blocked-constructor cleanup; test-only infinite WASM loop hard cancel/timeout and real Core recovery; zero conversion network requests |
 | Isolated browser UI | Manual modes, stale output, plain XML, preview error gate, retry, en/zh, 1280/390 px and large-text bounds; mocked host/MathJax |
-| Windows Obsidian app:// | Actual Core loading, Typst→LaTeX MathJax preview, strict LaTeX→OMML text, limits/original protection, explicit draft opening without note writes, en/zh and 1280/390 px geometry. Post-release 1.6.1 checks passed 16 matrix geometry cases in light/dark themes, including triangular 3 × 3 input. Windows-only Copy for Word produced editable Word OMath for a Greek fraction, superscript and matrix on Word 16.0 / installed build 18526.20672, keeping source and OMML output unchanged. Not OLE, PowerPoint, WPS or mobile Office acceptance |
-| Android phone / tablet | Real Android 16 WebViews on 2211133C / Obsidian 1.14.4 and 24018RPACC / Obsidian 1.13.8: simple samples across all 16 exposed best-effort combinations, conversion UI/settings, native touch controls, editor/library layout, matrix/parameter previews, Mermaid navigation/history and plots. New development fixes additionally passed 12 matrix geometry cases per tested orientation/theme with MathJax 3.2.2 / 4.1.3. See [Android verification](ANDROID-TESTING.md) for scope |
+| Windows Obsidian app:// | Retested 1.6.2: actual Core loading, Typst→LaTeX MathJax preview, strict LaTeX→OMML text, limits/original protection, explicit draft opening without note writes, en/zh and 1280/390 px geometry, including expanded Core metadata. All 16 light/dark CHTML matrix geometry cases passed, including triangular input. Copy for Word produced editable Word OMath for a Greek fraction, superscript and matrix on Word 16.0, keeping source and OMML output unchanged. Not OLE, PowerPoint, WPS or mobile Office acceptance |
+| Android phone / tablet | Historical 1.6.1 Core only: real Android 16 WebViews on 2211133C / Obsidian 1.14.4 and 24018RPACC / Obsidian 1.13.8: simple samples across all 16 exposed best-effort combinations, conversion UI/settings, native touch controls, editor/library layout, matrix/parameter previews, Mermaid navigation/history and plots. Development fixes additionally passed 12 matrix geometry cases per tested orientation/theme with MathJax 3.2.2 / 4.1.3. Not a retest of the new binary. See [Android verification](ANDROID-TESTING.md) for scope |
 | iOS and other mobile hosts | Not tested; Android results and desktop portrait checks are not universal mobile acceptance |
 | General formula fidelity | Not certified; simple examples do not prove all syntax or complete round trips |
 

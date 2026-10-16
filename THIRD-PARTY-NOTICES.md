@@ -6,9 +6,9 @@ AGPL-3.0-only; see [LICENSE](LICENSE). The original plugin portions retain their
 Historical MIT releases through 1.5.0 are unchanged.
 
 - LaTeXSnipper Core 3.2.1, conversion-only profile, source revision
-  `eeca3421e28afde07f3d5d6fd486a4220e93ebe8`: AGPL. The exact upstream source
-  archive is [vendor/core/source-eeca342.tar.gz](vendor/core/source-eeca342.tar.gz),
-  also available from the [pinned upstream commit](https://github.com/strangelion/latexsnipper-core/tree/eeca3421e28afde07f3d5d6fd486a4220e93ebe8).
+  `d31ae028c44ad39be44ecb73abe3f2e15b339b6a`: AGPL. The exact upstream source
+  archive is [vendor/core/source-d31ae02.tar.gz](vendor/core/source-d31ae02.tar.gz),
+  also available from the [pinned upstream commit](https://github.com/strangelion/latexsnipper-core/tree/d31ae028c44ad39be44ecb73abe3f2e15b339b6a).
   Its [NOTICE](vendor/core/NOTICE), [build dependency inventory](vendor/core/dependencies.json),
   and [collected dependency licenses](vendor/core/THIRD-PARTY-LICENSES.txt) are preserved.
   This inventory includes compile-time procedural macros, not a binary SPDX SBOM.

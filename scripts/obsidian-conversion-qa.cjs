@@ -11,7 +11,7 @@ const fs = require('node:fs');
     if (await candidate.evaluate(() => !!window.app?.plugins?.getPlugin('formula-library')).catch(() => false)) { page = candidate; break; }
   }
   if (!page) throw new Error('Obsidian page not available');
-  const errors = []; page.on('pageerror', (error) => errors.push(error.message));
+  const errors = []; page.on('pageerror', (error) => errors.push(error.stack || error.message));
   const viewport = await page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
   const widths = realDevice ? [viewport.width] : [1280, 390];
   const noScreenshots = process.argv.includes('--no-screenshots');
@@ -38,6 +38,20 @@ const fs = require('node:fs');
       __coreQaOpen();
     });
     await modal.locator('.fc-status').filter({ hasText: 'Engine ready.' }).waitFor({ timeout: 35000 });
+    const coreInfo = require('../vendor/core/manifest.json');
+    const details = modal.locator('.fc-core-info');
+    assert.equal(await details.evaluate(el => el.open), false);
+    assert.match(await details.locator('summary').innerText(), new RegExp(coreInfo.sourceCommit.slice(0, 7)));
+    await details.locator('summary').click();
+    assert.equal(await details.getByText(coreInfo.sourceCommit, { exact: true }).isVisible(), true);
+    assert.equal(await details.getByText(coreInfo.files['latexsnipper_wasm_bg.wasm'], { exact: true }).isVisible(), true);
+    for (const width of widths) {
+      if (!realDevice) await page.setViewportSize({ width, height: 900 });
+      assert.equal(await details.evaluate(el => el.scrollWidth > el.clientWidth + 1), false);
+      await capture(`core-info-${width}`);
+    }
+    if (!realDevice) await page.setViewportSize(viewport);
+    await details.locator('summary').click();
     assert.equal(await modal.getByLabel('Conversion mode', { exact: true }).inputValue(), 'best-effort');
     assert.equal(await modal.getByRole('button', { name: 'Convert', exact: true }).isDisabled(), false);
     await modal.getByLabel('Conversion mode', { exact: true }).selectOption('strict');
